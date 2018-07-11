@@ -1,0 +1,89 @@
+{% load i18n %}
+{% load humanize %}
+
+<li feed-id="{{ post.pk }}" csrf="{{ csrf_token }}">
+  <div class="feed-container">
+<div class="post media">
+	<h3>{{ post.message_html|safe }}</h3>
+
+
+    <div class="post">
+      <div class="interaction">
+        {% if user in post.likes.all %}
+         	<a href="{% url "posts:like" slug=post.slug %}" style="text-decoration: none;" class="like unlike">
+            <span class="glyphicon glyphicon-thumbs-up"></span>
+            <span class="text">{% trans 'Unlike' %}</span>
+            (<span class="like-count">{{ post.likes.count }}</span>)
+          </a>
+        {% else %}
+        	<a href="{% url "posts:like" slug=post.slug %}" style="text-decoration: none;" class="like">
+            <span class="glyphicon glyphicon-thumbs-up"></span>
+            <span class="text">{% trans 'Like' %}</span>
+            (<span class="like-count"> {{ post.likes.count }}</span>)
+          </a>
+        {% endif %}
+
+
+
+        <a href="" style="text-decoration: none;" class="comment">
+          <span class="glyphicon glyphicon-comment"></span> {% trans 'Comment' %}
+          (<span class="comment-count"></span>)
+        </a>
+       <div class="comments">
+            {{ post.comment.context }}
+
+     <form enctype="multipart/form-data" method="POST">
+        {%  csrf_token %}
+
+
+        {{ comment_form }}
+
+
+        <input type="submit" class='bth bth default'  value="Update">
+
+
+    </form>
+
+
+
+        <form role="form" method="post" action="{{ comment }}" onsubmit="return false">
+          {% csrf_token %}
+          <input type="hidden" name="feed" value="{{ post.pk }}">
+          <input type="text" class="form-control input-sm" placeholder="{% trans 'Write a comment...' %}" name="post" maxlength="255">
+        </form>
+
+
+
+        <ol class="clearfix">
+          {% comment %} Place holder to load feed comments {% endcomment %}
+        </ol>
+      </div>
+      </div>
+
+
+
+
+
+    	<div class="media-body">
+		<strong>  <a href="{% url 'accounts:profile' username=post.user.username %}">{{ post.user.username }}</a></strong>
+		<h5 class="media-heading">
+			<span class="username"><a href="{% url 'posts:for_user' username=post.user.username %}">@{{ post.user.username }}</a></span>
+			<time class="time"><a href="{% url 'posts:single' username=post.user.username pk=post.pk %}">{{ post.created_at }}</a></time>
+			{% if post.group %}
+			<span class="group-name">in <a href="#">{{ post.group.name }}</a></span>
+			{% endif %}
+		</h5>
+
+		<div class="media-footer">
+			{% if user.is_authenticated and post.user == user and not hide_delete %}
+				<a href="{% url 'posts:delete' pk=post.pk %}" title="delete" class="btn btn-simple">
+					<span class="glyphicon glyphicon-remove text-danger" aria-hidden="true"></span>
+					<span class="text-danger icon-label">Delete</span>
+				</a>
+			{% endif %}
+		</div>
+	</div>
+
+
+
+

@@ -1,0 +1,31 @@
+{%  extends "base.html" %}
+{% load staticfiles %}
+{% load bootstrap3%}
+{% block content %}
+
+
+<div class="container">
+
+{% if registered %}
+    <h1>Registration</h1>
+    <h2>Thank U for registering!</h2>
+
+{% else %}
+    <h3>Fill out the form:</h3>
+    <form enctype="multipart/form-data" method="POST">
+        {%  csrf_token %}
+
+
+        {{ user_form.as_p }}
+
+
+        <input type="submit" class='bth bth default'  value="Register">
+
+
+    </form>
+
+{% endif %}
+
+</div>
+
+{% endblock %}
