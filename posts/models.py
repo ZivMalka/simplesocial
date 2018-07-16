@@ -77,8 +77,6 @@ class Post(models.Model):
     def get_api_like_url(self):
         return reverse("posts:like-api-toggle", kwargs={"slug": self.slug})
 
-    def get_comments(self):
-       return post.comment.all()
 
 
 

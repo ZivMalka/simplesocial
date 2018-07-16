@@ -13,6 +13,9 @@ class UserProfileInfo(models.Model):
     birth_date = models.DateField(null=True, blank=True)
     weight = models.DecimalField
     height = models.DecimalField
+    body_fat = models.DecimalField
+
+
 
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
