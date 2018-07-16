@@ -1,4 +1,5 @@
-<!DOCTYPE html> {% load staticfiles %}
+{% load staticfiles %}
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -6,6 +7,13 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Bootcamp{% endblock %}</title>
+
+<script   src="http://code.jquery.com/jquery-1.12.2.min.js"   integrity="sha256-lZFHibXzMHo3GGeehn1hudTAP3Sc0uKXBXAzHX1sjtk="   crossorigin="anonymous"></script>
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js'></script>
     <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
     <!-- For Ajax Search suggestion -->
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all"/>
@@ -71,3 +79,10 @@
     <canvas id="canvas"></canvas>
 
 </body>
+<script>
+$(document).ready(function(){
+        $(".comment-reply-btn").click(function(){
+        $(".comment-reply").toggle();
+    })
+})
+    </script>

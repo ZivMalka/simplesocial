@@ -1,17 +1,22 @@
+
 from django.contrib import messages
+
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.urls import reverse_lazy
 from django.http import Http404
 from django.views import generic
 from groups.models import Group
 from braces.views import SelectRelatedMixin
-from posts.models import Post
 from . import forms
 from . import models
-from posts.models import Comment
-from posts.forms import CommentForm
+from posts.models import Post
 
+from activities.models import Comment
+from activities.forms import CommentForm
+from .models import Post
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -26,7 +31,7 @@ from django.contrib.auth.mixins import(
 )
 from django.shortcuts import get_object_or_404
 from django.views import generic
-
+from django.db.models import Q
 
 from django.contrib.contenttypes.models import ContentType
 
@@ -38,6 +43,9 @@ class SingleGroup(generic.DetailView):
 class PostList(SelectRelatedMixin, generic.ListView):
     model = models.Post
     select_related = ("user", "group")
+
+
+
 
 
 class UserPosts(generic.ListView):
@@ -89,6 +97,27 @@ class CreatePost(LoginRequiredMixin, SelectRelatedMixin, generic.CreateView):
         return super().form_valid(form)
 
 
+
+def add_comment_to_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+   # post = Post.objects.get(pk=1)
+
+    if request.method == "POST":
+            form = CommentForm(data=request.POST)
+            if form.is_valid():
+
+                content_data = form.cleaned_data.get("content")
+
+                Comment.objects.create(content_object=post, content=content_data, user=request.user)
+
+            return HttpResponseRedirect(post.get_posts_url())
+    else:
+        form = CommentForm()
+
+    return render(request, 'posts/partial_feed_comment.html', {'form': form})
+
+
+
 class DeletePost(LoginRequiredMixin, SelectRelatedMixin, generic.DeleteView):
     model = models.Post
     select_related = ("user", "group")
@@ -120,67 +149,4 @@ class like(RedirectView, LoginRequiredMixin):
 
 
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import authentication, permissions
 
-class PostLikeAPIToggle(APIView, LoginRequiredMixin):
-    authentication_classes = (authentication.SessionAuthentication,)
-    permission_classes = (permissions.IsAuthenticated,)
-
-    def get(self, request, slug=None, format=None):
-        # slug = self.kwargs.get("slug")
-        obj = get_object_or_404(Post, slug=self.kwargs.get("slug"))
-        url_ = obj.get_absolute_url()
-        user = self.request.user
-        updated = False
-        liked = False
-        if user in obj.likes.all():
-            liked = False
-            obj.likes.remove(user)
-        else:
-            liked = True
-            obj.likes.add(user)
-        updated = True
-        data = {
-            "updated": updated,
-            "liked": liked
-        }
-        return Response(data)
-
-def comment(request):
-    initial_data = {
-        "content_type": instance.get_content_type,
-        "object_id": instance.id
-    }
-
-    url_ = obj.get_posts_url()
-    if request.method == "POST":
-        comment_form = CommentForm(data=request.POST, initial=initial_data)
-
-        if comment_form.is_valid():
-            c_type = form.cleaned_data.get("content_type")
-            content_type = ContentType.objects.get(model=c_type)
-            obj_id = form.cleaned_data.get('object_id')
-            content_data = form.cleaned_data.get("content")
-            content_data = form.cleaned_data.get("content")
-
-            new_comment, created = (Comment.objects.get_or_create(
-							user = request.user,
-							content_type= content_type,
-							object_id = obj_id,
-							content = content_data,
-						))
-
-            return url_
-
-    comments = instance.comments
-    context = {
-        "title": instance.title,
-        "instance": instance,
-        "share_string": share_string,
-        "comments": comments,
-        "comment_form": form,
-    }
-
-    return  render(request, 'posts/_post.html', {'comment_form': comment_form})

@@ -3,5 +3,13 @@
 {% block post_content %}
 <div class="col-md-8">
     {% include "posts/_post.html" %}
+ <h1>New comment</h1>
+    <form method="POST" class="post-form">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default" >Send</button>
+    </form>
+
+
+
 </div>
 {% endblock %}

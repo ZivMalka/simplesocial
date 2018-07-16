@@ -1,12 +1,20 @@
+{% block head %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+{% endblock head %}
+
+{% load staticfiles %}
+
+
+{% load bootstrap3 %}
 {% load i18n %}
 {% load humanize %}
 
-<li feed-id="{{ post.pk }}" csrf="{{ csrf_token }}">
+
+
   <div class="feed-container">
 <div class="post media">
+
 	<h3>{{ post.message_html|safe }}</h3>
-
-
     <div class="post">
       <div class="interaction">
         {% if user in post.likes.all %}
@@ -24,45 +32,25 @@
         {% endif %}
 
 
-
-        <a href="" style="text-decoration: none;" class="comment">
-          <span class="glyphicon glyphicon-comment"></span> {% trans 'Comment' %}
-          (<span class="comment-count"></span>)
-        </a>
-       <div class="comments">
-            {{ post.comment.context }}
-
-     <form enctype="multipart/form-data" method="POST">
-        {%  csrf_token %}
-
-
-        {{ comment_form }}
-
-
-        <input type="submit" class='bth bth default'  value="Update">
-
-
-    </form>
-
-
-
-        <form role="form" method="post" action="{{ comment }}" onsubmit="return false">
-          {% csrf_token %}
-          <input type="hidden" name="feed" value="{{ post.pk }}">
-          <input type="text" class="form-control input-sm" placeholder="{% trans 'Write a comment...' %}" name="post" maxlength="255">
-        </form>
-
-
-
-        <ol class="clearfix">
-          {% comment %} Place holder to load feed comments {% endcomment %}
-        </ol>
-      </div>
-      </div>
-
-
-
-
+      <a href="#" style="text-decoration: none;" class="comment-reply-btn">
+             <span class="glyphicon glyphicon-comment"></span> {% trans 'Comment' %}
+            (<span class="comment-count">{{ post.comment.count }}</span>)
+             </a>
+          <form role="form" method="post" action="{% url 'posts:comment' pk=post.pk %}">
+              {% csrf_token %}
+              <input type="hidden" name="feed" value="{{ post.pk }}" onsubmit="return false">
+              <input type="text" class="form-control input-sm" placeholder="{% trans 'Write a comment...' %}" name="content" maxlength="255">
+          </form>
+                <ul class="list-group list-group-flush">
+                    <div class="comment-reply" style="display:none">
+                        {% for comment in post.comment.all %}
+                             {% if comment.user == user %}
+                                 <span class="glyphicon glyphicon-remove remove-feed" title="{% trans 'Click to remove this comment' %}"></span>
+                                {% endif %}
+                    <li class="list-group-item">{{ comment.content }}</li>
+                            {% empty %}
+                  <li class="empty">{% trans 'Be the first one to comment' %}</li>
+   {% endfor %}<ul/></div></div></div></div>
 
     	<div class="media-body">
 		<strong>  <a href="{% url 'accounts:profile' username=post.user.username %}">{{ post.user.username }}</a></strong>
@@ -81,9 +69,13 @@
 					<span class="text-danger icon-label">Delete</span>
 				</a>
 			{% endif %}
-		</div>
-	</div>
 
 
-
-
+<script>
+$(document).ready(function(){
+    $(".comment-reply-btn").click(function(event){
+        event.preventDefault();
+        $(this).parent().next(".comment-reply").fadeToggle(10);
+    })
+});
+</script>
