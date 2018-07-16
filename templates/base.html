@@ -43,7 +43,7 @@
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}
                     <li>
-                       <a href="{% url 'accounts:profile' username=user.username %}"> {{ user.username }}</a></li>
+                       <a href="{% url 'accounts:profile' username=request.user.username %}"> {{ request.user.username }}</a></li>
                 <li>
                     <a href="{% url 'posts:create' %}">Post</a>
                 </li>
@@ -57,9 +57,6 @@
                     <a href="{% url 'accounts:logout' %}">Logout</a>
                 </li>
                 {% else %}
-                <li>
-                    <a href="{% url 'groups:all' %}">Groups</a>
-                </li>
                 <li>
                     <a href="{% url 'accounts:login' %}">Login</a>
                 </li>

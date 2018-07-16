@@ -10,8 +10,11 @@
     <div class="container">
 
    <h2>Hey {{ user }}</h2>
+  {% if request.user == user %}
   <li><a href="{% url 'accounts:edit_profile' %}">Edit your profile</a></li>
- <li>	<span class="username"><a href="{% url 'posts:for_user' username=user.username %}">All Posts history</a></span></li>
+{% endif %}
+
+        <li>	<span class="username"><a href="{% url 'posts:for_user' username=user.username %}">All Posts history</a></span></li>
         <br>
 
     <p> First Name: </p>

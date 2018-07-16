@@ -25,6 +25,7 @@
 {% block group_content %}
 <div class="col-md-8">
 	<div class="list-group">
+        {% if user.is_authenticated %}
 		{% for group in object_list %}
 		  <a class="list-group-item" href="{% url 'groups:single' slug=group.slug %}">
 			     <h3 class="title list-group-item-heading">{{ group.name }}</h3>
@@ -41,6 +42,7 @@
 			</div>
 		</a>
 		{% endfor %}
+    	{% endif %}
 	</div>
 </div>
 {% endblock %}

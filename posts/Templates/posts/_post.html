@@ -1,19 +1,20 @@
-{% block head %}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-{% endblock head %}
 
 {% load staticfiles %}
-
-
 {% load bootstrap3 %}
 {% load i18n %}
 {% load humanize %}
+{% load static %}
 
+
+`{% block head %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <link href="{% static 'css/posts.css' %}?v=1" rel="stylesheet">
+{% endblock head %}
 
 
   <div class="feed-container">
 <div class="post media">
-
+ {% if request.user.is_authenticated %}
 	<h3>{{ post.message_html|safe }}</h3>
     <div class="post">
       <div class="interaction">
@@ -36,13 +37,14 @@
              <span class="glyphicon glyphicon-comment"></span> {% trans 'Comment' %}
             (<span class="comment-count">{{ post.comment.count }}</span>)
              </a>
+ <div class="comment-reply" style="display:none">
           <form role="form" method="post" action="{% url 'posts:comment' pk=post.pk %}">
               {% csrf_token %}
               <input type="hidden" name="feed" value="{{ post.pk }}" onsubmit="return false">
               <input type="text" class="form-control input-sm" placeholder="{% trans 'Write a comment...' %}" name="content" maxlength="255">
           </form>
                 <ul class="list-group list-group-flush">
-                    <div class="comment-reply" style="display:none">
+
                         {% for comment in post.comment.all %}
                              {% if comment.user == user %}
                                  <span class="glyphicon glyphicon-remove remove-feed" title="{% trans 'Click to remove this comment' %}"></span>
@@ -70,12 +72,13 @@
 				</a>
 			{% endif %}
 
+	{% endif %}
 
 <script>
 $(document).ready(function(){
     $(".comment-reply-btn").click(function(event){
         event.preventDefault();
-        $(this).parent().next(".comment-reply").fadeToggle(10);
+        $(this).parent().next(".comment-reply").toggle();
     })
 });
 </script>

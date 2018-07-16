@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
+from django.urls import reverse
 
 class UserProfileInfo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -18,6 +18,8 @@ class UserProfileInfo(models.Model):
         if created:
             user_profile = UserProfileInfo.objects.create(user=instance)
 
+    def get_redirect_url(self):
+        return reverse("accounts:profile",kwargs={"username": self.user.username})
 
     post_save.connect(create_user_profile, sender=User)
 

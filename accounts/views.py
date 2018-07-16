@@ -9,7 +9,11 @@ from django.views.generic import  View, TemplateView, ListView, DeleteView
 from django.shortcuts import render
 from django.views import generic
 from . import models
-
+from django.http import HttpResponse, HttpResponseRedirect, Http404
+from .models import UserProfileInfo
+from django.contrib.auth.models import User
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 def register(request):
     registered = False
     if request.method == "POST":
@@ -44,43 +48,48 @@ def register(request):
                        'profile_form': profile_form,
                        'registered': registered})
 
-
+@login_required
 def profile(request):
     args = {'user' : request.user }
     return render(request, 'accounts/profile.html', args)
 
 @login_required
 def edit_profile(request):
-    if request.method == 'POST':
-        user_form_edit = EditProfileForm(request.POST, instance=request.user)
-        profile_form = UserProfileInfoForm(request.POST, instance=request.user.userprofileinfo)
-
-        if user_form_edit.is_valid() and profile_form.is_valid():
-            user = user_form_edit.save()
-
-            user.save()
-
-            profile = profile_form.save(commit=False)
-
-            profile.user = user
-
-            if 'profile_pic' in request.FILES:
-                profile.profile_pic = request.FILES['profile_pic']
-
-            profile_form.save()
-            messages.success(request, 'Your profile was successfully updated!')
-
-            return redirect('/accounts/profile')
 
 
-        return redirect('/accounts/profile')
+
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            user_form_edit = EditProfileForm(request.POST, instance=request.user)
+            profile_form = UserProfileInfoForm(request.POST, instance=request.user.userprofileinfo)
+
+            if user_form_edit.is_valid() and profile_form.is_valid():
+                user = user_form_edit.save()
+
+                user.save()
+
+                profile = profile_form.save(commit=False)
+
+                profile.user = user
+
+                if 'profile_pic' in request.FILES:
+                    profile.profile_pic = request.FILES['profile_pic']
+
+                profile_form.save()
+                messages.success(request, 'Your profile was successfully updated!')
+
+                return HttpResponseRedirect(reverse("accounts:profile", kwargs={"username": request.user.username}))
+
+        else:
+            user_form_edit = EditProfileForm(instance=request.user)
+            profile_form = UserProfileInfoForm(instance=request.user.userprofileinfo)
+
+            return render(request, 'accounts/edit_profile.html',
+                          {'user_form_edit': user_form_edit, 'profile_form': profile_form})
 
     else:
-        user_form_edit = EditProfileForm(instance=request.user)
-        profile_form = UserProfileInfoForm(instance=request.user.userprofileinfo)
+        return HttpResponse("no acsses")
 
-        return render(request, 'accounts/edit_profile.html',
-                      {'user_form_edit': user_form_edit, 'profile_form': profile_form})
 
 @login_required
 def profile(request, username):
