@@ -1,21 +1,15 @@
 from __future__ import unicode_literals
 
-
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models.signals import pre_save
 from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
-from markdown_deux import markdown
-
-
 from django.conf import settings
 from django.urls import reverse
 from django.db import models
-
 import misaka
-
 from groups.models import  Group
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -37,7 +31,7 @@ class Post(models.Model):
     message = models.TextField()
     message_html = models.TextField(editable=False)
     group = models.ForeignKey(Group, related_name="posts",null=True, blank=True, on_delete=models.CASCADE)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=False)
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='post_likes')
     comment = GenericRelation(Comment)
     post_pic = models.ImageField(upload_to='post_pic', blank=True)
@@ -69,7 +63,7 @@ class Post(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
-        unique_together = ("message", "user")
+
 
     def get_like_url(self):
         return reverse("posts:like", kwargs={"slug": self.slug})

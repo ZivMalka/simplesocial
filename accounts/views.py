@@ -62,11 +62,8 @@ def edit_profile(request):
 
             if user_form_edit.is_valid() and profile_form.is_valid():
                 user = user_form_edit.save()
-
                 user.save()
-
                 profile = profile_form.save(commit=False)
-
                 profile.user = user
 
                 if 'profile_pic' in request.FILES:

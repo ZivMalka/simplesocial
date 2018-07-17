@@ -60,7 +60,7 @@
 
           <div class="compose">
             <h2>{% trans "Compose a new post" %}</h2>
-            <form role="form" method="post" id="compose-form" action="{% url 'posts:create' pk=group.pk %}">
+            <form enctype="multipart/form-data" role="form" method="post" id="compose-form" action="{% url 'posts:create' pk=group.pk %}">
               {% csrf_token %}
               <input type="hidden" name="last_feed">
               <div class="form-group">

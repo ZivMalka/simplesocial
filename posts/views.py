@@ -78,11 +78,18 @@ class PostDetail(SelectRelatedMixin, generic.DetailView):
             user__username__iexact=self.kwargs.get("username")
         )
 
+def upload_pic(request, post_id):
 
-def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.user = self.request.user
-        self.object.save()
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            if 'post_pic' in request.FILES:
+                form.post_pic = request.FILES['post_pic']
+
+            m = get_object_or_404(Post, pk=post_id)
+            m.post_pic = form.cleaned_data['post_pic']
+            m.save()
 
 
 def writePost(request, pk):
@@ -94,11 +101,11 @@ def writePost(request, pk):
             if form.is_valid():
                 message = form.cleaned_data.get("message")
 
-                new_post = Post.objects.create(group=group, message=message, user=request.user)
-
                 if 'post_pic' in request.FILES:
                     form.post_pic = request.FILES['post_pic']
-                    form_valid(new_post, form)
+
+                new_post = Post.objects.create(group=group, message=message, user=request.user)
+                upload_pic(request, new_post.id)
 
             return HttpResponseRedirect(reverse("posts:single_2" , kwargs={"slug": group.slug}))
         else:
@@ -121,11 +128,6 @@ class CreatePost(LoginRequiredMixin, SelectRelatedMixin, generic.CreateView):
         self.object = form.save(commit=False)
         self.object.user = self.request.user
         self.object.save()
-
-        if 'post_pic' in request.FILES:
-            self.object.profile_pic = request.FILES['post_pic']
-
-
         return super().form_valid(form)
 
 
