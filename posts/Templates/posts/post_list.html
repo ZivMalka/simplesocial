@@ -2,7 +2,11 @@
 {% block prepost %}
 
 
-<div class="col-md-4">
+
+
+
+
+
     {% if request.user.is_authenticated %}
 
     <div class="card card-with-shadow">
@@ -42,7 +46,6 @@
 
     {% endfor %}
 </div>
-
 
 {% endblock post_content %}
 

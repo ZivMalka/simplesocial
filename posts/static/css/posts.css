@@ -79,6 +79,7 @@ ul.stream li div.post div.interaction a {
 
 .comments {
   margin-top: .6em;
+  display: none;
 
 }
 
@@ -169,3 +170,8 @@ ul.stream li div.post div.interaction a {
 .comment-reply{
 
 }
+@media (min-width: 992px)
+.col-md-offset-3 {
+    width: 250%;
+}
+

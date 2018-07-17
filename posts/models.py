@@ -40,7 +40,7 @@ class Post(models.Model):
     slug = models.SlugField(unique=True)
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='post_likes')
     comment = GenericRelation(Comment)
-
+    post_pic = models.ImageField(upload_to='post_pic', blank=True)
 
     def __str__(self):
         return self.message

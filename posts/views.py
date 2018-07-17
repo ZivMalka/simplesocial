@@ -5,7 +5,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.http import Http404
 from django.views import generic
 from groups.models import Group
@@ -13,15 +13,15 @@ from braces.views import SelectRelatedMixin
 from . import forms
 from . import models
 from posts.models import Post
-
+from .forms import PostForm
 from activities.models import Comment
 from activities.forms import CommentForm
 from .models import Post
 from django.contrib.auth import get_user_model
 User = get_user_model()
-
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-
+from django.utils.text import slugify
 from django.views.generic import RedirectView
 
 
@@ -80,9 +80,32 @@ class PostDetail(SelectRelatedMixin, generic.DetailView):
         )
 
 
+
+def writePost(request, pk):
+    group = get_object_or_404(Group, pk=pk)
+
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = PostForm(data=request.POST)
+            if form.is_valid():
+                message = form.cleaned_data.get("message")
+
+
+                if 'post_pic' in request.FILES:
+                    profile.profile_pic = request.FILES['post_pic']
+
+                Post.objects.create(group=group, message=message , user=request.user)
+
+            return HttpResponseRedirect(reverse("posts:single_2" , kwargs={"slug": group.slug}))
+        else:
+            form = PostForm()
+
+        return render(request, 'posts/post_form.html', {'form': form})
+
+
 class CreatePost(LoginRequiredMixin, SelectRelatedMixin, generic.CreateView):
     # form_class = forms.PostForm
-    fields = ('message','group')
+    fields = ('message','group', 'post_pic')
     model = models.Post
 
     # def get_form_kwargs(self):
@@ -94,6 +117,11 @@ class CreatePost(LoginRequiredMixin, SelectRelatedMixin, generic.CreateView):
         self.object = form.save(commit=False)
         self.object.user = self.request.user
         self.object.save()
+
+        if 'post_pic' in request.FILES:
+            self.object.profile_pic = request.FILES['post_pic']
+
+
         return super().form_valid(form)
 
 

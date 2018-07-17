@@ -1,4 +1,5 @@
 {% extends "posts/post_base.html" %}
+{% load staticfiles %}
 
 {% load bootstrap3 %}
 
@@ -6,7 +7,7 @@
 <h4>Whats on your mind?!</h4>
 <form method="POST" action="{% url 'posts:create' %}" id="postForm">
 	{% csrf_token %}
-	{% bootstrap_form form %}
+	{{ form.as_p }}
 	<input type="submit" value="Post" class="btn btn-primary btn-large">
 </form>
 {% endblock %}

@@ -55,9 +55,6 @@ def profile(request):
 
 @login_required
 def edit_profile(request):
-
-
-
     if request.user.is_authenticated:
         if request.method == 'POST':
             user_form_edit = EditProfileForm(request.POST, instance=request.user)

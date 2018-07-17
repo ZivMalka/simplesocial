@@ -1,4 +1,18 @@
 {% extends "groups/group_base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+
+{% block head %}
+  <link href="{% static 'css/posts.css' %}?v=1" rel="stylesheet">
+  <script src="{% static 'js/jquery.bullseye-1.0-min.js' %}"></script>
+  <script src="{% static 'js/posts.js' %}?v=1"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+{% endblock head %}
+
+
+
 
 {% block pregroup %}
 
@@ -7,7 +21,6 @@
 <h2> Member Count: {{group.members.count}}</h2>
 
   <div class="content">
-
 
 				{% if user in group.members.all %}
 					<a href="{% url 'groups:leave' slug=group.slug %}" class="btn btn-lg btn-fill btn-warning"><span class="glyphicon glyphicon-remove-circle"></span> Leave</a>
@@ -24,14 +37,66 @@
 
 {% block group_content %}
 
-<div class="col-md-8">
+    <div class="col-md-4">
+
+<div class="row">
+    <div class="col-md-6 col-md-offset-3" style="width:250%">
+
+      <div class="page-header">
+        <button type="button" class="btn btn-primary pull-right btn-compose" title="{% trans 'Press Ctrl + P to compose' %}">
+          <span class="glyphicon glyphicon-share-alt"></span> {% trans 'Compose' %}
+        </button>
+        <h1>{% trans 'Feed' %}</h1>
+      </div>
+
+      <div class="panel panel-default panel-feed">
+        <div class="panel-heading">
+          <h3 class="panel-title">{% trans 'Latest posts' %}</h3>
+        </div>
+        <div class="panel-body">
+
+          <div class="compose">
+            <h2>{% trans "Compose a new post" %}</h2>
+            <form role="form" method="post" id="compose-form" action="{% url 'posts:create' pk=group.pk %}">
+              {% csrf_token %}
+              <input type="hidden" name="last_feed">
+              <div class="form-group">
+                    <input type="hidden" name="feed" value="{{ group.pk }}">
+                <textarea class="form-control" rows="3" name="message"></textarea>
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-post"  value="Post">
+                  <span class="glyphicon glyphicon-send"></span> {% trans 'Post' %}
+                </button>
+                <button type="button" class="btn btn-default btn-cancel-compose">{% trans 'Cancel' %}</button>
+                <span class="help-block help-count pull-right">255</span>
+              </div>
+            </form>
+          </div>
+          <div class="stream-update">
+            <a href="#"><span class="new-posts"></span> {% trans 'new posts' %}</a>
+          </div>
+   <ul class="stream">
     {% if group.posts.count == 0 %}
         <h2>No posts in this group yet!</h2>
     {% else %}
         {% for post in group.posts.all %}
             {% include "posts/_post.html" %}
         {% endfor %}
+           </ul>
     {% endif %}
 </div>
 
+
 {% endblock group_content %}
+
+
+
+<script>
+$(document).ready(function(){
+  $(".btn-compose").click(function(){
+      $(".compose").slideUp();}
+  });
+
+});
+</script>
