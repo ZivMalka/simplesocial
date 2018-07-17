@@ -24,7 +24,6 @@ from django.shortcuts import render
 from django.utils.text import slugify
 from django.views.generic import RedirectView
 
-
 from django.contrib.auth.mixins import(
     LoginRequiredMixin,
     PermissionRequiredMixin
@@ -80,21 +79,26 @@ class PostDetail(SelectRelatedMixin, generic.DetailView):
         )
 
 
+def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.save()
+
 
 def writePost(request, pk):
     group = get_object_or_404(Group, pk=pk)
 
     if request.user.is_authenticated:
         if request.method == 'POST':
-            form = PostForm(data=request.POST)
+            form = PostForm(request.POST, request.FILES)
             if form.is_valid():
                 message = form.cleaned_data.get("message")
 
+                new_post = Post.objects.create(group=group, message=message, user=request.user)
 
                 if 'post_pic' in request.FILES:
-                    profile.profile_pic = request.FILES['post_pic']
-
-                Post.objects.create(group=group, message=message , user=request.user)
+                    form.post_pic = request.FILES['post_pic']
+                    form_valid(new_post, form)
 
             return HttpResponseRedirect(reverse("posts:single_2" , kwargs={"slug": group.slug}))
         else:

@@ -1,7 +1,7 @@
 
 {% load i18n %}
 {% load humanize %}
-
+{% load staticfiles %}
 
 
 {% block head %}
@@ -15,6 +15,10 @@
  {% if request.user.is_authenticated %}
     <div class="post">
 	<h3>{{ post.message_html|safe }}</h3>
+        {% if  post.post_pic %}
+            <img src ="{{ post.post_pic.url }}" width="240">
+        {% endif %}
+    <br>
         <strong>  <a href="{% url 'accounts:profile' username=post.user.username %}">{{ post.user.username }}</a></strong>
      	<span class="username"><a href="{% url 'posts:for_user' username=post.user.username %}">@{{ post.user.username }}</a></span>
 			<time class="time"><a href="{% url 'posts:single' username=post.user.username pk=post.pk %}">{{ post.created_at }}</a></time>
@@ -57,30 +61,27 @@
               <input type="text" class="form-control input-sm" placeholder="{% trans 'Write a comment...' %}" name="content" maxlength="255">
           </form>
                 <ul class="list-group list-group-flush">
-                        {% for comment in post.comment.all %}
+                    {% for comment in post.comment.all %}
                              {% if comment.user == user %}
                                  <span class="glyphicon glyphicon-remove remove-feed" title="{% trans 'Click to remove this comment' %}"></span>
                                 {% endif %}
-                    <li class="list-group-item">{{ comment.content }}</li>
-                            {% empty %}
-                  <li class="empty">{% trans 'Be the first one to comment' %}</li>
-   {% endfor %}<ul/></div></div></div></div>
+                    <li feed-id="{{ comment.pk }}" csrf="{{ csrf_token }}">
+                        <div>{{ comment.content }}</div>
+    <h4>
+      <a href="{% url 'accounts:profile' username=post.user.username %}">
+        {{ comment.user.username }}
+      </a>
+      <small>{{ comment.timestamp|naturaltime }}</small>
+    </h4>
+
+  </li>
+{% empty %}
+  <li class="empty">{% trans 'Be the first one to comment' %}</li>
+   {% endfor %}
+                    <ul/></div></div></div></div>
 
 	{% endif %}
 
-<script>
-$(document).ready(function(){
-    $(".comment-reply-btn").click(function(event){
-        event.preventDefault();
-        $(this).parent().next(".comment-reply").toggle();
-    })
-
-
-});
-
-
-
-</script>
 
 
 
