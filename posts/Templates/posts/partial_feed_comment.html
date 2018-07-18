@@ -1,9 +1,30 @@
-{% load humanize %}
-{% load i18n %}
+ <a href="#" style="text-decoration: none;" class="comment">
+             <span class="glyphicon glyphicon-comment"></span> {% trans 'Comment' %}
+            (<span class="comment-count">{{ post.comment.count }}</span>)
+             </a>
+       </div>
+ <div class="comments" style="display: none;">
+          <form role="form" method="post" action="{% url 'posts:comment' pk=post.pk %}">
+              {% csrf_token %}
+              <input type="hidden" name="feed" value="{{ post.pk }}" onsubmit="return false">
+              <input type="text" class="form-control input-sm" placeholder="{% trans 'Write a comment...' %}" name="content" maxlength="255">
+          </form>
+                <ul class="list-group list-group-flush">
+                    {% for comment in post.comment.all %}
+                             {% if comment.user == user %}
+                                 <span class="glyphicon glyphicon-remove remove-feed" title="{% trans 'Click to remove this comment' %}"></span>
+                                {% endif %}
+                    <li feed-id="{{ comment.pk }}" csrf="{{ csrf_token }}">
+                        <div>{{ comment.content }}</div>
+    <h4>
+      <a href="{% url 'accounts:profile' username=post.user.username %}">
+        {{ comment.user.username }}
+      </a>
+      <small>{{ comment.timestamp|naturaltime }}</small>
+    </h4>
 
-
-    <h1>New comment</h1>
-    <form method="POST" class="post-form">{% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="save btn btn-default" >Send</button>
-    </form>
+  </li>
+{% empty %}
+  <li class="empty">{% trans 'Be the first one to comment' %}</li>
+   {% endfor %}
+                    <ul/></div></div></div></div>
