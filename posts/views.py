@@ -72,7 +72,7 @@ class PostDetail(SelectRelatedMixin, generic.DetailView):
     select_related = ("user", "group")
 
 
-    def get_queryset(self):
+    def get_category__slug(self):
         queryset = super().get_queryset()
         return queryset.filter(
             user__username__iexact=self.kwargs.get("username")

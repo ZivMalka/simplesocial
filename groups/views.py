@@ -26,6 +26,20 @@ class ListGroups(generic.ListView):
     model = Group
 
 
+def get_members(request, slug):
+
+    group = Group.objects.get(slug=slug)
+    members_list = GroupMember.objects.filter(group=group)
+    args = { 'members_list' : members_list,
+             'group' : group}
+    return render (request, 'groups/users_in_group.html', args)
+
+
+class GetGroup(LoginRequiredMixin, generic.RedirectView):
+
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse("groups:single", kwargs={"slug": self.kwargs.get("slug")})
+
 class JoinGroup(LoginRequiredMixin, generic.RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
@@ -72,3 +86,4 @@ class LeaveGroup(LoginRequiredMixin, generic.RedirectView):
                 "You have successfully left this group."
             )
         return super().get(request, *args, **kwargs)
+

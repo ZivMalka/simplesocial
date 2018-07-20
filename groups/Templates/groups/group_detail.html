@@ -1,4 +1,4 @@
-{% extends "groups/group_base.html" %}
+{% extends "groups/group_detail_base.html" %}
 {% load static %}
 {% load staticfiles %}
 {% load i18n %}
@@ -12,6 +12,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
       <script src="{% static 'posts/js/posts.js' %}" type="text/javascript"></script>
   <script src="{% static 'posts/js/posts.js' %}"></script>
+
+
+
 {% endblock head %}
 
 
@@ -19,26 +22,14 @@
 
 {% block pregroup %}
 
-
-<h1>{{group.name}}</h1>
-<h2> Member Count: {{group.members.count}}</h2>
-
-  <div class="content">
-
-				{% if user in group.members.all %}
-					<a href="{% url 'groups:leave' slug=group.slug %}" class="btn btn-lg btn-fill btn-warning"><span class="glyphicon glyphicon-remove-circle"></span> Leave</a>
-				{% else %}
-					<a href="{% url 'groups:join' slug=group.slug %}" class="btn btn-lg btn-fill btn-warning"><span class="glyphicon glyphicon-ok-circle"></span> Join</a>
-				{% endif %}
-
-
-
-</div>
-
 {% endblock %}
 
 
 {% block group_content %}
+
+
+
+
 
     <div class="row">
     <div class="col-md-6 col-md-offset-3">
@@ -95,11 +86,3 @@
 
 
 
-<script>
-$(document).ready(function(){
-  $(".btn-compose").click(function(){
-      $(".compose").slideUp();}
-  });
-
-});
-</script>

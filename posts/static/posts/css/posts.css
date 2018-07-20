@@ -8,6 +8,12 @@ ul.stream li {
   border-bottom: 1px solid #eeeeee;
   padding: 1em 0;
 }
+.group_name{
+    margin-top: -47px;
+    margin-left: 100px;
+    font-weight: 700;
+    color: #fff;
+}
 
 ul.stream li:last-child {
   border-bottom: none;
@@ -152,6 +158,12 @@ ul.stream li div.post div.interaction a {
 
 .remove-feed:hover {
   color: #333333;
+}
+
+.btn undefined btn-secondary icon-plus-green{
+    background-color: #fff;
+    color: #1879cd;
+    border: 1px solid #105189 !important;
 }
 
 .panel-feed {

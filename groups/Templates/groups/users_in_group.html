@@ -1,0 +1,24 @@
+{% extends "groups/group_detail_base.html" %}
+{% load static %}
+{% load staticfiles %}
+{% load i18n %}
+
+
+{% block pregroup %}
+        <h2>Members</h2>
+{% endblock pregroup %}
+
+{% block group_content %}
+<div class="col-md-8">
+    <div class="list-group">
+
+{% for site in members_list %}
+
+    <li>@{{ site.user.username }}</li>
+
+{% endfor %}
+
+    </div>
+</div>
+
+{% endblock group_content %}

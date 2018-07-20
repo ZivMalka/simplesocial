@@ -1,11 +1,12 @@
 {% load static %}
 {% load staticfiles %}
-
+{% load bootstrap3 %}
 
 <!DOCTYPE html>
 <html>
+
 <head>
-      <meta charset="UTF-8">
+     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Social Network</title>
@@ -21,18 +22,24 @@
     <!-- Google Font API -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
     <!-- Custom CSS File -->
-
 </head>
 
 
-</head>
 <body>
 
-    <nav class="navbar mynav" role="navigation" id="navbar">
-        <div class="container">
-            <a class="navbar-brand mynav" href="{% url 'home' %}">Star Social</a>
-            <ul class="nav navbar-nav navbar-right">
-                {% if user.is_authenticated %}
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+         <a class="navbar-brand mynav" href="{% url 'home' %}">Healthymize</a>
+    </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" style="background:white; id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+          </ul>
+        </li>
+      <ul class="nav navbar-nav navbar-left">
+          {% if user.is_authenticated %}
                     <li>
                        <a href="{% url 'accounts:profile' username=request.user.username %}"> {{ request.user.username }}</a></li>
 
@@ -52,8 +59,17 @@
                 <li>
                     <a href="{% url 'accounts:register' %}">Sign Up</a>
                 </li>
-
 {% endif %}
+
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
+
 
     <div class="container mycontent">
         {% block content %} {% endblock content %}

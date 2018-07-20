@@ -10,7 +10,8 @@
             <ul class="list-unstyled">
                 {% for member_group in get_user_groups %}
                     <li class="group li-with-bullet">
-                        <a href="{% url 'groups:single' slug=member_group.group.slug %}"></a>
+                        <a href="{% url 'groups:single' slug=member_group.group.slug %}">your groups</a>
+                     <a href="{% url 'groups:single' slug=member_group.group.slug %}">your</a>
                     </li>
                 {% endfor %}
             </ul>
@@ -23,9 +24,12 @@
             <ul class="list-unstyled">
                 {% for other_group in get_other_groups %}
                     <li class="group li-with-bullet">
-                        <a href="{% url 'groups:single' slug=other_group.slug %}"></a>
+                        <a href="{% url 'groups:single' slug=other_group.slug %}">All Groups</a>
                     </li>
                 {% endfor %}
+
+
+
             </ul>
         </div>
     </div>
@@ -35,11 +39,17 @@
 
 {% block post_content %}
 
-<div class="col-md-8">
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3" style="width:50%">
+        <div class="panel-body">
+             <div class="panel panel-default panel-feed">
+<ul class="stream">
     {% for post in post_list %}
         {% include "posts/_post.html" %}
 
     {% endfor %}
+ </ul>
+    </div></div></div></div>
 </div>
 
 {% endblock post_content %}
