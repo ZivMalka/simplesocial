@@ -1,37 +1,40 @@
-{% extends 'base.html' %}
-
-{% block head %}
-
-<title>Profile</title>
-
-{% endblock %}
+{%  extends "accounts/profile_base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% load humanize %}
 
 {% block content %}
-    <div class="container">
+<div class="container">
+  <div class="row">
+
 
    <h2>Hey {{ user }}</h2>
-  {% if request.user == user %}
-  <li><a href="{% url 'accounts:edit_profile' %}">Edit your profile</a></li>
+     {% if request.user == user %}
+      <li><a href="{% url 'accounts:edit_profile' %}">Update Profile</a></li>
+    {% endif %}
+  {% if request.user == user  or request.user.is_superuser %}
+     <li>  <a href="{% url 'accounts:personal_profile' username=user.username %}">Personal Profile</a></li>
 {% endif %}
-
+      {% if request.user.is_superuser %}
+      <li>  <a href="{% url 'accounts:edit_personal_profile' username=user.username %}">Update Personal profile</a></li>
+{% endif %}
         <li>	<span class="username"><a href="{% url 'posts:for_user' username=user.username %}">All Posts history</a></span></li>
         <br>
+<ul>
+    <li> First Name: {{ user.first_name }} </li>
+    <li> Last Name:  {{ user.last_name }}  </li>
+    <li> Last Name:  {{ user.email }}  </li>
 
-    <p> First Name: </p>
-    {{ user.first_name }}  <br>
-         <p> Last Name: </p>
-    {{ user.last_name }}  <br>
-        <p> Email: </p>
-    {{ user.email }}
+</ul>
         <br>
         {% if  user.userprofileinfo.profile_pic %}
             <img src ="{{ user.userprofileinfo.profile_pic.url }}" width="240">
         {% endif %}
-    <br><br>
-    </div>
+
+    <br>
+
+
 {% endblock %}
-
-
 
 
 

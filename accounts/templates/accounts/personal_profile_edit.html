@@ -4,7 +4,6 @@
 {% block content %}
 
 <div class="container">
-  <div class="row">
 
     <h1>Edit</h1>
 
@@ -12,7 +11,7 @@
     <h3>Update your details</h3>
     <form enctype="multipart/form-data" method="POST">
         {%  csrf_token %}
-        {{ user_form_edit.as_p }}
+
         {{ profile_form.as_p }}
 
 

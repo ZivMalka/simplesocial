@@ -40,6 +40,10 @@
         </li>
       <ul class="nav navbar-nav navbar-left">
           {% if user.is_authenticated %}
+              {% if user.is_superuser %}
+                 <li>    <a href="\admin">Admin Dashboard</a></li>
+               {% endif %}
+
                     <li>
                        <a href="{% url 'accounts:profile' username=request.user.username %}"> {{ request.user.username }}</a></li>
 

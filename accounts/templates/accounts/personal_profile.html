@@ -1,0 +1,44 @@
+{% extends 'accounts/profile_base.html' %}
+
+
+{% block content %}
+<div class="container">
+  <div class="row">
+
+       <h2>Personal Record</h2>
+
+<ul>
+    <li> First Name: {{ user.first_name }} </li>
+    <li> Last Name:  {{ user.last_name }}  </li>
+    <li> Height:  {{ user.userprofileinfo.height }}  </li>
+    <li> Body fat:  {{ user.userprofileinfo.body_fat }}  </li>
+    <li> Weight:  {{ user.userprofileinfo.current_weight }} </li>
+     <li> Bmi:  {{ bmi }}  </li>
+</ul>
+            <h2>Weight History: </h2>
+
+        <table class="table">
+
+  <thead class="thead-dark">
+    <tr>
+          {% for w in user.userprofileinfo.weight_history.all %}
+      <th scope="col">{{ w.timestamp | date:"F d Y"  }}</th>
+         {% endfor %}
+    </tr>
+  </thead>
+ <tbody>
+    <tr>
+         {% for w in user.userprofileinfo.weight_history.all %}
+      <th scope="row">{{ w.weight}} Kg </th>
+         {% endfor %}
+ </tr>
+  </tbody>
+</table>
+
+
+
+{% endblock %}
+
+
+
+

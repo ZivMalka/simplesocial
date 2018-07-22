@@ -13,4 +13,6 @@ urlpatterns = [
    # url(r'^profile/$', views.profile, name='profile'),
     url(r'^profile/edit/$', views.edit_profile, name='edit_profile'),
     url(r'profile/(?P<username>[a-zA-Z0-9]+)$', views.profile, name='profile'),
+    url(r'personal/(?P<username>[a-zA-Z0-9]+)$', views.personal_profile, name='personal_profile'),
+    url(r'personal/edit/(?P<username>[a-zA-Z0-9]+)$', views.edit_personal_profile, name='edit_personal_profile'),
 ]

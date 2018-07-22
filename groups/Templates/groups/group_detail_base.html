@@ -4,7 +4,7 @@
 {% load humanize %}
 
 
-
+<body>
 {% block content %}
 <div class="container">
   <div class="row">
@@ -14,15 +14,15 @@
 
 
   <div class="brand"><div class="brand__cover" style="background-image: url(/media/bannr/couchto5k_banner_1170x250.jpg);"></div><div class="brand__cover-overlay"></div><div class="brand-row brand__inner"><div class="brand__logo"><div class="brand__logo-content">
-      <img src="/media/bannr/couchto5k_banner_1170x250.jpg" class="brand__logo-img" style="margin-top: -20px;margin-left: -46px;height: 281px;" alt="Couch to 5K">
+      <img src="/media/bannr/couchto5k_banner_1170x250.jpg" class="brand__logo-img" style="margin-top: -20px;margin-left: -87px;height: 281px;" alt="Couch to 5K">
   </div></div><div class="brand__name"><h1 class="group_name" style="margin-top: -47px;margin-left: 100px;">{{group.name}}</h1></div><div class="brand__actions">
   </div></div><div class="brand__name"></div><div class="brand__actions">
       	{% if user in group.members.all %}
-					<a href="{% url 'groups:leave' slug=group.slug %}" class="btn btn-default btn-cancel-compose" ><span class="glyphicon glyphicon-remove-circle"></span> Unfollow</a>
+					<a href="{% url 'groups:leave' slug=group.slug %}" class="btn btn-default btn-cancel-compose" style="margin-top: -77px;margin-left: 245px;background:white; color: #1879cd;"><span class="glyphicon glyphicon-remove-circle"></span> Unfollow</a>
 				{% else %}
-					<a href="{% url 'groups:join' slug=group.slug %}" class="btn btn-default btn-cancel-compose" style="margin-top: -77px;margin-left: 245px;background:white; color: #1879cd;"><span class="glyphicon glyphicon-ok-circle" style="background:white; color: #1879cd;"></span> Follow</a>
+					<a href="{% url 'groups:join' slug=group.slug %}" class="btn btn-default btn-cancel-compose" style="margin-top: -77px;margin-left: 245px;background:white; color: #1879cd;"><span class="glyphicon glyphicon-ok-circle"></span> Follow</a>
 				{% endif %}
-            <nav class="navbar navbar-default" style="margin-top: -22px;">
+         <nav class="navbar navbar-default" style="margin-top: -22px;">
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" style="background:white; id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
@@ -37,12 +37,10 @@
 
   </div></div>
 
-
-
-
-
-
       {% block pregroup %} {% endblock %}
+
+
+  <div class="content">
 
 
     {% block group_content %}{% endblock %}
@@ -51,3 +49,4 @@
 </div>
 
 {% endblock %}
+    </body>

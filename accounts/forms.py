@@ -23,5 +23,8 @@ class EditProfileForm(forms.ModelForm):
         fields = ('first_name', 'last_name', 'email')
 
 
-
+class UserPersonalProfileInfoForm(forms.ModelForm):
+    class Meta:
+        model = UserProfileInfo
+        fields = ('height','body_fat','birth_date','current_weight')
 

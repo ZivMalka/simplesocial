@@ -15,6 +15,14 @@ ul.stream li {
     color: #fff;
 }
 
+.follow{
+  margin-top: -77px;
+  margin-left: 245px;
+  background:white;
+  color: #1879cd;
+
+}
+
 ul.stream li:last-child {
   border-bottom: none;
 }
