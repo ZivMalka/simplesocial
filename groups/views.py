@@ -14,10 +14,17 @@ from . import models
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import RedirectView
+from posts.models import Post
 
 class CreateGroup(LoginRequiredMixin, generic.CreateView):
     fields = ("name", "description")
     model = Group
+
+    def creatpost(self):
+        group = self.object.id
+        p1 = Post(message="Welcome to new group", group=group)
+        p1.save()
+
 
 class SingleGroup(generic.DetailView):
     model = Group

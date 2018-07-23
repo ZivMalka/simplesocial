@@ -1,16 +1,20 @@
 {% extends "base.html" %}
-
 {% load staticfiles %}
 {% load i18n %}
 {% load humanize %}
 
-{% block content %}
 
+<body>
+{% block content %}
 <div class="container">
   <div class="row">
 
  <link href="{% static 'posts/css/posts.css' %}?v=1" rel="stylesheet">
 
+   <div class="brand"><div class="brand__cover" style="background-image: url(/media/bannr/couchto5k_banner_1170x250.jpg);"></div><div class="brand__cover-overlay"></div><div class="brand-row brand__inner"><div class="brand__logo"><div class="brand__logo-content">
+      <img src="/media/bannr/couchto5k_banner_1170x250.jpg" class="brand__logo-img" style="margin-top: -20px;margin-left: -87px;height: 281px;" alt="Couch to 5K">
+  </div></div><div class="brand__name"><h1 class="group_name" style="margin-top: -47px;margin-left: 100px;"></h1></div><div class="brand__actions">
+  </div></div><div class="brand__name"></div><div class="brand__actions">
          <nav class="navbar navbar-default" style="margin-top: -22px;">
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" style="background:white; id="bs-example-navbar-collapse-1">
@@ -18,13 +22,34 @@
           </ul>
         </li>
       <ul class="nav navbar-nav navbar-left">
-        <li><a href="">Post</a></li>
-        <li><a href="">Members</a></li>
-        <li><a href="#">About</a></li>
+          <li><a href="{% url 'accounts:profile' username=user.username %}">Profile</a></li>
+             <li><a href="{% url 'posts:for_user' username=user.username %}">All Posts history</a></li>
+       {% if request.user == user %}
+      <li><a href="{% url 'accounts:edit_profile' %}">Update Profile</a></li>
+    {% endif %}
+  {% if request.user == user  or request.user.is_superuser %}
+     <li>  <a href="{% url 'accounts:personal_profile' username=user.username %}">Personal Profile</a></li>
+{% endif %}
+      {% if request.user.is_superuser %}
+      <li>  <a href="{% url 'accounts:edit_personal_profile' username=user.username %}">Update Personal profile</a></li>
+{% endif %}
       </ul>
 </nav>
+
+  </div></div>
+
+      {% block pregroup %} {% endblock %}
+
+
+  <div class="content">
+
+
+    {% block profile_content %}{% endblock %}
+
   </div>
 </div>
- </div>
 
 {% endblock %}
+
+    </body>
+

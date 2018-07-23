@@ -3,38 +3,38 @@
 {% load i18n %}
 {% load humanize %}
 
-{% block content %}
-<div class="container">
-  <div class="row">
+{% block head %}
+  <link href="{% static 'posts/css/posts.css' %}?v=1" rel="stylesheet">
+  <script src="{% static 'posts/js/jquery.bullseye-1.0-min.js' %}"></script>
+  <script src="{% static 'posts/js/posts.js' %}?v=1"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script src="{% static 'posts/js/posts.js' %}" type="text/javascript"></script>
+  <script src="{% static 'posts/js/posts.js' %}"></script>
 
 
-   <h2>Hey {{ user }}</h2>
-     {% if request.user == user %}
-      <li><a href="{% url 'accounts:edit_profile' %}">Update Profile</a></li>
-    {% endif %}
-  {% if request.user == user  or request.user.is_superuser %}
-     <li>  <a href="{% url 'accounts:personal_profile' username=user.username %}">Personal Profile</a></li>
-{% endif %}
-      {% if request.user.is_superuser %}
-      <li>  <a href="{% url 'accounts:edit_personal_profile' username=user.username %}">Update Personal profile</a></li>
-{% endif %}
-        <li>	<span class="username"><a href="{% url 'posts:for_user' username=user.username %}">All Posts history</a></span></li>
-        <br>
-<ul>
-    <li> First Name: {{ user.first_name }} </li>
-    <li> Last Name:  {{ user.last_name }}  </li>
-    <li> Last Name:  {{ user.email }}  </li>
 
-</ul>
-        <br>
-        {% if  user.userprofileinfo.profile_pic %}
-            <img src ="{{ user.userprofileinfo.profile_pic.url }}" width="240">
+{% endblock head %}
+
+
+   {% block profile_content %}
+
+    <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+
+ {% if  user.userprofileinfo.profile_pic %}
+            <img  style="margin-left: -53%;" src ="{{ user.userprofileinfo.profile_pic.url }}" width="240">
         {% endif %}
 
-    <br>
+<ul style="margin-top: -25%;">
+    <h3>{{ user.first_name }} {{ user.last_name }} </h3>
 
+     {{ user.email }}
+
+</ul>
 
 {% endblock %}
+
 
 
 

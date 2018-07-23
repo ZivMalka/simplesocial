@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from accounts.models import UserProfileInfo
+from accounts.models import UserProfileInfo, WeightList
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 
 
@@ -28,3 +28,9 @@ class UserPersonalProfileInfoForm(forms.ModelForm):
         model = UserProfileInfo
         fields = ('height','body_fat','birth_date','current_weight')
 
+class WeightHistoryForm(forms.ModelForm):
+    weight = forms.FloatField(required=True)
+    body_fat = forms.FloatField(required=True)
+    class Meta:
+        model = WeightList
+        fields = ('weight' , 'body_fat')

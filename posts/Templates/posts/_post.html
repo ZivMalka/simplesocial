@@ -25,24 +25,22 @@
 			<span class="group-name">in <a href="#">{{ post.group.name }}</a></span>
 			{% endif %}
      {% if user.is_authenticated and post.user == user and not hide_delete %}
-           <span class="glyphicon glyphicon-remove remove-feed" title="{% trans 'Click to remove this feed' %}">
 				<a href="{% url 'posts:delete' pk=post.pk %}" title="delete" class="btn btn-simple">
-					<span class="glyphicon glyphicon-remove text-danger" aria-hidden="true"></span>
-					<span class="text-danger icon-label">Delete</span>
+					   <span class="glyphicon glyphicon-remove remove-feed" title="{% trans 'Click to remove this feed' %}"> </span>
 				</a>
-         </span>
+
 			{% endif %}
 
 
       <div class="interaction">
         {% if user in post.likes.all %}
-         	<a href="{% url "posts:like" slug=post.slug %}" style="text-decoration: none;" class="like unlike">
+         	<a href="{% url "posts:like" pk=post.pk %}" style="text-decoration: none;" class="like unlike">
             <span class="glyphicon glyphicon-thumbs-up"></span>
             <span class="text">{% trans 'Unlike' %}</span>
             (<span class="like-count">{{ post.likes.count }}</span>)
           </a>
         {% else %}
-        	<a href="{% url "posts:like" slug=post.slug %}" style="text-decoration: none;" class="like">
+        	<a href="{% url "posts:like" pk=post.pk %}" style="text-decoration: none;" class="like">
             <span class="glyphicon glyphicon-thumbs-up"></span>
             <span class="text">{% trans 'Like' %}</span>
             (<span class="like-count"> {{ post.likes.count }}</span>)

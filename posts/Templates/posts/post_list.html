@@ -1,4 +1,8 @@
 {% extends "posts/post_base.html" %}
+{% load static %}
+{% load staticfiles %}
+{% load i18n %}
+
 {% block prepost %}
 
 
@@ -40,17 +44,24 @@
 {% block post_content %}
 
   <div class="row">
-    <div class="col-md-6 col-md-offset-3" style="width:50%">
+    <div class="col-md-6 col-md-offset-3">
+
+      <div class="panel panel-default panel-feed">
+        <div class="panel-heading">
+          <h3 class="panel-title">{% trans 'Latest posts' %}</h3>
+        </div>
         <div class="panel-body">
-             <div class="panel panel-default panel-feed">
+       <div class="stream-update">
+            <a href="#"><span class="new-posts"></span> {% trans 'new posts' %}</a>
+          </div>
+
 <ul class="stream">
     {% for post in post_list %}
         {% include "posts/_post.html" %}
-
     {% endfor %}
  </ul>
     </div></div></div></div>
-</div>
+
 
 {% endblock post_content %}
 

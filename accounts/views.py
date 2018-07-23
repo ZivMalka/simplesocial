@@ -1,4 +1,4 @@
-from accounts.forms import UserForm, UserProfileInfoForm,  EditProfileForm, UserPersonalProfileInfoForm
+from accounts.forms import UserForm, UserProfileInfoForm,  EditProfileForm, UserPersonalProfileInfoForm, WeightHistoryForm
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
@@ -108,13 +108,17 @@ def personal_profile(request, username):
             bmi = "Empty"
         else:
             bmi = (user_P.current_weight) / (user_P.height) ** 2
-        print(bmi)
         return render(request, 'accounts/personal_profile.html', {"user":user, 'bmi': bmi})
 
 @login_required
 def profile(request, username):
         user = User.objects.get(username=username)
+        user_P = UserProfileInfo.objects.get(user=user)
+        print(WeightList.objects.get(pk=1))
+
+
         return render(request, 'accounts/profile.html', {"user":user})
+
 
 
 
@@ -127,16 +131,16 @@ def edit_personal_profile(request, username):
             if profile_form.is_valid():
                 weight = profile_form.cleaned_data.get('current_weight')
 
-                if  weight is not None:
+                profile = profile_form.save()
+                #profile = profile_form.save(commit=False)
+                profile.save()
+
+                if weight is not None:
                     p1 = WeightList(weight=weight)
                     p1.save()
                     user = User.objects.get(username=username)
                     user_P = UserProfileInfo.objects.get(user=user)
                     user_P.weight_history.add(p1)
-
-                profile = profile_form.save()
-                #profile = profile_form.save(commit=False)
-                profile.save()
 
                 messages.success(request, 'Your personal profile was successfully updated!')
                 return HttpResponseRedirect(reverse("accounts:personal_profile", kwargs={"username": user.username}))
@@ -149,3 +153,37 @@ def edit_personal_profile(request, username):
                           {'profile_form': profile_form})
     else:
         return HttpResponse("No access to this page")
+
+
+def delete_weight(request, pk):
+    user = User.objects.get(username=request.user.username)
+    user_P = UserProfileInfo.objects.get(user=user)
+#    d = WeightList.objects.filter(weight_list__user_id=user.id, weight=weight, timestamp=date)
+    d= WeightList.objects.get(id=pk)
+    d.delete()
+    return HttpResponseRedirect(reverse("accounts:personal_profile", kwargs={"username": user.username}))
+
+
+
+def add_weight(request, username):
+    if request.user.is_superuser:
+        if request.method == 'POST':
+            form = WeightHistoryForm(request.POST, instance=request.user.userprofileinfo)
+
+            if form.is_valid():
+                weight = form.cleaned_data.get('weight')
+                body_fat = form.cleaned_data.get('body_fat')
+
+
+                p1 = WeightList(weight=weight, body_fat=body_fat)
+                p1.save()
+                user = User.objects.get(username=username)
+                user_P = UserProfileInfo.objects.get(user=user)
+                user_P.weight_history.add(p1)
+                return HttpResponseRedirect(reverse("accounts:personal_profile", kwargs={"username": user.username}))
+
+        else:
+            form = WeightHistoryForm(request.POST, instance=request.user.userprofileinfo)
+            return render(request, 'accounts/add_weight.html', {'form': form})
+    else:
+            return HttpResponse("No access to this page")
