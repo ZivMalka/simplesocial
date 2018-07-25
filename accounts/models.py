@@ -19,6 +19,7 @@ class UserProfileInfo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     # additional
     profile_pic = models.ImageField(upload_to='profile_pics', blank=True)
+    description = models.CharField(null=True, blank=True, max_length=250)
     birth_date = models.DateField(null=True, blank=True)
     height = models.FloatField(null=True, blank=True)
     body_fat = models.FloatField(null=True, blank=True)
@@ -38,3 +39,4 @@ class UserProfileInfo(models.Model):
 
     def __str__(self):
         return self.user.username
+

@@ -92,7 +92,7 @@ def upload_pic(request, post_id):
             m.save()
 
 
-def writePost(request, pk):
+def write_post(request, pk):
     group = get_object_or_404(Group, pk=pk)
 
     if request.user.is_authenticated:
@@ -165,8 +165,6 @@ class DeletePost(LoginRequiredMixin, SelectRelatedMixin, generic.DeleteView):
         messages.success(self.request, "Post Deleted")
         return super().delete(*args, **kwargs)
 
-def like(request, pk):
-    obj = get_object_or_404(Post, pk=pk)
 
 
 class like(RedirectView, LoginRequiredMixin):
@@ -179,6 +177,8 @@ class like(RedirectView, LoginRequiredMixin):
             obj.likes.remove(user)
         else:
             obj.likes.add(user)
+        for user in obj.likes.all():
+            print(user)
 
         return url_
 

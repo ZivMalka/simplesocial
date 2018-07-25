@@ -110,6 +110,12 @@ $("body").keydown(function (evt) {
     }
   });
 
+  var modal = document.getElementById('t-wrapper');
+window.onclick = function(event) {
+    if (event.target == t) {
+        modal.style.display = "none";
+    }
+}
 
 
 });

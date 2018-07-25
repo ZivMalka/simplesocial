@@ -11,7 +11,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
       <script src="{% static 'posts/js/posts.js' %}" type="text/javascript"></script>
   <script src="{% static 'posts/js/posts.js' %}"></script>
-
+     <link href="{% static 'accounts/css/css.css' %}?v=1" rel="stylesheet">
 
 
 {% endblock head %}
@@ -31,9 +31,31 @@
 
      {{ user.email }}
 
+<p style="font-size:16px;">
+ <span>Following</span>&nbsp;&nbsp; <b><a style="color:black" onclick="document.getElementById('modal-wrapper').style.display='block'">{{ my_groups.count }}<b></a>
+</p>
+
+
+
 </ul>
 
+        <div id="modal-wrapper" class="modal">
+        <div class="modal-content animate" style="width: 335px; margin-top: 40px; min-height:500px; margin-left:36%">
+        <div class="imgcontainer">
+
+        <span style="margin-top: -7%;" onclick="document.getElementById('modal-wrapper').style.display='none'" class="close" title="Close PopUp">&times;</span>
+         <b><h5 class="follow_h">likes</h5></b>
+            {% for site in my_groups %}
+             <ul class="list-group list-group-flush">
+         <li class="list-group-item">
+             <a class="follow_h2">{{ site.group.name }}</a>
+         </li>
+            </ul>
+        {% endfor %}
+        </div>
+        </div></div>
 {% endblock %}
+
 
 
 

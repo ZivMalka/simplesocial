@@ -6,11 +6,15 @@
 
 {% block head %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="{% static 'accounts/js/accounts.js' %}"></script>
+     <link href="{% static 'accounts/css/css.css' %}?v=1" rel="stylesheet">
 {% endblock %}
 
 
   <div class="feed-container">
 <div class="post media">
+
+
  {% if request.user.is_authenticated %}
     <div class="post">
 	<h3>{{ post.message_html|safe }}</h3>
@@ -28,42 +32,56 @@
 				<a href="{% url 'posts:delete' pk=post.pk %}" title="delete" class="btn btn-simple">
 					   <span class="glyphicon glyphicon-remove remove-feed" title="{% trans 'Click to remove this feed' %}"> </span>
 				</a>
-
 			{% endif %}
-
-
       <div class="interaction">
         {% if user in post.likes.all %}
          	<a href="{% url "posts:like" pk=post.pk %}" style="text-decoration: none;" class="like unlike">
             <span class="glyphicon glyphicon-thumbs-up"></span>
             <span class="text">{% trans 'Unlike' %}</span>
-            (<span class="like-count">{{ post.likes.count }}</span>)
           </a>
         {% else %}
         	<a href="{% url "posts:like" pk=post.pk %}" style="text-decoration: none;" class="like">
             <span class="glyphicon glyphicon-thumbs-up"></span>
             <span class="text">{% trans 'Like' %}</span>
-            (<span class="like-count"> {{ post.likes.count }}</span>)
           </a>
         {% endif %}
+
+          <span class="like-count"><a style="color:black" onclick="myFunction()">({{ post.likes.count }})</a> <span>
       <a href="#" style="text-decoration: none;" class="comment">
              <span class="glyphicon glyphicon-comment"></span> {% trans 'Comment' %}
             (<span class="comment-count">{{ post.comment.count }}</span>)
              </a>
        </div>
+
+        <div id="modal-wrapper" class="modal">
+        <div class="modal-content animate" style="width: 335px; margin-top: 40px; min-height:500px; margin-left:36%">
+                <span style="margin-top: -7%;" onclick="document.getElementById('modal-wrapper').style.display='none'" class="close" title="Close PopUp">&times;</span>
+         <b><h5 class="follow_h">likes</h5></b>
+            {% for user in post.likes.all %}
+             <ul class="list-group list-group-flush">
+         <li class="list-group-item" style="text-align:center">
+             <a class="follow_h2">{{ user.username }}</a>
+             <div style="font-size:15px;color: #999;">{{ user.first_name }}{{ user.last_name }}</div>
+         </li>
+            </ul>
+        {% endfor %}
+        </div>
+        </div>
+
+
  <div class="comments" style="display: none;">
-          <form role="form" method="post" action="{% url 'posts:comment' pk=post.pk %}">
-              {% csrf_token %}
-              <input type="hidden" name="feed" value="{{ post.pk }}" onsubmit="return false">
-              <input type="text" class="form-control input-sm" placeholder="{% trans 'Write a comment...' %}" name="content" maxlength="255">
-          </form>
-                <ul class="list-group list-group-flush">
-                    {% for comment in post.comment.all %}
-                             {% if comment.user == user %}
-                                 <span class="glyphicon glyphicon-remove remove-feed" title="{% trans 'Click to remove this comment' %}"></span>
-                                {% endif %}
-                    <li feed-id="{{ comment.pk }}" csrf="{{ csrf_token }}">
-                        <div>{{ comment.content }}</div>
+  <form role="form" method="post" action="{% url 'posts:comment' pk=post.pk %}">
+ {% csrf_token %}
+     <input type="hidden" name="feed" value="{{ post.pk }}" onsubmit="return false">
+   <input type="text" class="form-control input-sm" placeholder="{% trans 'Write a comment...' %}" name="content" maxlength="255">
+ </form>
+<ul class="list-group list-group-flush">
+     {% for comment in post.comment.all %}
+     {% if comment.user == user %}
+  <span class="glyphicon glyphicon-remove remove-feed" title="{% trans 'Click to remove this comment' %}"></span>
+             {% endif %}
+     <li feed-id="{{ comment.pk }}" csrf="{{ csrf_token }}">
+     <div>{{ comment.content }}</div>
     <h4>
       <a href="{% url 'accounts:profile' username=post.user.username %}">
         {{ comment.user.username }}
@@ -78,7 +96,5 @@
                     <ul/></div></div></div></div>
 
 	{% endif %}
-
-
 
 

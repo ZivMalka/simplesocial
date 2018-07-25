@@ -15,6 +15,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.contrib.postgres.fields import ArrayField
+from groups.models import GroupMember
 
 def register(request):
     registered = False
@@ -114,10 +115,8 @@ def personal_profile(request, username):
 def profile(request, username):
         user = User.objects.get(username=username)
         user_P = UserProfileInfo.objects.get(user=user)
-        print(WeightList.objects.get(pk=1))
-
-
-        return render(request, 'accounts/profile.html', {"user":user})
+        my_groups = GroupMember.objects.filter(user=user)
+        return render(request, 'accounts/profile.html', {"user":user, 'my_groups': my_groups })
 
 
 
@@ -161,7 +160,7 @@ def delete_weight(request, pk):
 #    d = WeightList.objects.filter(weight_list__user_id=user.id, weight=weight, timestamp=date)
     d= WeightList.objects.get(id=pk)
     d.delete()
-    return HttpResponseRedirect(reverse("accounts:personal_profile", kwargs={"username": user.username}))
+    return HttpResponseRedirect(reverse("accounts:personal_profile", kwargs={"username": user.username }))
 
 
 
@@ -187,3 +186,9 @@ def add_weight(request, username):
             return render(request, 'accounts/add_weight.html', {'form': form})
     else:
             return HttpResponse("No access to this page")
+
+def get_groups(request, username):
+    user = User.objects.get(username=request.user.username)
+    my_groups = GroupMember.objects.filter(user=user)
+    args = {'my_groups' : my_groups}
+    return render (request, 'accounts/profile.html', args)

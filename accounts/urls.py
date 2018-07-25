@@ -17,4 +17,5 @@ urlpatterns = [
     url(r'personal/edit/(?P<username>[a-zA-Z0-9]+)$', views.edit_personal_profile, name='edit_personal_profile'),
     url(r"delete/(?P<pk>\d+)/$", views.delete_weight, name='delete_weight'),
     url(r'personal/add/(?P<username>[a-zA-Z0-9]+)$', views.add_weight, name='add_weight'),
+
 ]

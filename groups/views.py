@@ -20,10 +20,12 @@ class CreateGroup(LoginRequiredMixin, generic.CreateView):
     fields = ("name", "description")
     model = Group
 
-    def creatpost(self):
-        group = self.object.id
-        p1 = Post(message="Welcome to new group", group=group)
+    def form_valid(self, form):
+        group = form.save()
+        p1= Post.objects.create(group=group, message="Welcome to new group", user_id=1)
         p1.save()
+        print(p1)
+        return redirect("groups:all")
 
 
 class SingleGroup(generic.DetailView):
@@ -32,7 +34,6 @@ class SingleGroup(generic.DetailView):
 class ListGroups(generic.ListView):
     model = Group
 
-
 def get_members(request, slug):
 
     group = Group.objects.get(slug=slug)
@@ -40,6 +41,9 @@ def get_members(request, slug):
     args = { 'members_list' : members_list,
              'group' : group}
     return render (request, 'groups/users_in_group.html', args)
+
+
+
 
 
 class GetGroup(LoginRequiredMixin, generic.RedirectView):
