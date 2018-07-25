@@ -8,6 +8,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="{% static 'accounts/js/accounts.js' %}"></script>
      <link href="{% static 'accounts/css/css.css' %}?v=1" rel="stylesheet">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 {% endblock %}
 
 
@@ -45,28 +48,35 @@
             <span class="text">{% trans 'Like' %}</span>
           </a>
         {% endif %}
-
-          <span class="like-count"><a style="color:black" onclick="myFunction()">({{ post.likes.count }})</a> <span>
-      <a href="#" style="text-decoration: none;" class="comment">
-             <span class="glyphicon glyphicon-comment"></span> {% trans 'Comment' %}
-            (<span class="comment-count">{{ post.comment.count }}</span>)
-             </a>
-       </div>
-
-        <div id="modal-wrapper" class="modal">
-        <div class="modal-content animate" style="width: 335px; margin-top: 40px; min-height:500px; margin-left:36%">
-                <span style="margin-top: -7%;" onclick="document.getElementById('modal-wrapper').style.display='none'" class="close" title="Close PopUp">&times;</span>
+          <span class="like-count"><a style="color:black" data-toggle="modal" data-target="#myModal{{ post.pk }}">({{ post.likes.count }})</a> <span>
+                  <!-- Modal -->
+  <div class="modal" id="myModal{{ post.pk }}" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content" style="width: 400px;height: 400px;">
+        <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
          <b><h5 class="follow_h">likes</h5></b>
+        </div>
             {% for user in post.likes.all %}
              <ul class="list-group list-group-flush">
-         <li class="list-group-item" style="text-align:center">
-             <a class="follow_h2">{{ user.username }}</a>
+         <li class="list-group-item" style="text-align:center;margin-top: -19px;">
+             <div class="follow_h2">{{ user.username }}</div>
              <div style="font-size:15px;color: #999;">{{ user.first_name }}{{ user.last_name }}</div>
          </li>
             </ul>
         {% endfor %}
         </div>
-        </div>
+        </div>    </div>
+
+
+              <a href="#" style="text-decoration: none;" class="comment">
+             <span class="glyphicon glyphicon-comment"></span> {% trans 'Comment' %}
+            (<span class="comment-count">{{ post.comment.count }}</span>)
+             </a>
+       </div>
+
+
 
 
  <div class="comments" style="display: none;">
