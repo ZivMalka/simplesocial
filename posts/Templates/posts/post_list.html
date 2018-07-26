@@ -5,44 +5,11 @@
 
 {% block prepost %}
 
-
-    {% if request.user.is_authenticated %}
-
-    <div class="card card-with-shadow">
-        <div class="content">
-            <h5 class="title">Your Groups</h5>
-            <ul class="list-unstyled">
-                {% for member_group in get_user_groups %}
-                    <li class="group li-with-bullet">
-                        <a href="{% url 'groups:single' slug=member_group.group.slug %}">your groups</a>
-                     <a href="{% url 'groups:single' slug=member_group.group.slug %}">your</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
-
-    <div class="card card-with-shadow">
-        <div class="content">
-            <h5 class="title">All Groups</h5>
-            <ul class="list-unstyled">
-                {% for other_group in get_other_groups %}
-                    <li class="group li-with-bullet">
-                        <a href="{% url 'groups:single' slug=other_group.slug %}">All Groups</a>
-                    </li>
-                {% endfor %}
-
-
-
-            </ul>
-        </div>
-    </div>
-</div>
-    {% endif %}
 {% endblock prepost %}
 
-{% block post_content %}
 
+{% block post_content %}
+ {% if request.user.is_authenticated %}
   <div class="row">
     <div class="col-md-6 col-md-offset-3">
 
@@ -57,11 +24,11 @@
 
 <ul class="stream">
     {% for post in post_list %}
-        {% include "posts/_post.html" %}
+        {% include "posts/_post.html"  %}
     {% endfor %}
  </ul>
     </div></div></div></div>
-
+    {% endif %}
 
 {% endblock post_content %}
 

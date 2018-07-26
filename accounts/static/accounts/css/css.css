@@ -50,19 +50,24 @@
     color: red;
     cursor: pointer;
 }
+.like-count1{
+  color: #337ab7;
+}
 
 .follow_h{
     text-align: center;
     font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     font-size:17px;
     font-weight: 500;
+    color:black;
 }
 
 .follow_h2{
+
+    scolor: black;
     text-align: center;
     font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     font-size:15px;
-    color:black;
     font-weight: 500;
 }
 .popup {

@@ -116,8 +116,8 @@ def profile(request, username):
         user = User.objects.get(username=username)
         user_P = UserProfileInfo.objects.get(user=user)
         my_groups = GroupMember.objects.filter(user=user)
-        return render(request, 'accounts/profile.html', {"user":user, 'my_groups': my_groups })
-
+        url = reverse("posts:for_user",  kwargs={"username": user.username})
+        return render(request, 'accounts/profile.html', {"user":user, 'my_groups': my_groups, 'url':url })
 
 
 

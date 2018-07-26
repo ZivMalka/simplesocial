@@ -49,7 +49,7 @@ class PostList(SelectRelatedMixin, generic.ListView):
 
 class UserPosts(generic.ListView):
     model = models.Post
-    template_name = "posts/u.html"
+    template_name = "posts/user_post_list.html"
 
     def get_queryset(self):
         try:
@@ -172,13 +172,13 @@ class like(RedirectView, LoginRequiredMixin):
     def get_redirect_url(self, *args, **kwargs):
         obj = get_object_or_404(Post, pk=self.kwargs.get("pk"))
         url_ = obj.get_posts_url()
+        for user in obj.likes.all():
+            print()
         user = self.request.user
         if user in obj.likes.all():
             obj.likes.remove(user)
         else:
             obj.likes.add(user)
-        for user in obj.likes.all():
-            print(user)
 
         return url_
 

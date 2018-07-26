@@ -10,15 +10,18 @@
 
 {% block group_content %}
 <div class="col-md-8">
-    <div class="list-group">
+
 
 {% for site in members_list %}
-
-    <li>@{{ site.user.username }}</li>
-
+    <div style="height:300px;width:200px">
+<ul class="list-group">
+      <li class="list-group-item">
+        <a class="follow_h2" href="{% url 'accounts:profile' username=site.user.username %}">{{ site.user.username }}</a>
+ <div style="font-size:15px;color: #999;">{{ site.user.first_name }}{{ site.user.last_name }}</div>
+</ul>
 {% endfor %}
 
     </div>
-</div>
+</div></div>
 
 {% endblock group_content %}
