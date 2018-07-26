@@ -103,6 +103,7 @@ def profile(request, username):
 
 @login_required
 def personal_profile(request, username):
+    if request.user.username == username:
         user = User.objects.get(username=username)
         user_P = UserProfileInfo.objects.get(user=user)
         if (user_P.height is None or user_P.current_weight is None):
@@ -110,6 +111,8 @@ def personal_profile(request, username):
         else:
             bmi = (user_P.current_weight) / (user_P.height) ** 2
         return render(request, 'accounts/personal_profile.html', {"user":user, 'bmi': bmi})
+    else:
+        return HttpResponse("No access to this page")
 
 @login_required
 def profile(request, username):

@@ -15,12 +15,11 @@ ul.stream li {
     color: #fff;
 }
 
-.follow{
+#follow{
   margin-top: -77px;
   margin-left: 245px;
   background:white;
   color: #1879cd;
-
 }
 
 ul.stream li:last-child {
@@ -81,9 +80,11 @@ ul.stream li div.post div.interaction a {
 }
 
 .compose {
+  display: none;
   border-bottom: 1px solid #eee;
   padding-left: 15px;
   padding-right: 15px;
+
 }
 
 .compose h2 {
