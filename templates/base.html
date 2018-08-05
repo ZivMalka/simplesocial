@@ -55,10 +55,13 @@
                     <a href="{% url 'groups:create' %}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Create Groups</a>
                 </li>
                 <li>
-                    <a href="{% url 'nutrition:list' %}"><span class="glyphicon glyphicon-cutlery" aria-hidden="true"></span>&nbsp;Nutrition</a>
+                    <a href="{% url 'nutrition:list' username=request.user.username %}"><span class="glyphicon glyphicon-cutlery" aria-hidden="true"></span>&nbsp;Nutrition</a>
                 </li>
                 <li>
                     <a href="{% url 'groups:all' %}"><span class="glyphicon glyphicon-scale" aria-hidden="true"></span>&nbsp;Workout</a>
+                </li>
+              <li>
+                    <a href="{% url 'accounts:all_users' %}">&nbsp;Friends</a>
                 </li>
               </ul>
       <ul class="nav navbar-nav navbar-right">

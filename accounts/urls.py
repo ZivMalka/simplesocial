@@ -20,5 +20,6 @@ urlpatterns = [
     url(r'personal/chart/(?P<username>[a-zA-Z0-9]+)$', views.chart, name='chart'),
    # url(r'personal/chart/filter/(?P<username>[a-zA-Z0-9]+)$', views.chart_filter, name='filter'),
     url(r'personal/chartbody/(?P<username>[a-zA-Z0-9]+)$', views.chart_bodyfat, name='chart_bodyfat'),
+    url(r"users/$", views.get_users, name="all_users"),
 
 ]

@@ -58,6 +58,11 @@ def profile(request):
     args = {'user' : request.user }
     return render(request, 'accounts/profile.html', args)
 
+
+def get_users(request):
+    users = User.objects.all()
+    return render (request, 'accounts/users.html', {'users':users})
+
 @login_required
 def edit_profile(request):
     if request.user.is_authenticated:

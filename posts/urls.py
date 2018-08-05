@@ -8,6 +8,7 @@ app_name='posts'
 urlpatterns = [
 
     url(r"^$", views.PostList.as_view(), name="all"),
+
    # url(r"new/$", views.writePost, name="create"),
     url(r'^post/(?P<pk>\d+)/new/$', views.write_post, name='create'),
     url(r'^post/(?P<pk>\d+)/comment/$', views.add_comment_to_post, name='comment'),

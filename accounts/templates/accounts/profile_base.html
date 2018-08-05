@@ -34,6 +34,8 @@
     {% endif %}
   {% if request.user == user  or request.user.is_superuser %}
      <li>  <a href="{% url 'accounts:personal_profile' username=user.username %}">Personal Profile</a></li>
+       <li><a href="{% url 'nutrition:list' username=request.user.username %}">Nutrition</a>
+       </li>
 {% endif %}
       {% if request.user.is_superuser %}
       <li>  <a href="{% url 'accounts:edit_personal_profile' username=user.username %}">Update Personal profile</a></li>

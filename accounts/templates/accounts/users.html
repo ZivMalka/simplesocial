@@ -1,0 +1,25 @@
+{% extends "accounts/profile_base.html" %}
+{% load static %}
+{% load staticfiles %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% block content %}
+<link href="{% static 'posts/css/posts.css' %}?v=1" rel="stylesheet">
+    {% for user in users %}
+    <ul class="list-group">
+      <li class="list-group-item">
+        <a class="follow_h2" href="{% url 'accounts:profile' username=user.username %}">{{ user.username }}</a>
+ <div style="font-size:15px;color: #999;">{{ user.first_name }}{{ user.last_name }}</div></li>
+       </ul>
+        {% endfor %}
+
+
+</head>
+<body>
+
+</body>
+</html>
+{% endblock content %}
