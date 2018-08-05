@@ -11,6 +11,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
       <script src="{% static 'posts/js/posts.js' %}" type="text/javascript"></script>
   <script src="{% static 'posts/js/posts.js' %}"></script>
+   <script src="{% static 'accounts/js/fusioncharts.js' %}?v=1"></script>
+   <script src="{% static 'accounts/js/fusioncharts.theme.ocean.js' %}?v=1"></script>
 
 
 
@@ -41,7 +43,7 @@
         <div class="imgcontainer">
 
         <span style="margin-top: -7%;" onclick="document.getElementById('modal-wrapper').style.display='none'" class="close" title="Close PopUp">&times;</span>
-         <b><h5 class="follow_h">likes</h5></b>
+         <b><h5 class="follow_h">Following</h5></b>
             {% for site in my_groups %}
              <ul class="list-group list-group-flush">
          <li class="list-group-item">

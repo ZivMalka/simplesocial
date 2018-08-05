@@ -3,10 +3,6 @@
 {% load staticfiles %}
 {% load i18n %}
 
-{% block prepost %}
-
-{% endblock prepost %}
-
 
 {% block post_content %}
  {% if request.user.is_authenticated %}
@@ -22,6 +18,8 @@
             <a href="#"><span class="new-posts"></span> {% trans 'new posts' %}</a>
           </div>
 
+
+
 <ul class="stream">
     {% for post in post_list %}
         {% include "posts/_post.html"  %}
@@ -29,6 +27,8 @@
  </ul>
     </div></div></div></div>
     {% endif %}
+    <ul class="stream">
 
 {% endblock post_content %}
 
+  </head>

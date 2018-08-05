@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from accounts.models import UserProfileInfo, WeightList
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 
+from django.forms.fields import DateField
+
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
@@ -31,6 +33,18 @@ class UserPersonalProfileInfoForm(forms.ModelForm):
 class WeightHistoryForm(forms.ModelForm):
     weight = forms.FloatField(required=True)
     body_fat = forms.FloatField(required=True)
+
     class Meta:
         model = WeightList
-        fields = ('weight' , 'body_fat')
+        fields = ('weight' , 'body_fat', 'timestamp')
+        widgets = {
+            'timestamp': forms.DateTimeInput(attrs={'class': 'datepicker'})
+        }
+
+class FilterDate(forms.ModelForm):
+    class Meta:
+        model = WeightList
+        fields = ('timestamp', )
+        widgets = {
+            'timestamp': forms.DateTimeInput(attrs={'class': 'datepicker'})
+        }
