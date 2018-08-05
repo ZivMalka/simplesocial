@@ -32,7 +32,7 @@
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-         <a class="navbar-brand mynav" href="{% url 'home' %}">Healthymize</a>
+         <a class="navbar-brand" href="{% url 'home' %}">Healthymize</a>
     </div>
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" style="background:white; id="bs-example-navbar-collapse-1">
@@ -46,20 +46,29 @@
                {% endif %}
 
                     <li>
-                       <a href="{% url 'accounts:profile' username=request.user.username %}"> {{ request.user.username }}</a></li>
+                       <a href="{% url 'accounts:profile' username=request.user.username %}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp; {{ request.user.username }}</a></li>
 
                 <li>
-                    <a href="{% url 'groups:all' %}">Groups</a>
+                    <a href="{% url 'groups:all' %}"><span class="glyphicon glyphicon-th" aria-hidden="true"></span>&nbsp;Groups</a>
                 </li>
                 <li>
-                    <a href="{% url 'groups:create' %}">Create Groups</a>
+                    <a href="{% url 'groups:create' %}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Create Groups</a>
                 </li>
                 <li>
-                    <a href="{% url 'accounts:logout' %}">Logout</a>
+                    <a href="{% url 'nutrition:list' %}"><span class="glyphicon glyphicon-cutlery" aria-hidden="true"></span>&nbsp;Nutrition</a>
                 </li>
+                <li>
+                    <a href="{% url 'groups:all' %}"><span class="glyphicon glyphicon-scale" aria-hidden="true"></span>&nbsp;Workout</a>
+                </li>
+              </ul>
+      <ul class="nav navbar-nav navbar-right">
+          <li>
+              <a href="{% url 'accounts:logout' %}"><span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp;Logout</a>
+          </li>
+      </ul>
                 {% else %}
                 <li>
-                    <a href="{% url 'accounts:login' %}">Login</a>
+                    <a href="{% url 'accounts:login' %}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp; Login</a>
                 </li>
                 <li>
                     <a href="{% url 'accounts:register' %}">Sign Up</a>

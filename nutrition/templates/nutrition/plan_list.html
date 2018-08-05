@@ -1,0 +1,45 @@
+{% extends 'nutrition/nutrition_base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+<div class="list-group">
+    {% for plan in plans %}
+        <a href="{{ plan.get_absolute_url }}" class="list-group-item">
+            <span class="glyphicon glyphicon-chevron-right pull-right"></span>
+
+            <h4 class="list-group-item-heading">{{ plan.subtitle }}</h4>
+            <p class="list-group-item-text">
+                {{ plan.date }} –
+                {{ plan.get_energy_value }} {% trans "kcal" %}
+            </p>
+        </a>
+    {% empty %}
+        {% if user.is_superuser %}
+        <a href="{% url 'nutrition:create_plan' %}" class="list-group-item">
+        {% trans "No nutrition plans." %}<br>
+        {% trans "Add one now." %}
+        </a>
+        {% endif %}
+    {% endfor %}
+</div>
+        {% if user.is_superuser %}
+     <div class="col-sm-12">
+        <br>
+        <a href="{% url 'nutrition:create_plan' %}">
+            <button type="button" class="btn btn-success">
+                <span class="glyphicon glyphicon-plus"></span>&nbsp; Add Plan
+            </button>
+        </a>
+     </div>
+        {% endif %}
+
+    {% endif %}
+{% endblock %}
+
+
+
+
+
+

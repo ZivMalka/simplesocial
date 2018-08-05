@@ -1,0 +1,75 @@
+{% extends 'nutrition/nutrition_base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+<br>
+{% block content %}
+
+
+<table style="width:100%;" class="table table-bordered">
+    <thead>
+        <tr style="background: #E0E0E0;">
+            <th>{% trans "Meal" %}</th>
+            <th>{% trans "Contents" %}</th>
+            <th class="align-right">{% trans "Amount" %}</th>
+            <th class="align-right">{% trans "Energy" %}</th>
+        </tr>
+    </thead>
+    <tbody>
+    <tr style="background: #FFFFFF;">
+        <td colspan="2"></td>
+        <td class="align-right">{% trans 'grams' %}</td>
+        <td class="align-right">{% trans 'calories'  %}</td>
+    </tr>
+{% for meal in plan.nutrition_set.all %}
+    {% if user.is_authenticated %}
+    <tr style="background: #FFFFFF;">
+        {% ifchanged meal.pk %}
+        <td width="10%" rowspan="{{meal.nutrition_set.count}}">
+            <strong>
+            {% trans "Nr."%} {{ forloop.counter }}
+            {% if meal.time %} &ndash; {{meal.time|time:"H:i"}}{% endif %}
+            </strong>
+            {% if user.is_superuser %}
+                    <div class="editoptions">
+                        <a href="{% url 'nutrition:delete_nutrition' plan.id meal.id %}"
+                           title="{% trans 'Delete' %}">
+                          <span class="glyphicon glyphicon-trash"></span>&nbsp;</a>
+                    </div>
+            {% endif %}
+        </td>
+        {% endifchanged %}
+        <td>{{ meal.description }}</td>
+        <td width="10%" class="align-right">{{meal.amount}}</td>
+        <td width="10%" class="align-right">{{meal.energy}}</td>
+    </tr>
+    {% endif %}
+{% endfor %}
+
+    <tr style="background: #F8E6E0;">
+        <td>{{ plan.get_energy_value }}</td>
+    </tr>
+
+        {% if user.is_authenticated %}
+        <tr>
+            <td colspan="6">
+            <a href="{% url 'nutrition:create_nutrition' plan.id %}">
+                <span class="glyphicon glyphicon-plus"></span>&nbsp;
+                {% trans "Add a new meal" %}
+            </a>
+            </td>
+        <tr>
+        {% endif %}
+    </tbody>
+</table>
+
+     <div class="col-sm-12">
+                <br>
+                <a href="{% url 'nutrition:delete_plan' plan.id %}">
+                    <button type="button" class="btn btn-danger">
+                        <span class="glyphicon glyphicon-plus"></span>&nbsp; Delete Plan
+                    </button>
+                </a>
+            </div>
+
+
+{% endblock %}

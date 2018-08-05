@@ -28,5 +28,6 @@ urlpatterns = [
     url(r"^posts/", include('posts.urls', namespace='posts')),
     url(r"^groups/", include('groups.urls', namespace='groups')),
     url(r"^activities/", include('activities.urls', namespace='activities')),
+    url(r"^nutrition/", include('nutrition.urls', namespace='nutrition')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
