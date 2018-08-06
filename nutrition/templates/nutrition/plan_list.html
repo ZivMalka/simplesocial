@@ -9,10 +9,16 @@
         <a href="{{ plan.get_absolute_url }}" class="list-group-item">
             <span class="glyphicon glyphicon-chevron-right pull-right"></span>
 
-            <h4 class="list-group-item-heading">{{ plan.subtitle }}</h4>
-            <p class="list-group-item-text">
-                {{ plan.date }} –
+            <h4 class="list-group-item-heading">{{ plan.subtitle }}
+            <br>
                 {{ plan.get_energy_value }} {% trans "kcal" %}
+            </h4>
+
+            <p class="list-group-item-text">
+                {{ plan.date }}
+
+
+
             </p>
         </a>
     {% empty %}

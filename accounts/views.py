@@ -212,14 +212,26 @@ def myconverter_year(o):
 # The `chart` function is defined to generate Column 2D chart from database.
 def chart(request, username):
     # Chart data is passed to the `dataSource` parameter, as dict, in the form of key-value pairs.
-    dataSource = {}
+    dataSource = {
+
+    }
     dataSource['chart'] = {
         "caption": "Weight lost",
         "subCaption": "Weight lost",
         "xAxisName": "Month",
         "yAxisName": "Weight (In Kg)",
         "numberPrefix": "kg",
-        "theme": "zune"
+        "theme": "zune",
+        "canvasBorderColor": "'666666",
+        "canvasBorderThickness": "4",
+        "canvasBorderAlpha": "80",
+        "canvasbgColor": "#1790e1",
+        "canvasbgAlpha": "10",
+        "canvasBorderThickness": "1",
+        "showAlternateHGridColor": "0",
+        "bgColor": "#eeeeee",
+        "color": "#6baa01",
+
     }
     # The data for the chart should be in an array where each element of the array is a JSON object
     # having the `label` and `value` as key value pair.
@@ -248,6 +260,7 @@ def chart(request, username):
                         #  date = json.dumps(date)
                         data['label'] = myconverter(k.timestamp)
                         data['value'] = k.weight
+                        data['color']= "#9b59b6"
                         dataSource['data'].append(data)
                     # Create an object for the Column 2D chart using the FusionCharts class constructor
                 column2D = FusionCharts("line", "ex1", "600", "350", "chart-1", "json", dataSource)
@@ -261,6 +274,7 @@ def chart(request, username):
             data['label'] = myconverter(key.timestamp)
             data['value'] = key.weight
             dataSource['data'].append(data)
+            data['color']=  "#9b59b6"
         # Create an object for the Column 2D chart using the FusionCharts class constructor
         column2D = FusionCharts("line", "ex1", "600", "350", "chart-1", "json", dataSource)
         return (column2D.render())
@@ -294,7 +308,9 @@ def chart_bodyfat(request, username, date):
                 #  date = json.dumps(date)
                 data['label'] = myconverter(key.timestamp)
                 data['value'] = key.body_fat
+                data['color'] = "#6baa01"
                 dataSource['data'].append(data)
+
             # Create an object for the Column 2D chart using the FusionCharts class constructor
             column2D = FusionCharts("line", "ex2", "600", "350", "chart-2", "json", dataSource)
             return (column2D.render())
@@ -309,6 +325,7 @@ def chart_bodyfat(request, username, date):
                 #  date = json.dumps(date)
                 data['label'] = myconverter(k.timestamp)
                 data['value'] = k.body_fat
+                data['color'] = "#6baa01"
                 dataSource['data'].append(data)
             # Create an object for the Column 2D chart using the FusionCharts class constructor
         column2D = FusionCharts("line", "ex2", "600", "350", "chart-2", "json", dataSource)

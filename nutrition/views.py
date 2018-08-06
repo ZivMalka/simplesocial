@@ -25,7 +25,6 @@ def create_plan(request):
     else:
         return HttpResponse("No access to this page")
 
-
 def create_nutrition(request, plan_id):
     if request.user.is_superuser:
         form = NutritionForm(request.POST or None)
@@ -70,8 +69,8 @@ def delete_nutrition(request, plan_id, nutrition_id):
 def detail(request, plan_id):
         plan = get_object_or_404(Plan, pk=plan_id)
         user = plan.user
-        return render(request, 'nutrition/detail.html', {'plan': plan, 'user': user})
-
+        sum = total_calories(plan_id)
+        return render(request, 'nutrition/detail.html', {'plan': plan, 'user': user, 'sum' : sum })
 
 
 def plan_list(request, username):

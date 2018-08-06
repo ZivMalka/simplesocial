@@ -21,7 +21,7 @@
         <td class="align-right">{% trans 'calories'  %}</td>
     </tr>
 {% for meal in plan.nutrition_set.all %}
-    {% if user.is_authenticated %}
+
     <tr style="background: #FFFFFF;">
         {% ifchanged meal.pk %}
         <td width="10%" rowspan="{{meal.nutrition_set.count}}">
@@ -42,14 +42,14 @@
         <td width="10%" class="align-right">{{meal.amount}}</td>
         <td width="10%" class="align-right">{{meal.energy}}</td>
     </tr>
-    {% endif %}
+
 {% endfor %}
 
     <tr style="background: #F8E6E0;">
         <td>{{ plan.get_energy_value }}</td>
     </tr>
 
-        {% if user.is_authenticated %}
+        {% if request.user.is_superuser %}
         <tr>
             <td colspan="6">
             <a href="{% url 'nutrition:create_nutrition' plan.id %}">
