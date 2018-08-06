@@ -38,7 +38,7 @@ class Nutrition(models.Model):
     time = models.TimeField(null=True, blank=True)
     description = models.TextField()
     amount = models.IntegerField()
-    energy = models.DecimalField(max_digits=6 , decimal_places=2)
+    energy = models.FloatField()
 
 
     def __str__(self):
@@ -50,13 +50,12 @@ class Nutrition(models.Model):
         '''
         return self.plan
 
-  #  @staticmethod
     def get_energy_value(self):
         plan = get_object_or_404(Plan, pk=self)
         sum = 0
         for cal in plan.nutrition_set.all():
             sum = sum + cal.energy
-        return sum
+        return int(float(sum))
 
 
 

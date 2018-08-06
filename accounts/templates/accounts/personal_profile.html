@@ -103,22 +103,29 @@
            <label for="startDate">Filter by month :</label>
      <input name="timestamp" id="startDate" class="date-picker" />
  </form>
-
+<div>
      <div>
-         <div id="chart-1" class="element1" style="display:inline-block; margin-right:10px;margin-right: 10px;float: left;margin-left: -4%%;">
+         <div id="chart-1" style="width: 100px; height: 100px;display: inline-block; margin-left: -4%;">
         {{ output|safe }}
     </div>
-         <div id="chart-2" class="element2" style="display:inline-block;margin-top: -30%;margin-right:1%;">
+         <div id="chart-2" style="width: 100px; height: 100px; display: inline-block;margin-right:43%; float:right;">
 
         {{ output2|safe }}
     </div>
+         <br><br>
+          <div id="chart-3" style="width: 100px; height: 100px; display: inline-block;margin-right:43%; float:right;">
+
+        {{ output3|safe }}
+    </div>
 
 </div>
+</div>
      <style>
-     .element1 {
-         display:inline-block;
-         margin-right:10px;}
-    .element2 {
+     #chart-1 {
+         display:
+        inline-block;
+     }
+    #chart-2 {
         display:
         inline-block;}
 </style>

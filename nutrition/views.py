@@ -69,8 +69,7 @@ def delete_nutrition(request, plan_id, nutrition_id):
 def detail(request, plan_id):
         plan = get_object_or_404(Plan, pk=plan_id)
         user = plan.user
-        sum = total_calories(plan_id)
-        return render(request, 'nutrition/detail.html', {'plan': plan, 'user': user, 'sum' : sum })
+        return render(request, 'nutrition/detail.html', {'plan': plan, 'user': user })
 
 
 def plan_list(request, username):

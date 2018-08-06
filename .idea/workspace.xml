@@ -25,13 +25,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="plan_list.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/nutrition/templates/nutrition/plan_list.html">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/accounts/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="13" column="62" lean-forward="false" selection-start-line="13" selection-start-column="62" selection-end-line="13" selection-end-column="62" />
+            <state relative-caret-position="182">
+              <caret line="353" column="70" lean-forward="false" selection-start-line="353" selection-start-column="70" selection-end-line="353" selection-end-column="70" />
               <folding>
-                <marker date="1533566909919" expanded="true" signature="344:620" ph="..." />
+                <element signature="e#0#122#0" expanded="true" />
+                <element signature="e#2937#3449#0" expanded="false" />
+                <marker date="1533571624031" expanded="true" signature="6391:6599" ph="..." />
+                <marker date="1533571624031" expanded="true" signature="7860:8409" ph="..." />
+                <marker date="1533571624031" expanded="true" signature="8634:11765" ph="..." />
+                <marker date="1533571624031" expanded="true" signature="11235:11505" ph="..." />
+                <marker date="1533571624031" expanded="true" signature="12503:14077" ph="..." />
+                <marker date="1533571624031" expanded="true" signature="13227:13296" ph="..." />
+                <marker date="1533571624031" expanded="true" signature="14165:15757" ph="..." />
               </folding>
             </state>
           </provider>
@@ -51,8 +59,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>WeightList</find>
-      <find>login</find>
       <find>accounts/</find>
       <find>startDate</find>
       <find>form</find>
@@ -62,7 +68,6 @@
       <find>x</find>
       <find>reverse</find>
       <find>profile</find>
-      <find>personal</find>
       <find>personal_profile</find>
       <find>print</find>
       <find>'output2':content</find>
@@ -81,6 +86,9 @@
       <find>nutrition_set</find>
       <find>for</find>
       <find>sum</find>
+      <find>personal</find>
+      <find>Decimal</find>
+      <find>chart</find>
     </findStrings>
     <dirStrings>
       <dir>C:\Users\ziv\simplesocial\media\profile_pic</dir>
@@ -138,18 +146,18 @@
         <option value="$PROJECT_DIR$/posts/static/posts/js/posts.js" />
         <option value="$PROJECT_DIR$/simplesocial/settings.py" />
         <option value="$PROJECT_DIR$/simplesocial/urls.py" />
-        <option value="$PROJECT_DIR$/accounts/templates/accounts/profile_base.html" />
         <option value="$PROJECT_DIR$/posts/urls.py" />
         <option value="$PROJECT_DIR$/accounts/urls.py" />
         <option value="$PROJECT_DIR$/accounts/templates/accounts/users.html" />
         <option value="$PROJECT_DIR$/templates/base.html" />
-        <option value="$PROJECT_DIR$/accounts/views.py" />
-        <option value="$PROJECT_DIR$/accounts/templates/accounts/personal_profile.html" />
         <option value="$PROJECT_DIR$/nutrition/urls.py" />
         <option value="$PROJECT_DIR$/nutrition/templates/nutrition/detail.html" />
-        <option value="$PROJECT_DIR$/nutrition/views.py" />
-        <option value="$PROJECT_DIR$/nutrition/models.py" />
         <option value="$PROJECT_DIR$/nutrition/templates/nutrition/plan_list.html" />
+        <option value="$PROJECT_DIR$/nutrition/views.py" />
+        <option value="$PROJECT_DIR$/accounts/templates/accounts/personal_profile.html" />
+        <option value="$PROJECT_DIR$/nutrition/models.py" />
+        <option value="$PROJECT_DIR$/accounts/templates/accounts/profile_base.html" />
+        <option value="$PROJECT_DIR$/accounts/views.py" />
       </list>
     </option>
   </component>
@@ -212,19 +220,24 @@
             <path>
               <item name="simplesocial" type="b2602c69:ProjectViewProjectNode" />
               <item name="simplesocial" type="462c0819:PsiDirectoryNode" />
-              <item name="nutrition" type="462c0819:PsiDirectoryNode" />
+              <item name="accounts" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="simplesocial" type="b2602c69:ProjectViewProjectNode" />
               <item name="simplesocial" type="462c0819:PsiDirectoryNode" />
-              <item name="nutrition" type="462c0819:PsiDirectoryNode" />
+              <item name="accounts" type="462c0819:PsiDirectoryNode" />
               <item name="templates" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="simplesocial" type="b2602c69:ProjectViewProjectNode" />
               <item name="simplesocial" type="462c0819:PsiDirectoryNode" />
-              <item name="nutrition" type="462c0819:PsiDirectoryNode" />
+              <item name="accounts" type="462c0819:PsiDirectoryNode" />
               <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="accounts" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="simplesocial" type="b2602c69:ProjectViewProjectNode" />
+              <item name="simplesocial" type="462c0819:PsiDirectoryNode" />
               <item name="nutrition" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -406,7 +419,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18627451" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32843137" sideWeight="0.4969743" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24509804" sideWeight="0.6354009" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22385621" sideWeight="0.6354009" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25189108" sideWeight="0.8404762" order="2" side_tool="true" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -625,14 +638,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/accounts/templates/accounts/profile.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="37" lean-forward="false" selection-start-line="0" selection-start-column="37" selection-end-line="0" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/accounts/templates/accounts/add_weight.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
@@ -680,17 +685,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/accounts/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="31" />
-          <folding>
-            <marker date="1532794621509" expanded="true" signature="326:382" ph="..." />
-            <marker date="1532794621509" expanded="true" signature="326:444" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/nutrition/admin.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -715,14 +709,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
           <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/accounts/templates/accounts/profile_base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="36" column="79" lean-forward="false" selection-start-line="36" selection-start-column="79" selection-end-line="36" selection-end-column="79" />
           <folding />
         </state>
       </provider>
@@ -807,55 +793,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/accounts/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="327" column="41" lean-forward="false" selection-start-line="327" selection-start-column="41" selection-end-line="327" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#122#0" expanded="false" />
-            <element signature="e#2880#3392#0" expanded="false" />
-            <marker date="1533501056672" expanded="true" signature="6226:6434" ph="..." />
-            <marker date="1533501056672" expanded="true" signature="7695:8244" ph="..." />
-            <marker date="1533501056672" expanded="true" signature="8469:11612" ph="..." />
-            <marker date="1533501056672" expanded="true" signature="11082:11352" ph="..." />
-            <marker date="1533501056672" expanded="true" signature="13085:13154" ph="..." />
-            <marker date="1533501056672" expanded="true" signature="14906:15748" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/accounts/templates/accounts/personal_profile.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
-          <caret line="110" column="102" lean-forward="false" selection-start-line="110" selection-start-column="102" selection-end-line="110" selection-end-column="102" />
-          <folding>
-            <marker date="1533501754599" expanded="false" signature="2190:2260" ph="..." />
-            <marker date="1533501754599" expanded="true" signature="4353:4389" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/nutrition/templates/nutrition/create_nutrition.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nutrition/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="29" column="47" lean-forward="false" selection-start-line="29" selection-start-column="47" selection-end-line="29" selection-end-column="47" />
-          <folding>
-            <marker date="1533566858855" expanded="true" signature="240:716" ph="..." />
-            <marker date="1533566858855" expanded="true" signature="240:815" ph="..." />
-            <marker date="1533566858855" expanded="true" signature="718:815" ph="..." />
-            <marker date="1533566858855" expanded="true" signature="750:815" ph="..." />
-            <marker date="1533566858855" expanded="true" signature="847:1551" ph="..." />
-            <marker date="1533566858855" expanded="true" signature="1451:1551" ph="..." />
-            <marker date="1533566858855" expanded="true" signature="1550:1551" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -865,18 +807,6 @@
           <caret line="48" column="36" lean-forward="false" selection-start-line="48" selection-start-column="36" selection-end-line="48" selection-end-column="36" />
           <folding>
             <marker date="1533566796589" expanded="true" signature="707:1598" ph="{% if user.is_authenticated ... %}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nutrition/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="73" column="0" lean-forward="true" selection-start-line="73" selection-start-column="0" selection-end-line="73" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-            <marker date="1533566824730" expanded="true" signature="460:837" ph="..." />
-            <marker date="1533566824730" expanded="true" signature="2887:3497" ph="..." />
           </folding>
         </state>
       </provider>
@@ -895,6 +825,88 @@
           <caret line="13" column="62" lean-forward="false" selection-start-line="13" selection-start-column="62" selection-end-line="13" selection-end-column="62" />
           <folding>
             <marker date="1533566909919" expanded="true" signature="344:620" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/accounts/templates/accounts/profile.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-674">
+          <caret line="0" column="37" lean-forward="false" selection-start-line="0" selection-start-column="37" selection-end-line="0" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/accounts/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="101">
+          <caret line="14" column="0" lean-forward="true" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+            <marker date="1532794621509" expanded="true" signature="326:382" ph="..." />
+            <marker date="1532794621509" expanded="true" signature="326:444" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nutrition/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="57" column="30" lean-forward="false" selection-start-line="57" selection-start-column="30" selection-end-line="57" selection-end-column="30" />
+          <folding>
+            <marker date="1533571039638" expanded="true" signature="240:716" ph="..." />
+            <marker date="1533571039638" expanded="true" signature="718:815" ph="..." />
+            <marker date="1533571039638" expanded="true" signature="847:1508" ph="..." />
+            <marker date="1533571039638" expanded="true" signature="847:1511" ph="..." />
+            <marker date="1533571039638" expanded="true" signature="1335:1508" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nutrition/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1122">
+          <caret line="77" column="46" lean-forward="false" selection-start-line="77" selection-start-column="46" selection-end-line="77" selection-end-column="46" />
+          <folding>
+            <marker date="1533568646898" expanded="true" signature="460:837" ph="..." />
+            <marker date="1533568646898" expanded="true" signature="2836:3446" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/accounts/templates/accounts/profile_base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="36" column="66" lean-forward="false" selection-start-line="36" selection-start-column="66" selection-end-line="36" selection-end-column="66" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/accounts/templates/accounts/personal_profile.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="329">
+          <caret line="118" column="10" lean-forward="true" selection-start-line="118" selection-start-column="10" selection-end-line="118" selection-end-column="10" />
+          <folding>
+            <marker date="1533570156022" expanded="false" signature="2190:2260" ph="..." />
+            <marker date="1533570156022" expanded="true" signature="4320:4356" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/accounts/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="182">
+          <caret line="353" column="70" lean-forward="false" selection-start-line="353" selection-start-column="70" selection-end-line="353" selection-end-column="70" />
+          <folding>
+            <element signature="e#0#122#0" expanded="true" />
+            <element signature="e#2937#3449#0" expanded="false" />
+            <marker date="1533571624031" expanded="true" signature="6391:6599" ph="..." />
+            <marker date="1533571624031" expanded="true" signature="7860:8409" ph="..." />
+            <marker date="1533571624031" expanded="true" signature="8634:11765" ph="..." />
+            <marker date="1533571624031" expanded="true" signature="11235:11505" ph="..." />
+            <marker date="1533571624031" expanded="true" signature="12503:14077" ph="..." />
+            <marker date="1533571624031" expanded="true" signature="13227:13296" ph="..." />
+            <marker date="1533571624031" expanded="true" signature="14165:15757" ph="..." />
           </folding>
         </state>
       </provider>
