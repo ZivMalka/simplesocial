@@ -1,0 +1,45 @@
+body{
+    background: white url("../images/1.jpeg");
+
+
+}
+*{
+    font-family: 'Cabin', sans-serif;
+
+}
+
+.navbar-brand{
+    font-family: 'Satisfy', cursive;
+}
+
+.underline {
+  border-bottom: 2px solid currentColor;
+  display: inline-block;
+  line-height: 0.85;
+  color: rgba(0,0,0,0.6);
+  text-shadow: 2px 8px 6px rgba(0,0,0,0.2),
+                 0px -5px 35px rgba(255,255,255,0.3);
+}
+
+.table {
+
+    border-collapse: collapse;
+    width: 100%;
+}
+
+
+.table tr:nth-child(even){background-color: #f2f2f2;}
+
+.table tr:hover {background-color: #ddd;}
+
+.table tr{background-color: white;}
+
+
+.table th {
+
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: left;
+    background-color: #3498DB;
+    color: white;
+}
