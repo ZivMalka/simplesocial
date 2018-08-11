@@ -187,6 +187,7 @@ INSTALLED_APPS = [
     'posts',
     'activities',
     'nutrition',
+    'workout',
 
 ]
 
