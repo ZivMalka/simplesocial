@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.validators import (
     MaxValueValidator,
     MinValueValidator
@@ -51,7 +51,7 @@ class Set(models.Model):
     class Meta:
         ordering = ["order", ]
 
-    workout = models.ForeignKey(Workout, name='workout')
+    workout = models.ForeignKey(Workout, name='workout', on_delete=models.CASCADE)
     exercise = models.TextField()
     order = models.IntegerField(blank=True, null=True, name='order')
     sets = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(MAX_SETS)],  default=DEFAULT_SETS)
