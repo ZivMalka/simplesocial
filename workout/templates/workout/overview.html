@@ -1,0 +1,40 @@
+{% extends  "workout/workout_base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+
+{% block content %}
+    {% if user.is_authenticated %}
+
+    <h1 class="underline">Your workouts</h1>
+    <div class="list-group">
+        {% for workout in workouts %}
+            <a href="{{ workout.get_absolute_url }}" class="list-group-item">
+                <span class="glyphicon glyphicon-chevron-right pull-right"></span>
+
+                <h4 class="list-group-item-heading">{{ workout.title }}</h4>
+                <p class="list-group-item-text"><b>Workout day:</b>&nbsp; {{ workout.get_day_display }}</p>
+                <p class="list-group-item-text"><b>Created on:</b>&nbsp;{{ workout.creation_date }}</p>
+            </a>
+        {% empty %}
+            <a href="{% url 'workout:add_workout' %}" class="list-group-item">
+            {% trans "No workouts found." %}<br>{% trans "Add one now." %}
+            </a>
+        {% endfor %}
+    </div>
+        {% endif %}
+
+
+     {% if user.is_superuser %}
+         <div class="col-sm-12">
+            <br>
+            <a href="{% url 'workout:add_workout' %}">
+                <button type="button" class="btn btn-success">
+                    <span class="glyphicon glyphicon-plus"></span>&nbsp; Add Plan
+                </button>
+            </a>
+         </div>
+            {% endif %}
+
+{% endblock %}
+

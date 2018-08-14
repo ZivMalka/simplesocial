@@ -29,7 +29,7 @@
         <entry file="file://$PROJECT_DIR$/accounts/views.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="187">
-              <caret line="590" column="50" lean-forward="true" selection-start-line="590" selection-start-column="50" selection-end-line="590" selection-end-column="50" />
+              <caret line="590" column="50" lean-forward="false" selection-start-line="590" selection-start-column="50" selection-end-line="590" selection-end-column="50" />
               <folding>
                 <marker date="1534276123764" expanded="true" signature="8264:8459" ph="..." />
                 <marker date="1534276123764" expanded="true" signature="9925:10474" ph="..." />
@@ -74,7 +74,7 @@
         <entry file="file://$PROJECT_DIR$/accounts/static/accounts/js/accounts.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="170">
-              <caret line="22" column="47" lean-forward="true" selection-start-line="22" selection-start-column="47" selection-end-line="22" selection-end-column="47" />
+              <caret line="22" column="17" lean-forward="false" selection-start-line="22" selection-start-column="17" selection-end-line="22" selection-end-column="17" />
               <folding>
                 <marker date="1534277882817" expanded="true" signature="129:346" ph="{...}" />
               </folding>
@@ -252,60 +252,6 @@
             <path>
               <item name="simplesocial" type="b2602c69:ProjectViewProjectNode" />
               <item name="simplesocial" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="simplesocial" type="b2602c69:ProjectViewProjectNode" />
-              <item name="simplesocial" type="462c0819:PsiDirectoryNode" />
-              <item name="accounts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="simplesocial" type="b2602c69:ProjectViewProjectNode" />
-              <item name="simplesocial" type="462c0819:PsiDirectoryNode" />
-              <item name="accounts" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="simplesocial" type="b2602c69:ProjectViewProjectNode" />
-              <item name="simplesocial" type="462c0819:PsiDirectoryNode" />
-              <item name="accounts" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="accounts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="simplesocial" type="b2602c69:ProjectViewProjectNode" />
-              <item name="simplesocial" type="462c0819:PsiDirectoryNode" />
-              <item name="accounts" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="accounts" type="462c0819:PsiDirectoryNode" />
-              <item name="js" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="simplesocial" type="b2602c69:ProjectViewProjectNode" />
-              <item name="simplesocial" type="462c0819:PsiDirectoryNode" />
-              <item name="accounts" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="simplesocial" type="b2602c69:ProjectViewProjectNode" />
-              <item name="simplesocial" type="462c0819:PsiDirectoryNode" />
-              <item name="accounts" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="accounts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="simplesocial" type="b2602c69:ProjectViewProjectNode" />
-              <item name="simplesocial" type="462c0819:PsiDirectoryNode" />
-              <item name="groups" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="simplesocial" type="b2602c69:ProjectViewProjectNode" />
-              <item name="simplesocial" type="462c0819:PsiDirectoryNode" />
-              <item name="nutrition" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="simplesocial" type="b2602c69:ProjectViewProjectNode" />
-              <item name="simplesocial" type="462c0819:PsiDirectoryNode" />
-              <item name="posts" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -935,7 +881,7 @@
     <entry file="file://$PROJECT_DIR$/accounts/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
-          <caret line="590" column="50" lean-forward="true" selection-start-line="590" selection-start-column="50" selection-end-line="590" selection-end-column="50" />
+          <caret line="590" column="50" lean-forward="false" selection-start-line="590" selection-start-column="50" selection-end-line="590" selection-end-column="50" />
           <folding>
             <marker date="1534276123764" expanded="true" signature="8264:8459" ph="..." />
             <marker date="1534276123764" expanded="true" signature="9925:10474" ph="..." />
@@ -989,7 +935,7 @@
     <entry file="file://$PROJECT_DIR$/accounts/static/accounts/js/accounts.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
-          <caret line="22" column="47" lean-forward="true" selection-start-line="22" selection-start-column="47" selection-end-line="22" selection-end-column="47" />
+          <caret line="22" column="17" lean-forward="false" selection-start-line="22" selection-start-column="17" selection-end-line="22" selection-end-column="17" />
           <folding>
             <marker date="1534277882817" expanded="true" signature="129:346" ph="{...}" />
           </folding>

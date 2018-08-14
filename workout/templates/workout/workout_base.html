@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+    <link rel='stylesheet' type='text/css' href="{% static 'css/css.css' %}" />
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    {% block title %}{% endblock %}
+
+  </div>
+</div>
+
+{% endblock %}
