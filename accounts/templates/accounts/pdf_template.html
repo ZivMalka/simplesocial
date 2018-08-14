@@ -1,0 +1,86 @@
+<html>
+<head>
+  <title>Test</title>
+  <style>
+    .s {
+      background-color: #f7f7f7;
+    }
+      th{
+          text-align:left;
+          font-size:16px;
+      }
+      table {
+        font-size:12px;
+      }
+         .title span {
+                 color: #007cae;
+             }
+      body {
+                 font-weight: 200;
+                 font-size: 14px;
+             }
+             .header {
+                 font-size: 20px;
+                 font-weight: 100;
+                 text-align: center;
+                 color: #007cae;
+             }
+             .title {
+                 font-size: 22px;
+                 font-weight: 100;
+                /* text-align: right;*/
+                padding: 10px 20px 0px 20px;
+             }
+             .title span {
+                 color: #007cae;
+             }
+             .details {
+                 padding: 10px 20px 0px 20px;
+                 text-align: left !important;
+                 /*margin-left: 40%;*/
+             }
+             .hrItem {
+                 border: none;
+                 height: 1px;
+                 /* Set the hr color */
+                 color: #333; /* old IE */
+                 background-color: #fff; /* Modern Browsers */
+             }
+  </style>
+</head>
+<body>
+
+<h1 class="s">HealthyHipe Report</h1>
+   <div class='wrapper'>
+             <div class='header'>
+   <p class='title'>Weight Report </p>
+     </div>
+
+   <p> Name: {{ user.get_full_name }} <br>
+      Birth date: {{ user.userprofileinfo.birth_date}}<br>
+       Height:  {{ user.userprofileinfo.height }} <br>
+    Current Weight:  {{ user.userprofileinfo.current_weight }}<br>
+     Body fat:  {{ user.userprofileinfo.body_fat }}<br>
+      Bmi:  {{ bmi }}</p>
+     <hr class='hrItem' />
+ <table>
+           <tr>
+          <th scope="col">Date</th>
+          <th scope="col">Weight</th>
+          <th scope="col">Body Fat</th>
+           </tr>
+
+     {% for w in data.data %}
+      <tr> <td>{{ w.timestamp | date:"F d Y"  }} <br></td>
+       <td scope="row">{{ w.weight}} Kg </td>
+           <td scope="row">{{ w.body_fat}} % </td>
+     {% endfor %}</tr>
+
+</table>
+        <hr class='hrItem' />
+<h2>Total loss/Gain (in Kg): {{ total }}</h2>
+ <h2>Weight Loss Percentage (in %):   {{ total_in_per }} </h2>
+
+
+</body>
+</html>

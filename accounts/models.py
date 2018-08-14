@@ -9,9 +9,13 @@ User = get_user_model()
 
 
 class WeightList(models.Model):
-      weight = models.FloatField(null=True, blank=True)
-      timestamp = models.DateTimeField(null=True, blank=True)
-      body_fat = models.FloatField(null=True, blank=True)
+
+    class Meta:
+        ordering = ['timestamp']
+
+    weight = models.FloatField(null=True, blank=True)
+    timestamp = models.DateTimeField(null=True, blank=True)
+    body_fat = models.FloatField(null=True, blank=True)
 
 
 

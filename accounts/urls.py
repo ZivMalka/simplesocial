@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from accounts import views
+from accounts import views, printing
 from django.conf.urls import url
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.views import login
@@ -15,11 +15,13 @@ urlpatterns = [
     url(r'profile/(?P<username>[a-zA-Z0-9]+)$', views.profile, name='profile'),
     url(r'personal/(?P<username>[a-zA-Z0-9]+)$', views.personal_profile, name='personal_profile'),
     url(r'personal/edit/(?P<username>[a-zA-Z0-9]+)$', views.edit_personal_profile, name='edit_personal_profile'),
-    url(r"delete/(?P<pk>\d+)/$", views.delete_weight, name='delete_weight'),
+    url(r"delete/(?P<pk>\d+)/(?P<username>[a-zA-Z0-9]+)/$", views.delete_weight, name='delete_weight'),
     url(r'personal/add/(?P<username>[a-zA-Z0-9]+)$', views.add_weight, name='add_weight'),
-    url(r'personal/chart/(?P<username>[a-zA-Z0-9]+)$', views.chart, name='chart'),
-   # url(r'personal/chart/filter/(?P<username>[a-zA-Z0-9]+)$', views.chart_filter, name='filter'),
-    url(r'personal/chartbody/(?P<username>[a-zA-Z0-9]+)$', views.chart_bodyfat, name='chart_bodyfat'),
+    url(r'personal/chart/(?P<username>[a-zA-Z0-9]+)$', views.chart_visualsion, name='chart'),
+    url(r'personal/chart/filter/(?P<username>[a-zA-Z0-9]+)$', views.chart, name='filter'),
     url(r"users/$", views.get_users, name="all_users"),
+    url(r"users/report/$", views.print_users, name="print_users"),
+    url(r"report/(?P<username>[a-zA-Z0-9]+)$", views.GeneratePdf.as_view(), name="report"),
+    url(r'personal/report/filter/(?P<username>[a-zA-Z0-9]+)$', views.reports_2, name='filter_report'),
 
 ]

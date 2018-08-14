@@ -17,7 +17,9 @@
 <ul class="list-group">
       <li class="list-group-item">
         <a class="follow_h2" href="{% url 'accounts:profile' username=site.user.username %}">{{ site.user.username }}</a>
- <div style="font-size:15px;color: #999;">{{ site.user.first_name }}{{ site.user.last_name }}</div>
+ <div style="font-size:15px;color: #999;">{{ site.user.first_name }}{{ site.user.last_name }}
+ <br>{{ site.date }}
+ </div>
 </ul>
 {% endfor %}
 

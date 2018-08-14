@@ -31,8 +31,9 @@ class UserPersonalProfileInfoForm(forms.ModelForm):
         fields = ('height','body_fat','birth_date','current_weight')
 
 class WeightHistoryForm(forms.ModelForm):
-    weight = forms.FloatField(required=True)
-    body_fat = forms.FloatField(required=True)
+    weight = forms.FloatField(required=True, min_value=30)
+    body_fat = forms.FloatField(required=True, min_value=5)
+    timestamp = forms.FloatField(required=True)
 
     class Meta:
         model = WeightList

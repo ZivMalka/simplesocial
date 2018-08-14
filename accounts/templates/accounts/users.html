@@ -1,4 +1,4 @@
-{% extends "accounts/profile_base.html" %}
+{% extends "base.html" %}
 {% load static %}
 {% load staticfiles %}
 {% load i18n %}
@@ -7,7 +7,9 @@
 <html lang="en">
 <head>
 {% block content %}
+
 <link href="{% static 'posts/css/posts.css' %}?v=1" rel="stylesheet">
+    <h2>Users List</h2>
     {% for user in users %}
     <ul class="list-group">
       <li class="list-group-item">
@@ -15,6 +17,7 @@
  <div style="font-size:15px;color: #999;">{{ user.first_name }}{{ user.last_name }}</div></li>
        </ul>
         {% endfor %}
+          <a href="{% url 'accounts:print_users' %}" class="btn btn-default btn-cancel-compose" style="display: inline-block;margin-top: -58%;margin-left:18%;background:white; color: #1879cd;"><span class="glyphicon glyphicon-ok-circle"></span>Export Users Report</a>
 
 
 </head>

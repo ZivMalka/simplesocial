@@ -33,6 +33,7 @@ class Post(models.Model):
     group = models.ForeignKey(Group, related_name="posts",null=True, blank=True, on_delete=models.CASCADE)
     slug = models.SlugField(unique=False)
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='post_likes')
+    date_of_like = models.DateTimeField(null=True, blank=True)
     comment = GenericRelation(Comment)
     post_pic = models.ImageField(upload_to='post_pic', blank=True)
 
@@ -70,6 +71,8 @@ class Post(models.Model):
 
     def get_api_like_url(self):
         return reverse("posts:like-api-toggle", kwargs={"slug": self.slug})
+
+
 
 
 

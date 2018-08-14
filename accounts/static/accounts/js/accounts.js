@@ -1,15 +1,21 @@
 
 
-$(document).ready(function(){
+$(document).ready(function() {
 
-       $(".a").click(function(){
-var modal = document.getElementByClassName("modal");
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}}
-   {
+    $( function() {
+    $( ".datepicker" ).datepicker();
+  } );
+
+    $(".a").click(function () {
+        var modal = document.getElementByClassName("modal");
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    });
+
+         $(function() {
             $('.date-picker').datepicker( {
             changeMonth: true,
             changeYear: true,
@@ -23,7 +29,12 @@ window.onclick = function(event) {
 			});
         });
 
+    // Apply the search
+ $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
 
-
-
-}
+})

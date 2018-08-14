@@ -23,7 +23,6 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.utils.text import slugify
 from django.views.generic import RedirectView
-
 from django.contrib.auth.mixins import(
     LoginRequiredMixin,
     PermissionRequiredMixin
@@ -31,9 +30,9 @@ from django.contrib.auth.mixins import(
 from django.shortcuts import get_object_or_404
 from django.views import generic
 from django.db.models import Q
-
+from django.utils import timezone
 from django.contrib.contenttypes.models import ContentType
-
+import datetime
 
 class SingleGroup(generic.DetailView):
     model = Group
@@ -56,6 +55,7 @@ class UserPosts(generic.ListView):
         except User.DoesNotExist:
             raise Http404
         else:
+           
             return self.post_user.posts.all()
 
     def get_context_data(self, **kwargs):
@@ -169,13 +169,12 @@ class like(RedirectView, LoginRequiredMixin):
     def get_redirect_url(self, *args, **kwargs):
         obj = get_object_or_404(Post, pk=self.kwargs.get("pk"))
         url_ = obj.get_posts_url()
-        for user in obj.likes.all():
-            print()
         user = self.request.user
         if user in obj.likes.all():
             obj.likes.remove(user)
         else:
             obj.likes.add(user)
+            obj.date_of_like = datetime.datetime.now()
 
         return url_
 

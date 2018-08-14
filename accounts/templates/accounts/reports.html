@@ -1,0 +1,39 @@
+{%  extends "accounts/profile_base.html" %}
+
+{% load staticfiles %}
+
+{% block head %}
+   <!-- JAVA SCRIPT FILES -->
+ <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.js"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css">
+   <script src="{% static 'accounts/js/accounts.js' %}"></script>
+{% endblock head %}
+
+
+<style>
+.report {
+    font-size: 18px;
+}
+</style>
+
+ {% block profile_content %}
+    <h2>Export Report</h2>
+       <ul class="list-group">
+      <li class="list-group-item">
+<form role="form" method="post" action="#">
+ {% csrf_token %}
+    <p class="report">Monthly Report</p>
+           <label for="startDate">Filter by month: </label>
+     <input name="timestamp" id="startDate" class="date-picker" />
+ </form>
+</li>
+           <br>
+       <li class="list-group-item">
+    <p class="report"><a href="{% url 'accounts:report' username=user.username %}">Annual Report</p></a>
+       </li>
+
+
+       </ul>
+
+{% endblock  %}

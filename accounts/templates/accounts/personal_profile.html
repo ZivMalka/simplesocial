@@ -1,31 +1,29 @@
 {%  extends "accounts/profile_base.html" %}
+{% load static %}
 {% load staticfiles %}
 {% load i18n %}
 {% load humanize %}
-{% load static %}
+
 
 {% block head %}
   <link href="{% static 'posts/css/posts.css' %}?v=1" rel="stylesheet">
+      <link href="{% static 'accounts/css/css.css' %}?v=1" rel="stylesheet">
   <script src="{% static 'posts/js/jquery.bullseye-1.0-min.js' %}"></script>
   <script src="{% static 'posts/js/posts.js' %}?v=1"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
      <script src="{% static 'accounts/js/accounts.js' %}"></script>
-       <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.js"></script>
+    <script type="text/javascript">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css">
-    <script type="text/javascript">
-   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.js"></script>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
-    <link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css">
-    <script type="text/javascript">
 
 {% endblock head %}
 
- {% block profile_content %}
-     <body>
 <div class="container">
   <div class="row">
+
+ {% block profile_content %}
 
        <h2>Personal Record</h2>
 
@@ -39,99 +37,78 @@
      <li> Bmi:  {{ bmi }}  </li>
 </ul>
 
+           <a href="{% url 'accounts:filter_report' username=user.username %}" class="btn btn-default btn-cancel-compose" style="display: inline-block;margin-top: -32%;margin-left:20%;background:white; color: #1879cd;"><span class="glyphicon glyphicon-ok-circle"></span>Export Report</a>
 
             <h2>Weight History: </h2>
+ <div>
 
-        <table class="table">
+       {% if request.user.is_superuser %}
+          <a href="{% url 'accounts:add_weight' username=user.username %}" class="btn btn-default btn-cancel-compose" style="display: inline-block;margin-top: -77px;margin-left: 245px;background:white; color: #1879cd;"><span class="glyphicon glyphicon-ok-circle"></span>Add</a>
+ {% endif %}
 
-  <thead class="thead-dark">
-  <thead class="thead-dark">
-    <tr>
-              <a href="{% url 'accounts:add_weight' username=user.username %}" class="btn btn-default btn-cancel-compose" style="margin-top: -77px;margin-left: 245px;background:white; color: #1879cd;"><span class="glyphicon glyphicon-ok-circle"></span>Add</a>
+<div class="a">
+<input type="text" id="myInput" placeholder="Filter" title="Type in a name"></div>
+ </div>
 
+  <!-- style
+   <table class="table" id="myTable">
+           <tr class="header">
+        <th scope="col">#</th>
           {% for w in user.userprofileinfo.weight_history.all %}
-
       <th scope="col">{{ w.timestamp | date:"F d Y"  }}
-
-                    <a href="{% url 'accounts:delete_weight' pk=w.pk %}"
-                 title="delete" class="btn btn-simple">
-					   <span class="glyphicon glyphicon-remove remove-feed" title="{% trans 'Click to remove this column' %}"> </span>
-				</a>
-      </th>
+                    <a href="{% url 'accounts:delete_weight' pk=w.pk username=user.username%}"
+                 title="delete" class="btn btn-simple"> <span class="glyphicon glyphicon-remove remove-feed" title="{% trans 'Click to remove this column' %}"> </span>
+				</a></th>
          {% endfor %}
+
     </tr>
-  </thead>
+
+
  <tbody>
 
-    <tr>
+    <tr> <th scope="row">Weight</th>
          {% for w in user.userprofileinfo.weight_history.all %}
-             <th scope="row">{{ w.weight}} Kg </th>
+             <td>{{ w.weight}} Kg </td>
          {% endfor %}
-
  </tr>
- <tr>
-  {% for w in user.userprofileinfo.weight_history.all %}
-             <th scope="row">{{ w.body_fat}} % </th>
 
+ <tr><th scope="row">Body fat</th>
+  {% for w in user.userprofileinfo.weight_history.all %}
+             <td>{{ w.body_fat}} % </td>
          {% endfor %}
  </tr>
   </tbody>
+</table>-->
+
+<center>
+   <table class="table" id="myTable" style="max-width: 50%;">
+           <tr class="header">
+          <th scope="col">Date</th>
+          <th scope="col">Weight</th>
+          <th scope="col">Body Fat</th>    </tr>
+
+ <tbody>
+     {% for w in user.userprofileinfo.weight_history.all %}
+
+      <tr> <td><b>{{ w.timestamp | date:"F d Y"  }}<b>
+                    <a href="{% url 'accounts:delete_weight' pk=w.pk username=user.username%}"
+                 title="delete" class="btn btn-simple"> <span class="glyphicon glyphicon-remove remove-feed" title="{% trans 'Click to remove this column' %}"> </span>
+				</a></td>
+       <td scope="row">{{ w.weight}} Kg </td>
+           <td scope="row">{{ w.body_fat}} % </td>
+     {% endfor %}</tr>
+
+
+
+
+  </tbody>
 </table>
-
-
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.js"></script>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
-    <link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css">
-    <script type="text/javascript">
-        $(function() {
-            $('.date-picker').datepicker( {
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: true,
-            onClose: function(dateText, inst) {
-                $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-            }
-            });
-             $('.date-picker').focus(function () {
-	        	$(".ui-datepicker-calendar").hide();
-			});
-        });
-    </script>
-
-  <form role="form" method="post" action="{% url 'accounts:chart' username=user.username %}">
- {% csrf_token %}
-           <label for="startDate">Filter by month :</label>
-     <input name="timestamp" id="startDate" class="date-picker" />
- </form>
-<div>
-     <div>
-         <div id="chart-1" style="width: 100px; height: 100px;display: inline-block; margin-left: -4%;">
-        {{ output|safe }}
-    </div>
-         <div id="chart-2" style="width: 100px; height: 100px; display: inline-block;margin-right:43%; float:right;">
-
-        {{ output2|safe }}
-    </div>
-         <br><br>
-          <div id="chart-3" style="width: 100px; height: 100px; display: inline-block;margin-right:43%; float:right;">
-
-        {{ output3|safe }}
-    </div>
+</center>
 
 </div>
-</div>
-     <style>
-     #chart-1 {
-         display:
-        inline-block;
-     }
-    #chart-2 {
-        display:
-        inline-block;}
-</style>
+
+
+
 
 {% endblock %}
-
-
-
 
