@@ -53,33 +53,31 @@
 <h1 class="s">HealthyHipe Report</h1>
    <div class='wrapper'>
              <div class='header'>
-   <p class='title'>{% if type is date %}{{ type | date:"F Y" }}{% else %}{{ type }} {% endif %} Progress Report </p>
+   <p class='title'>User Progress Reports </p>
      </div>
 
-   <p> Name: {{ user.get_full_name }} <br>
-      Birth date: {{ user.userprofileinfo.birth_date}}<br>
-       Height:  {{ user.userprofileinfo.height }} <br>
-    Current Weight:  {{ user.userprofileinfo.current_weight }}<br>
-     Body fat:  {{ user.userprofileinfo.body_fat }}<br>
-      Bmi:  {{ bmi }}</p>
+
      <hr class='hrItem' />
+
  <table>
            <tr>
-          <th scope="col">Date</th>
-          <th scope="col">Weight</th>
-          <th scope="col">Body Fat</th>
+          <th scope="col">Username</th>
+          <th scope="col">Name</th>
+          <th scope="col">Weight Loss Percentage</th>
+          <th scope="col">Loss/Gain in Kg</th>
            </tr>
 
      {% for w in data.data %}
-      <tr> <td>{{ w.timestamp | date:"F d Y"  }} <br></td>
-       <td scope="row">{{ w.weight}} Kg </td>
-           <td scope="row">{{ w.body_fat}} % </td>
+         <tr><td scope="row"> {{ w.user.username }}</td>
+          <td scope="row"> {{ w.user.get_full_name }}  </td>
+     <td>{{ w.weight_loss_per }} % <br></td>
+       <td>{{ w.weight_loss_}} Kg </td>
+
      {% endfor %}</tr>
 
 </table>
         <hr class='hrItem' />
-<h2>Total loss/Gain in {% if type is date %}{{ type | date:"F Y" }}{% else %}{{ type }} {% endif %}(in Kg): {{ total }}</h2>
- <h2>Weight Loss Percentage in {% if type is date %}{{ type | date:"F Y" }}{% else %}{{ type }} {% endif %}(in %):   {{ total_in_per }} </h2>
+
 
 
 </body>

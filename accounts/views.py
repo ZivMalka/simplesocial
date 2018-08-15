@@ -134,17 +134,19 @@ def chart_visualsion(request, username):
                   {"user": user, 'output': content1, 'output2': content2, 'output3': content3,
                    'output4': content4, 'output5': content5, 'output6': content6, 'output6': content6,'output7': content7})
 
-
+def calc_bmi(user_P):
+    if (user_P.height is None or user_P.current_weight is None):
+        bmi = "Empty"
+    else:
+        bmi = round((user_P.current_weight) / (user_P.height) ** 2, 2)
+    return bmi
 
 @login_required
 def personal_profile(request, username):
     if request.user.username == username or request.user.is_superuser:
         user = User.objects.get(username=username)
         user_P = UserProfileInfo.objects.get(user=user)
-        if (user_P.height is None or user_P.current_weight is None):
-            bmi = "Empty"
-        else:
-            bmi = (user_P.current_weight) / (user_P.height) ** 2
+        bmi = calc_bmi(user_P)
         return render(request, 'accounts/personal_profile.html', {"user":user, 'bmi': bmi })
     else:
         return HttpResponse("No access to this page")
@@ -392,9 +394,7 @@ def chart_calories(request, username, date):
 
 def WeightLossPercentage(request, username):
     # Chart data is passed to the `dataSource` parameter, as dict, in the form of key-value pairs.
-    dataSource = {
-
-    }
+    dataSource = {}
     dataSource['chart'] = {
         "caption": "Weight loss Percentage",
         "subCaption": "Weight loss Percentage",
@@ -408,23 +408,16 @@ def WeightLossPercentage(request, username):
     dataSource['data'] = []
     # Iterate through the data in `Revenue` model and insert in to the `dataSource['data']` list.
     if request.user.username == username or request.user.is_superuser:
-        for key in UserProfileInfo.objects.all():
-            for k in key.weight_history.all():
-                        data = {}
-                        users = {}
-                        count=0
-                        if count == 0:
-                            data['label'] = key.user.username
-                            data['value'] = (((k.weight-key.current_weight)/k.weight)*100)
+        for user in User.objects.all():
+                            data = {}
+                            data['label'] = user.username
+                            data['value'] = calc_total_loss_per(user, user.userprofileinfo.current_weight)
                             dataSource['data'].append(data)
-                        if key.user.username in data['label']:
-                            break
-                        count = count+1
                     # Create an object for the Column 2D chart using the FusionCharts class constructor
         column2D = FusionCharts("column2d", "ex4", "600", "350", "chart-4", "json", dataSource)
         return (column2D.render())
 
-
+# Distrbotion
 def weight_lossDistrbotion(request, username):
     # Chart data is passed to the `dataSource` parameter, as dict, in the form of key-value pairs.
     dataSource = { }
@@ -442,42 +435,31 @@ def weight_lossDistrbotion(request, username):
     # Iterate through the data in `Revenue` model and insert in to the `dataSource['data']` list.
     if request.user.username == username or request.user.is_superuser:
                 arr = []
-                for key in UserProfileInfo.objects.all():
-                    for k in key.weight_history.all():
+                for user in User.objects.all():
+                    index = calc_total_loss_per(user, user.userprofileinfo.current_weight)/10
+                    if len(str(abs(index)))<2:
+                        arr.append(index)
+                    else:
+                        index = (math.ceil(calc_total_loss_per(user, user.userprofileinfo.current_weight)/10))
+                        arr.append(index)
 
-                            count=0
-                            if count == 0:
-                                curr = key.user.username
-                                index = (math.ceil((((k.weight-key.current_weight)/k.weight)*100)))
-                                if len(str(abs(index)))<2:
-                                    arr.append(index)
-                                else:
-                                    index = (math.ceil((((k.weight - key.current_weight) / k.weight) * 100)/10))
-                                    arr.append(index)
-                            if key.user.username == curr:
-                               break
-                            count = count+1
+
                 for i in range (negatives.__len__()-1, -1,-1):
                     data = {}
                     data['label'] = negatives[i]
-                    data['value'] = arr.count(i)
+                    data['value'] = arr.count(-i)
                     dataSource['data'].append(data)
-
 
                 for i in range(0, labels.__len__()):
                     data = {}
                     data['label'] = labels[i]
                     data['value'] = arr.count(i)
-                 #   print(arr.count(i), labels[i])
                     dataSource['data'].append(data)
-
-              #      print(data['value'])
-
                     # Create an object for the Column 2D chart using the FusionCharts class constructor
                 column2D = FusionCharts("column2d", "ex5", "600", "350", "chart-5", "json", dataSource)
                 return (column2D.render())
 
-
+# chart activity of Individual user
 def activity_log_chart(request, username, date):
     # Chart data is passed to the `dataSource` parameter, as dict, in the form of key-value pairs.
     dataSource = {}
@@ -493,7 +475,6 @@ def activity_log_chart(request, username, date):
 
     dataSource['data'] =[]
 
-
     if request.user.username == username or request.user.is_superuser:
         user = User.objects.get(username=username)
         for i in range(1, 13):
@@ -507,7 +488,7 @@ def activity_log_chart(request, username, date):
     column2D = FusionCharts("column2d", "ex6", "600", "350", "chart-6", "json", dataSource)
     return (column2D.render())
 
-
+#chart avtivity of all the users
 def activity_log_all(request, username, date):
     # Chart data is passed to the `dataSource` parameter, as dict, in the form of key-value pairs.
     dataSource = {}
@@ -519,12 +500,8 @@ def activity_log_all(request, username, date):
         "valueFontSize": "15",
         "showlegend": "1",
         "legendposition": "bottom",
-
     }
-
     dataSource['data'] =[]
-
-
     if request.user.username == username or request.user.is_superuser:
         for user in User.objects.all():
             data = {}
@@ -535,6 +512,8 @@ def activity_log_all(request, username, date):
             dataSource['data'].append(data)
     column2D = FusionCharts("pie2d", "ex7", "600", "350", "chart-7", "json", dataSource)
     return (column2D.render())
+
+
 
 from accounts.printing import MyPrint
 from io import BytesIO
@@ -552,53 +531,98 @@ def print_users(request):
     response.write(pdf)
     return response
 
+def calc_total_loss(user, current):
+    total = 0
+    for key in user.userprofileinfo.weight_history.all():
+        if total == 0:
+           total = current - key.weight
+        else:
+           break
+    return total
 
+def calc_total_loss_per(user, current):
+    total = 0
+    for k in user.userprofileinfo.weight_history.all():
+        if total == 0:
+           total = round((((k.weight- current)/k.weight)*100),2)
+        else:
+           break
+    return total
+
+
+# Reports
 from django.http import HttpResponse
 from django.views.generic import View
 from accounts.printing import render_to_pdf #created in step 4
 
 
-def calc_total_loss(request, username):
-    total = 0
-    user = User.objects.get(username=username)
-    for key in user.userprofileinfo.weight_history.all():
-        if total == 0:
-           total = user.userprofileinfo.current_weight - key.weight
-        else:
-           break
-    return total
-
-def calc_total_loss_per(request, username):
-    total = 0
-    user = User.objects.get(username=username)
-    for k in user.userprofileinfo.weight_history.all():
-        if total == 0:
-           total =(((k.weight- user.userprofileinfo.current_weight)/k.weight)*100)
-        else:
-           break
-    return total
-
-
-def reports_2(request, username):
-    user = User.objects.get(username=username)
+def generate_reports(request):
+    GeneratePdf_of_all_user(request)
     return render(request, 'accounts/reports.html')
 
-class GeneratePdf(View):
-    def get(self, request, username):
+
+def GeneratePdf_of_all_user(request):
+    if request.user.is_superuser:
         dataSource = {}
         dataSource['data'] = []
-        count = 0
-        user = User.objects.get(username=username)
-        for key in user.userprofileinfo.weight_history.all():
 
-            data = {}
-            data['body_fat'] = key.body_fat
-            data['weight']  = key.weight
-            data['timestamp'] = key.timestamp
-            dataSource['data'].append(data)
-        total = calc_total_loss(request, username)
-        total_in_per = calc_total_loss_per(request, username)
+        for user in User.objects.all():
+                data = {}
+                data['weight_loss_per'] = calc_total_loss_per(user, user.userprofileinfo.current_weight)
+                data['weight_loss_']  = calc_total_loss(user, user.userprofileinfo.current_weight)
+                data ['user'] = user
+                dataSource['data'].append(data)
 
-        pdf = render_to_pdf('accounts/pdf_template.html', {'data': dataSource, 'total': total, 'total_in_per' : total_in_per,   'user':user})
+        pdf = render_to_pdf('accounts/all_users_report.html',
+                            {'data': dataSource})
 
         return HttpResponse(pdf, content_type='application/pdf')
+
+    else:
+        return render(request, 'accounts/reports.html')
+
+def  GeneratePdf(request, username):
+        user = User.objects.get(username=username)
+        dataSource = {}
+        dataSource['data'] = []
+
+        if request.method == "POST":
+            form = FilterDate(request.POST, instance=request.user.userprofileinfo)
+            if form.is_valid():
+                time = form.cleaned_data.get('timestamp')
+                month = myconverter_month(time)
+                year = myconverter_year(time)
+                list = user.userprofileinfo.weight_history.filter(timestamp__year=year, timestamp__month=month)
+                type  = time
+                if not list:
+                    return render(request, 'accounts/reports.html')
+
+        elif request.GET.get('year'):
+                year = (request.GET.get('year'))
+                list = user.userprofileinfo.weight_history.filter(timestamp__year=year)
+                type = year
+                if not list :
+                    return render(request, 'accounts/reports.html')
+        else:
+                return render(request, 'accounts/reports.html')
+
+        for k in list:
+                data = {}
+                data['body_fat'] = k.body_fat
+                data['weight'] = k.weight
+                data['timestamp'] = k.timestamp
+                current = k.weight
+                dataSource['data'].append(data)
+
+        total = calc_total_loss(user, current)
+        total_in_per = calc_total_loss_per(user, current)
+        bmi = calc_bmi(user.userprofileinfo)
+
+        pdf = render_to_pdf('accounts/pdf_template.html',
+                                        {'data': dataSource, 'total': total, 'total_in_per': total_in_per,
+                                         'bmi': bmi, 'user': user, 'type': type })
+
+        return HttpResponse(pdf, content_type='application/pdf')
+
+
+

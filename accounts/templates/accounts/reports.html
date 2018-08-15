@@ -15,23 +15,55 @@
 .report {
     font-size: 18px;
 }
+  .date-picker2{
+          margin-left: 1%;
+  }
+
+
 </style>
 
  {% block profile_content %}
     <h2>Export Report</h2>
        <ul class="list-group">
       <li class="list-group-item">
+<form role="form" method="post" action="{% url 'accounts:report' username=user.username %}">
+ {% csrf_token %}
+    <p class="report">Progress Report of {{ user.username }}</p>
+           <label for="startDate">Filter by month: </label>
+     <input name="timestamp" id="startDate" class="date-picker" />
+ </form>
+          <br>
+     <form role="form" method="get" action="{% url 'accounts:report' username=user.username %}">
+ {% csrf_token %}
+           <label for="startDate">Filter by year: </label>
+     <input name="year" id="startDate1" class="date-picker1"  style=" margin-left: 1%;" />
+ </form>
+
+</li>
+  <br>
+          {% if request.user.is_superuser %}
+ <li class="list-group-item">
+     <a href="{% url 'accounts:all_users_report' %}">User Progress Reports</a>
+  </li>
+           <br>
+ {% endif %}
+       <li class="list-group-item">
 <form role="form" method="post" action="#">
  {% csrf_token %}
-    <p class="report">Monthly Report</p>
+    <p class="report">Nutrition Report</p>
            <label for="startDate">Filter by month: </label>
      <input name="timestamp" id="startDate" class="date-picker" />
  </form>
 </li>
            <br>
-       <li class="list-group-item">
-    <p class="report"><a href="{% url 'accounts:report' username=user.username %}">Annual Report</p></a>
-       </li>
+  <li class="list-group-item">
+<form role="form" method="post" action="#">
+ {% csrf_token %}
+    <p class="report">Activity </p>
+           <label for="startDate">Filter by month: </label>
+     <input name="timestamp" id="startDate" class="date-picker" />
+ </form>
+</li>
 
 
        </ul>

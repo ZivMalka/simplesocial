@@ -21,7 +21,8 @@ urlpatterns = [
     url(r'personal/chart/filter/(?P<username>[a-zA-Z0-9]+)$', views.chart, name='filter'),
     url(r"users/$", views.get_users, name="all_users"),
     url(r"users/report/$", views.print_users, name="print_users"),
-    url(r"report/(?P<username>[a-zA-Z0-9]+)$", views.GeneratePdf.as_view(), name="report"),
-    url(r'personal/report/filter/(?P<username>[a-zA-Z0-9]+)$', views.reports_2, name='filter_report'),
+    url(r"reports/$", views.GeneratePdf_of_all_user, name="all_users_report"),
+    url(r"report/(?P<username>[a-zA-Z0-9]+)$", views.GeneratePdf, name="report"),
+    url(r'personal/report/filter/$', views.generate_reports, name='filter_report'),
 
 ]
