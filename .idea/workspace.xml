@@ -21,20 +21,16 @@
     <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
   </component>
   <component name="DockManager">
-    <window id="15">
+    <window id="22">
       <content type="file-editors">
         <state>
           <leaf>
-            <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
-              <entry file="file://$PROJECT_DIR$/posts/views.py">
+            <file leaf-file-name="reports.html" pinned="false" current-in-tab="true">
+              <entry file="file://$PROJECT_DIR$/accounts/templates/accounts/reports.html">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="396">
-                    <caret line="138" column="0" lean-forward="false" selection-start-line="138" selection-start-column="0" selection-end-line="138" selection-end-column="0" />
-                    <folding>
-                      <marker date="1534194600020" expanded="true" signature="1368:1432" ph="..." />
-                      <marker date="1534194600020" expanded="true" signature="3000:3170" ph="..." />
-                      <marker date="1534194600020" expanded="true" signature="3000:3172" ph="..." />
-                    </folding>
+                  <state relative-caret-position="164">
+                    <caret line="35" column="35" lean-forward="false" selection-start-line="35" selection-start-column="4" selection-end-line="35" selection-end-column="35" />
+                    <folding />
                   </state>
                 </provider>
               </entry>
@@ -49,12 +45,16 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="reports.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/accounts/templates/accounts/reports.html">
+      <file leaf-file-name="Graph.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/accounts/templates/accounts/Graph.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="112">
-              <caret line="45" column="74" lean-forward="false" selection-start-line="45" selection-start-column="74" selection-end-line="45" selection-end-column="74" />
-              <folding />
+            <state relative-caret-position="153">
+              <caret line="81" column="17" lean-forward="false" selection-start-line="81" selection-start-column="17" selection-end-line="81" selection-end-column="17" />
+              <folding>
+                <element signature="e#1928#2004#0#HTML" expanded="true" />
+                <element signature="e#2942#3000#0#HTML" expanded="true" />
+                <element signature="e#3286#3363#0#HTML" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -73,17 +73,12 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>&lt;script src=&quot;{% static 'accounts/js/accounts.js' %}&quot;&gt;&lt;/script&gt;</find>
-      <find>&lt;script src=&quot;https://code.jquery.com/ui/1.12.1/jquery-ui.js&quot;&gt;&lt;/script&gt;</find>
-      <find>form</find>
-      <find>date-picker</find>
       <find>datepicker</find>
       <find>STYLE</find>
       <find>buffer</find>
       <find>k</find>
       <find>group</find>
       <find>username</find>
-      <find>visu</find>
       <find>pre</find>
       <find>per</find>
       <find>perc</find>
@@ -94,15 +89,20 @@
       <find>work</find>
       <find>accounts:profil</find>
       <find>report</find>
-      <find>chart</find>
       <find>timestamp</find>
-      <find>def form_valid(self, form):</find>
       <find>count</find>
       <find>messages</find>
       <find>print</find>
       <find>total</find>
       <find>bmi</find>
       <find>super</find>
+      <find>def form_valid(self, form):</find>
+      <find>mean</find>
+      <find>import math</find>
+      <find>import sta</find>
+      <find>text</find>
+      <find>chart</find>
+      <find>visu</find>
     </findStrings>
     <dirStrings>
       <dir>C:\Users\ziv\simplesocial\media\profile_pic</dir>
@@ -155,7 +155,6 @@
         <option value="$PROJECT_DIR$/groups/Templates/groups/group_detail.html" />
         <option value="$PROJECT_DIR$/posts/Templates/posts/user_post_list.html" />
         <option value="$PROJECT_DIR$/accounts/static/accounts/css/css.css" />
-        <option value="$PROJECT_DIR$/accounts/templates/accounts/Graph.html" />
         <option value="$PROJECT_DIR$/accounts/templates/accounts/add_weight.html" />
         <option value="$PROJECT_DIR$/accounts/templates/accounts/profile.html" />
         <option value="$PROJECT_DIR$/accounts/printing.py" />
@@ -169,9 +168,10 @@
         <option value="$PROJECT_DIR$/accounts/templates/accounts/pdf_template.html" />
         <option value="$PROJECT_DIR$/accounts/templates/accounts/all_users_reoport_progress.html" />
         <option value="$PROJECT_DIR$/accounts/urls.py" />
-        <option value="$PROJECT_DIR$/accounts/views.py" />
-        <option value="$PROJECT_DIR$/accounts/templates/accounts/all_users_report.html" />
         <option value="$PROJECT_DIR$/accounts/templates/accounts/reports.html" />
+        <option value="$PROJECT_DIR$/accounts/templates/accounts/all_users_report.html" />
+        <option value="$PROJECT_DIR$/accounts/views.py" />
+        <option value="$PROJECT_DIR$/accounts/templates/accounts/Graph.html" />
       </list>
     </option>
   </component>
@@ -465,9 +465,9 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32843137" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5588235" sideWeight="0.36459908" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18627451" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32843137" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32843137" sideWeight="0.4969743" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.01633987" sideWeight="0.6354009" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27287582" sideWeight="0.6354009" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2322239" sideWeight="0.85784316" order="2" side_tool="true" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -786,14 +786,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/accounts/templates/accounts/Graph.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="30" column="0" lean-forward="false" selection-start-line="30" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/workout/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -852,18 +844,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/posts/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="138" column="0" lean-forward="false" selection-start-line="138" selection-start-column="0" selection-end-line="138" selection-end-column="0" />
-          <folding>
-            <marker date="1534194600020" expanded="true" signature="1368:1432" ph="..." />
-            <marker date="1534194600020" expanded="true" signature="3000:3170" ph="..." />
-            <marker date="1534194600020" expanded="true" signature="3000:3172" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/accounts/forms.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="513">
@@ -911,16 +891,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/accounts/templates/accounts/pdf_template.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="70" column="16" lean-forward="false" selection-start-line="70" selection-start-column="16" selection-end-line="70" selection-end-column="16" />
-          <folding>
-            <marker date="1534343032853" expanded="true" signature="2011:2185" ph="{% for w in user.userprofileinfo.weight_history.all ... %}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/accounts/templates/accounts/personal_profile.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
@@ -946,21 +916,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/accounts/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="334">
-          <caret line="580" column="4" lean-forward="false" selection-start-line="580" selection-start-column="4" selection-end-line="580" selection-end-column="4" />
-          <folding>
-            <marker date="1534348092785" expanded="true" signature="8325:8520" ph="..." />
-            <marker date="1534348092785" expanded="true" signature="9986:10535" ph="..." />
-            <marker date="1534348092785" expanded="true" signature="17673:18047" ph="..." />
-            <marker date="1534348092785" expanded="true" signature="19018:19387" ph="..." />
-            <marker date="1534348092785" expanded="true" signature="19025:19229" ph="..." />
-            <marker date="1534348092785" expanded="true" signature="24240:24258" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/accounts/templates/accounts/personal_profile_edit.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -969,19 +924,61 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/posts/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="138" column="0" lean-forward="false" selection-start-line="138" selection-start-column="0" selection-end-line="138" selection-end-column="0" />
+          <folding>
+            <marker date="1534194600020" expanded="true" signature="1368:1432" ph="..." />
+            <marker date="1534194600020" expanded="true" signature="3000:3170" ph="..." />
+            <marker date="1534194600020" expanded="true" signature="3000:3172" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/accounts/templates/accounts/pdf_template.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="232">
+          <caret line="54" column="33" lean-forward="true" selection-start-line="54" selection-start-column="33" selection-end-line="54" selection-end-column="33" />
+          <folding>
+            <marker date="1534343032853" expanded="true" signature="2011:2185" ph="{% for w in user.userprofileinfo.weight_history.all ... %}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/accounts/templates/accounts/all_users_report.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="109">
-          <caret line="55" column="41" lean-forward="false" selection-start-line="55" selection-start-column="41" selection-end-line="55" selection-end-column="41" />
+        <state relative-caret-position="323">
+          <caret line="82" column="55" lean-forward="true" selection-start-line="82" selection-start-column="55" selection-end-line="82" selection-end-column="55" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/accounts/templates/accounts/reports.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="112">
-          <caret line="45" column="74" lean-forward="false" selection-start-line="45" selection-start-column="74" selection-end-line="45" selection-end-column="74" />
+        <state relative-caret-position="164">
+          <caret line="35" column="35" lean-forward="false" selection-start-line="35" selection-start-column="4" selection-end-line="35" selection-end-column="35" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/accounts/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-185">
+          <caret line="429" column="12" lean-forward="false" selection-start-line="429" selection-start-column="12" selection-end-line="429" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/accounts/templates/accounts/Graph.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="81" column="17" lean-forward="false" selection-start-line="81" selection-start-column="17" selection-end-line="81" selection-end-column="17" />
+          <folding>
+            <element signature="e#1928#2004#0#HTML" expanded="true" />
+            <element signature="e#2942#3000#0#HTML" expanded="true" />
+            <element signature="e#3286#3363#0#HTML" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -1,3 +1,5 @@
+from h5py.h5 import H5PYConfig
+
 from accounts.forms import UserForm, UserProfileInfoForm,  EditProfileForm, UserPersonalProfileInfoForm, WeightHistoryForm
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
@@ -31,28 +33,17 @@ def register(request):
     registered = False
     if request.method == "POST":
         user_form = UserForm(data=request.POST)
-       # profile_form = UserProfileInfoForm(data=request.POST)
-
         if user_form.is_valid():
             username = user_form.cleaned_data.get('username')
             email = user_form.cleaned_data.get('email')
             password = user_form.cleaned_data.get('password')
             User.objects.create_user(username=username, password=password,email=email)
             user = authenticate(username=username, password=password)
-
-     #       if 'profile_pic' in request.FILES:
-      #          profile.profile_pic = request.FILES['profile_pic']
-
             registered = True
-
             login(request, user)
-
             return render(request, 'accounts/signup.html', {'user_form': user_form,'registered': registered})
-
         else:
             return render(request, 'accounts/signup.html')
-
-
     else:
         user_form = UserForm()
         profile_form = UserProfileInfoForm()
@@ -77,62 +68,64 @@ def edit_profile(request):
         if request.method == 'POST':
             user_form_edit = EditProfileForm(request.POST, instance=request.user)
             profile_form = UserProfileInfoForm(request.POST, instance=request.user.userprofileinfo)
-
-
             if user_form_edit.is_valid() and profile_form.is_valid():
                 user = user_form_edit.save()
                 user.save()
                 profile = profile_form.save(commit=False)
                 profile.user = user
-
                 if 'profile_pic' in request.FILES:
                     profile.profile_pic = request.FILES['profile_pic']
-
                 profile_form.save()
                 messages.success(request, 'Your profile was successfully updated!')
-
                 return HttpResponseRedirect(reverse("accounts:profile", kwargs={"username": request.user.username}))
-
         else:
             user_form_edit = EditProfileForm(instance=request.user)
             profile_form = UserProfileInfoForm(instance=request.user.userprofileinfo)
-
             return render(request, 'accounts/edit_profile.html',
                           {'user_form_edit': user_form_edit, 'profile_form': profile_form})
-
     else:
         return HttpResponse("No access to this page")
 
 def chart_visualsion(request, username):
+    if request.user.username == username or request.user.is_superuser:
+        user = User.objects.get(username=username)
+        if request.method == 'POST':
+            form = FilterDate(request.POST, instance=request.user.userprofileinfo)
+            if form.is_valid():
+                date = form.cleaned_data.get('timestamp')
+                month = myconverter_month(date)
+                year = myconverter_year(date)
+                list = user.userprofileinfo.weight_history.filter(timestamp__year=year, timestamp__month=month)
+                plans = Plan.objects.filter(user=user, date__month=month, date__year=year)
 
-    user = User.objects.get(username=username)
-    if request.method == 'POST':
-        form = FilterDate(request.POST, instance=request.user.userprofileinfo)
-        if form.is_valid():
-            date = form.cleaned_data.get('timestamp')
+
+        elif request.GET.get('year'):
+            year = (request.GET.get('year'))
+            list = user.userprofileinfo.weight_history.filter(timestamp__year=year)
+            plans = Plan.objects.filter(user=user, date__year=year)
+            month = None
+
+
+        else:
+            date = datetime.now()
             month = myconverter_month(date)
             year = myconverter_year(date)
-            content1 = chart(request, username, date)
-            content2 = chart_bodyfat(request, username, date)
-            content3 = chart_calories(request, username, date)
-            content4 = WeightLossPercentage(request, username)
-            content5 = weight_lossDistrbotion(request, username)
-            content6 = activity_log_chart(request, username, None)
-            content7 = activity_log_all(request, username, None)
-            return render(request, 'accounts/Graph.html',
-                          {"user": user, 'output': content1, 'output2': content2, 'output3': content3,
-                           'output4': content4, 'output5': content5, 'output6': content6, 'output7': content7,})
+            plans = Plan.objects.filter(user=user, date__month=month, date__year=year)
+            list = user.userprofileinfo.weight_history.filter(timestamp__year=year, timestamp__month=month)
 
-    content1 = chart(request, username, None)
-    content2 = chart_bodyfat(request, username, None)
-    content3 = chart_calories(request, username, None)
-    content4 = WeightLossPercentage(request, username)
-    content5=weight_lossDistrbotion(request, username)
-    content6=activity_log_chart(request, username, None)
-    content7 = activity_log_all(request, username, None)
-    return render(request, 'accounts/Graph.html',
-                  {"user": user, 'output': content1, 'output2': content2, 'output3': content3,
-                   'output4': content4, 'output5': content5, 'output6': content6, 'output6': content6,'output7': content7})
+        content1 = chart(request, list)
+        content2 = chart_bodyfat(request, list)
+        content3 = chart_calories(request, plans)
+        content4 = WeightLossPercentage(request, username)
+        content5=weight_lossDistrbotion(request, username)
+        content6=activity_log_chart(request, username)
+        content7 = activity_log_all(request, month, year)
+        return render(request, 'accounts/Graph.html',
+                      {"user": user, 'output': content1, 'output2': content2, 'output3': content3,
+                       'output4': content4, 'output5': content5, 'output6': content6, 'output6': content6,'output7': content7})
+
+    else:
+        return HttpResponseRedirect(reverse("accounts:profile", kwargs={"username": request.user.username}))
 
 def calc_bmi(user_P):
     if (user_P.height is None or user_P.current_weight is None):
@@ -250,7 +243,7 @@ def myconverter_year(o):
     return "{}".format(o.year)
 
 # The `chart` function is defined to generate Column 2D chart from database.
-def chart(request, username, date):
+def chart(request, list):
     # Chart data is passed to the `dataSource` parameter, as dict, in the form of key-value pairs.
     dataSource = {
     }
@@ -264,37 +257,19 @@ def chart(request, username, date):
     }
     dataSource['data'] = []
     # Iterate through the data in `Revenue` model and insert in to the `dataSource['data']` list.
-    if request.user.username == username or request.user.is_superuser:
-        user = User.objects.get(username=username)
-        if date is None:
-            for key in user.userprofileinfo.weight_history.all():
-                        data = {}
-                        data['label'] = myconverter(key.timestamp)
-                        data['value'] = key.weight
-                        data['color']= "#9b59b6"
-                        dataSource['data'].append(data)
-            column2D = FusionCharts("line", "ex1", "600", "350", "chart-1", "json", dataSource)
-            return (column2D.render())
-
-
-        month = myconverter_month(date)
-        year = myconverter_year(date)
-        for key in UserProfileInfo.objects.filter(user=user):
-            for k in key.weight_history.filter(timestamp__month=month, timestamp__year=year):
+    for k in list:
                 data = {}
-                #  date = json.dumps(key.timestamp, default = myconverter)
-                #  date = json.dumps(date)
                 data['label'] = myconverter(k.timestamp)
                 data['value'] = k.weight
                 dataSource['data'].append(data)
                 data['color']=  "#9b59b6"
             # Create an object for the Column 2D chart using the FusionCharts class constructor
-        column2D = FusionCharts("line", "ex1", "600", "350", "chart-1", "json", dataSource)
-        return (column2D.render())
+    column2D = FusionCharts("line", "ex1", "600", "350", "chart-1", "json", dataSource)
+    return (column2D.render())
 
 
 
-def chart_bodyfat(request, username, date):
+def chart_bodyfat(request, list):
     # Chart data is passed to the `dataSource` parameter, as dict, in the form of key-value pairs.
     dataSource = {}
     dataSource['chart'] = {
@@ -309,39 +284,19 @@ def chart_bodyfat(request, username, date):
     # The data for the chart should be in an array where each element of the array is a JSON object
     # having the `label` and `value` as key value pair.
     dataSource['data'] = []
-    # Iterate through the data in `Revenue` model and insert in to the `dataSource['data']` list.
-    if request.user.username == username or request.user.is_superuser:
-
-        user = User.objects.get(username=username)
-
-        if date is None:
-            for key in user.userprofileinfo.weight_history.all():
-                data = {}
-
-                data['label'] = myconverter(key.timestamp)
-                data['value'] = key.body_fat
-                data['color'] = "#6baa01"
-                dataSource['data'].append(data)
-            # Create an object for the Column 2D chart using the FusionCharts class constructor
-            column2D = FusionCharts("line", "ex2", "600", "350", "chart-2", "json", dataSource)
-            return (column2D.render())
-
-        month = myconverter_month(date)
-        year = myconverter_year(date)
-        for key in UserProfileInfo.objects.filter(user=user):
-            for k in key.weight_history.filter(timestamp__year=year, timestamp__month=month):
+    for k in list:
                 data = {}
                 data['label'] = myconverter(k.timestamp)
                 data['value'] = k.body_fat
                 data['color'] = "#6baa01"
                 dataSource['data'].append(data)
             # Create an object for the Column 2D chart using the FusionCharts class constructor
-        column2D = FusionCharts("line", "ex2", "600", "350", "chart-2", "json", dataSource)
-        return (column2D.render())
-    #   username = request.user.username
+    column2D = FusionCharts("line", "ex2", "600", "350", "chart-2", "json", dataSource)
+    return (column2D.render())
 
 
-def chart_calories(request, username, date):
+
+def chart_calories(request, plans):
     # Chart data is passed to the `dataSource` parameter, as dict, in the form of key-value pairs.
     dataSource = {}
     dataSource['chart'] = {
@@ -354,42 +309,15 @@ def chart_calories(request, username, date):
         "theme": "fint",
         "palettecolors": "08ee4,9b59b6,6baa01,e44a00"
     }
-
-    # The data for the chart should be in an array where each element of the array is a JSON object
-    # having the `label` and `value` as key value pair.
     dataSource['data'] = []
-    # Iterate through the data in `Revenue` model and insert in to the `dataSource['data']` list.
-    if request.user.username == username or request.user.is_superuser:
-        user = User.objects.get(username=username)
-
-        if date is None:
-            plans = Plan.objects.filter(user=user)
-            for plan in plans:
-                    data = {}
-                    #  date = json.dumps(key.timestamp, default = myconverter)
-                    #  date = json.dumps(date)
-                    data['label'] = myconverter(plan.date)
-                    data['value'] = ((plan.get_energy_value()))
-                    dataSource['data'].append(data)
-            # Create an object for the Column 2D chart using the FusionCharts class constructor
-            column2D = FusionCharts("column2d", "ex3", "600", "350", "chart-3", "json", dataSource)
-            return (column2D.render())
-
-        month = myconverter_month(date)
-        year = myconverter_year(date)
-        plans = Plan.objects.filter(user=user, date__month=month, date__year=year)
-        for plan in plans:
+    for plan in plans:
                 data = {}
-                #  date = json.dumps(key.timestamp, default = myconverter)
-                #  date = json.dumps(date)
                 data['label'] = myconverter(plan.date)
                 data['value'] = ((plan.get_energy_value()))
                 dataSource['data'].append(data)
             # Create an object for the Column 2D chart using the FusionCharts class constructor
-        column2D = FusionCharts("column2d", "ex3", "600", "350", "chart-3", "json", dataSource)
-        return (column2D.render())
-
-
+    column2D = FusionCharts("column2d", "ex3", "600", "350", "chart-3", "json", dataSource)
+    return (column2D.render())
 
 
 def WeightLossPercentage(request, username):
@@ -403,19 +331,15 @@ def WeightLossPercentage(request, username):
         "setadaptiveymin": "1",
         "theme": "fint",
         "palettecolors": "#FF2DC6,#632289,#FFAE00",
-
     }
     dataSource['data'] = []
-    # Iterate through the data in `Revenue` model and insert in to the `dataSource['data']` list.
-    if request.user.username == username or request.user.is_superuser:
-        for user in User.objects.all():
-                            data = {}
-                            data['label'] = user.username
-                            data['value'] = calc_total_loss_per(user, user.userprofileinfo.current_weight)
-                            dataSource['data'].append(data)
-                    # Create an object for the Column 2D chart using the FusionCharts class constructor
-        column2D = FusionCharts("column2d", "ex4", "600", "350", "chart-4", "json", dataSource)
-        return (column2D.render())
+    for user in User.objects.all():
+        data = {}
+        data['label'] = user.username
+        data['value'] = calc_total_loss_per(user, user.userprofileinfo.current_weight)
+        dataSource['data'].append(data)
+    column2D = FusionCharts("column2d", "ex4", "600", "350", "chart-4", "json", dataSource)
+    return (column2D.render())
 
 # Distrbotion
 def weight_lossDistrbotion(request, username):
@@ -460,7 +384,7 @@ def weight_lossDistrbotion(request, username):
                 return (column2D.render())
 
 # chart activity of Individual user
-def activity_log_chart(request, username, date):
+def activity_log_chart(request, username):
     # Chart data is passed to the `dataSource` parameter, as dict, in the form of key-value pairs.
     dataSource = {}
     dataSource['chart'] = {
@@ -474,10 +398,8 @@ def activity_log_chart(request, username, date):
     }
 
     dataSource['data'] =[]
-
-    if request.user.username == username or request.user.is_superuser:
-        user = User.objects.get(username=username)
-        for i in range(1, 13):
+    user = User.objects.get(username=username)
+    for i in range(1, 13):
             data = {}
             data['label'] = i
             data['value'] = Post.objects.filter(user=user, created_at__month=i).count() + \
@@ -489,7 +411,7 @@ def activity_log_chart(request, username, date):
     return (column2D.render())
 
 #chart avtivity of all the users
-def activity_log_all(request, username, date):
+def activity_log_all(request, month, year):
     # Chart data is passed to the `dataSource` parameter, as dict, in the form of key-value pairs.
     dataSource = {}
     dataSource['chart'] = {
@@ -502,13 +424,14 @@ def activity_log_all(request, username, date):
         "legendposition": "bottom",
     }
     dataSource['data'] =[]
-    if request.user.username == username or request.user.is_superuser:
-        for user in User.objects.all():
+    for user in User.objects.all():
             data = {}
             data['label'] = user.username
-            data['value'] = Post.objects.filter(user=user).count() + \
-                            Post.objects.filter(user=user).count() + \
-                            Comment.objects.filter(user=user).count()
+            data['value'] = Post.objects.filter(user=user, created_at__month=month, created_at__year=year).count() + \
+                            Post.objects.filter(likes=user,  date_of_like__month=month, date_of_like__year=year).count() + \
+                            Comment.objects.filter(user=user, timestamp__month=month, timestamp__year=year).count() + \
+                            GroupMember.objects.filter(user=user, date__month=month, date__year=year).count()
+
             dataSource['data'].append(data)
     column2D = FusionCharts("pie2d", "ex7", "600", "350", "chart-7", "json", dataSource)
     return (column2D.render())
@@ -560,21 +483,40 @@ def generate_reports(request):
     GeneratePdf_of_all_user(request)
     return render(request, 'accounts/reports.html')
 
+import numpy as np
+from statistics import mean, stdev, median
+from decimal import Decimal as d
 
 def GeneratePdf_of_all_user(request):
     if request.user.is_superuser:
         dataSource = {}
         dataSource['data'] = []
-
+        numbers = []
         for user in User.objects.all():
                 data = {}
                 data['weight_loss_per'] = calc_total_loss_per(user, user.userprofileinfo.current_weight)
-                data['weight_loss_']  = calc_total_loss(user, user.userprofileinfo.current_weight)
+                data['weight_loss']  = calc_total_loss(user, user.userprofileinfo.current_weight)
                 data ['user'] = user
+                numbers.append(data['weight_loss_per'])
                 dataSource['data'].append(data)
 
+        avg = round((mean(numbers)), 2)
+        std = round(stdev(numbers), 2)
+        med = round(median(numbers), 2)
+        numbers.clear()
+      #  numbers = {'avg': avg, 'std': std, 'med': med}
+
+        for data in dataSource['data']:
+            numbers.append((data.get('weight_loss')))
+
+        avg2 = round((mean(numbers)), 2)
+        std2 = round(stdev(numbers), 2)
+        med2 = round(median(numbers), 2)
+
+        numbers = {'avg': avg, 'std': std, 'med': med, 'avg2' : avg2, 'std2' : std2, 'med2': med2}
+
         pdf = render_to_pdf('accounts/all_users_report.html',
-                            {'data': dataSource})
+                            {'data': dataSource, 'numbers': numbers})
 
         return HttpResponse(pdf, content_type='application/pdf')
 
@@ -608,7 +550,7 @@ def  GeneratePdf(request, username):
 
         for k in list:
                 data = {}
-                data['body_fat'] = k.body_fat
+                data['body_fat'].k.body_fat
                 data['weight'] = k.weight
                 data['timestamp'] = k.timestamp
                 current = k.weight
@@ -617,7 +559,7 @@ def  GeneratePdf(request, username):
         total = calc_total_loss(user, current)
         total_in_per = calc_total_loss_per(user, current)
         bmi = calc_bmi(user.userprofileinfo)
-
+        print(data)
         pdf = render_to_pdf('accounts/pdf_template.html',
                                         {'data': dataSource, 'total': total, 'total_in_per': total_in_per,
                                          'bmi': bmi, 'user': user, 'type': type })

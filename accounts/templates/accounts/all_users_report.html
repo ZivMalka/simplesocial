@@ -6,11 +6,16 @@
       background-color: #f7f7f7;
     }
       th{
-          text-align:left;
-          font-size:16px;
+          text-align:center;
+
+      }
+      tr{
+                  text-align:center;
       }
       table {
         font-size:12px;
+          width:200px;
+
       }
          .title span {
                  color: #007cae;
@@ -46,6 +51,9 @@
                  color: #333; /* old IE */
                  background-color: #fff; /* Modern Browsers */
              }
+      .border_bottom {
+  border-bottom:1pt solid black;
+}
   </style>
 </head>
 <body>
@@ -59,24 +67,39 @@
 
      <hr class='hrItem' />
 
- <table>
-           <tr>
-          <th scope="col">Username</th>
-          <th scope="col">Name</th>
-          <th scope="col">Weight Loss Percentage</th>
-          <th scope="col">Loss/Gain in Kg</th>
+<table >
+           <tr  class="border_bottom">
+          <th scope="col">Username  </th>
+          <th scope="col">Name</th><br>
+          <th scope="col">Weight Loss Percentage  </th>
+          <th scope="col">Total loss/Gain in Kg </th>
+         <th scope="col">Current weight in Kg </th>
            </tr>
 
      {% for w in data.data %}
-         <tr><td scope="row"> {{ w.user.username }}</td>
-          <td scope="row"> {{ w.user.get_full_name }}  </td>
-     <td>{{ w.weight_loss_per }} % <br></td>
-       <td>{{ w.weight_loss_}} Kg </td>
+         <tr  class="border_bottom"><td scope="row"> {{ w.user.username }}<br> <br> </td>
+          <td scope="row"> {{ w.user.get_full_name }} <br> <br> </td>
+      <td scope="row"> {{ w.weight_loss_per }} <br><br> </td>
+        <td scope="row"> {{ w.weight_loss }} <br> </td>
+         <td scope="row" > {{ w.user.userprofileinfo.current_weight }}<br>  </td>
 
      {% endfor %}</tr>
 
+
+      <tr >
+          <td scope="row"></td>
+          <td scope="row"> </td>
+               <td>Mean {{ numbers.avg }} <br>
+         Stdev {{ numbers.std }} <br>
+         medin {{ numbers.med }}</td>
+           <td>Mean {{ numbers.avg2 }} <br>
+         Stdev {{ numbers.std2 }} <br>
+         medin {{ numbers.med2 }}</td>
+          <td scope="row"> </td>
+</tr>
+
+
 </table>
-        <hr class='hrItem' />
 
 
 

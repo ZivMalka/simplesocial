@@ -20,12 +20,14 @@
 
      {% if request.user == user and not request.user.is_superuser %}
      <h2>Dashboard</h2>
+
  <div id="chart-5" style="width: 100px; height: 100px;display: inline-block; margin-left: -4%;">
         {{ output5|safe }}
     </div>
  <div id="chart-6" style="width: 100px; height: 100px; display: inline-block;margin-right:43%; float:right;">
         {{ output6|safe }}
     </div>
+
 
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <form role="form" method="post" action="{% url 'accounts:chart' username=user.username %}">
@@ -34,7 +36,14 @@
      <input name="timestamp" id="startDate" class="date-picker" />
  </form>
 
+<form role="form" method="get" action="{% url 'accounts:chart' username=user.username %}">
+ {% csrf_token %}
+           <label for="startDate">Filter by year :</label>
+     <input name="year" id="startDate1" class="date-picker1" />
+ </form>
+
 <div>
+
      <div>
          <div id="chart-1" style="width: 100px; height: 100px;display: inline-block; margin-left: -4%;">
         {{ output|safe }}
@@ -70,8 +79,22 @@
         {{ output4|safe }}
         </div>
      <br><br>  <br><br><br><br>     <br><br>  <br><br><br><br>
+         <center>
+ <div>
+<div style="width: 100px; height: 100px;display: inline-block;">
+         <form role="form" method="post"  action="{% url 'accounts:chart' username=user.username %}">
+ {% csrf_token %}
+           <label for="startDate">Filter by month :</label>
+     <input name="timestamp" id="startDate" class="date-picker" />
+        </form></div>
 
-<center>
+         <div style="width: 100px; height: 100px; display: inline-block;  margin-left: 8%;">
+         <form role="form" method="get"  action="{% url 'accounts:chart' username=user.username %}">
+ {% csrf_token %}
+           <label for="startDate">Filter by year :</label>
+     <input name="year" id="startDate1" class="date-picker1" />
+ </form></div> </div>
+
         <div id="chart-7">
         {{ output7|safe }}
         </div>
@@ -80,11 +103,7 @@
 <br><br>
 
            <h2>My activity</h2>
-         <form role="form" method="post" action="{% url 'accounts:chart' username=user.username %}">
- {% csrf_token %}
-           <label for="startDate">Filter by month :</label>
-     <input name="timestamp" id="startDate" class="date-picker" />
-        </form>
+
 
      <div>
          <div id="chart-1" style="width: 100px; height: 100px;display: inline-block; margin-left: -4%;">
