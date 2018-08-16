@@ -1,3 +1,4 @@
+{% load static %}
 {% load staticfiles %}
 {% load i18n %}
 {% load humanize %}
@@ -5,6 +6,7 @@
 
 
 {% block head %}
+      <link href="{% static 'posts/css/posts.css' %}?v=1" rel="stylesheet">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="{% static 'accounts/js/accounts.js' %}"></script>
      <link href="{% static 'accounts/css/css.css' %}?v=1" rel="stylesheet">
@@ -12,31 +14,40 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
+
 {% endblock %}
 
 
   <div class="feed-container">
 <div class="post media">
-
-
  {% if request.user.is_authenticated %}
-    <div class="post">
-	<h3>{{ post.message_html|safe }}</h3>
-        {% if  post.post_pic %}
-            <img src ="{{ post.post_pic.url }}" width="240">
-        {% endif %}
-    <br>
-        <strong>  <a href="{% url 'accounts:profile' username=post.user.username %}">{{ post.user.username }}</a></strong>
-     	<span class="username"><a href="{% url 'posts:for_user' username=post.user.username %}">@{{ post.user.username }}</a></span>
-			<time class="time"><a href="{% url 'posts:single' username=post.user.username pk=post.pk %}">{{ post.created_at }}</a></time>
+      <a href="{% url 'accounts:profile' username=post.user.username %}">{{ post.user.username }}
+         {% if  post.user.userprofileinfo.profile_pic %}
+          <img src ="{{ user.userprofileinfo.profile_pic.url }}" class="user">
+               {% else %}
+                       <img src="/media/user_pic/user.png" class="user">
+                  {% endif %}
+              </a>
+		<small>	<time class="time" ><a style="color: #616770;" href="{% url 'posts:single' username=post.user.username pk=post.pk %}">
+                {{ post.created_at| date:"F Y" }}</a>
+            </time>
 			{% if post.group %}
-			<span class="group-name">in <a href="#">{{ post.group.name }}</a></span>
-			{% endif %}
+			<span class="group-name">in <a style="color: #616770;" href="{% url 'groups:single' slug=post.group.slug %}">{{ post.group.name }}</a></span>
+			{% endif %}</small>
      {% if user.is_authenticated and post.user == user and not hide_delete %}
 				<a href="{% url 'posts:delete' pk=post.pk %}" title="delete" class="btn btn-simple">
 					   <span class="glyphicon glyphicon-remove remove-feed" title="{% trans 'Click to remove this feed' %}"> </span>
 				</a>
 			{% endif %}
+
+
+    <div class="post">
+	<p>{{ post.message_html|safe }}</p>
+        {% if  post.post_pic %}
+            <img src ="{{ post.post_pic.url }}" width="240">
+        {% endif %}
+    <br>
+
       <div class="interaction">
         {% if user in post.likes.all %}
          	<a href="{% url "posts:like" pk=post.pk %}" style="text-decoration: none;" class="like unlike">

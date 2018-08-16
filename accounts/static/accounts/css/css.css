@@ -83,8 +83,11 @@
 }
 
 
-
-
+.user_pic{
+    width: 60px;
+    border-radius: 100px;
+    float: left;
+}
 
 .search-table-outter { overflow-x: scroll; }
 

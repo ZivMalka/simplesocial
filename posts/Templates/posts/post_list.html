@@ -2,10 +2,17 @@
 {% load static %}
 {% load staticfiles %}
 {% load i18n %}
+{% load humanize %}
+
+{% block head %}
+     <link href="{% static 'posts/css/posts.css' %}?v=1" rel="stylesheet">
+{% endblock head %}
 
 
 {% block post_content %}
+
  {% if request.user.is_authenticated %}
+
   <div class="row">
     <div class="col-md-6 col-md-offset-3">
 
@@ -21,13 +28,13 @@
 
 
 <ul class="stream">
+
     {% for post in post_list %}
-        {% include "posts/_post.html"  %}
+<li>  {% include "posts/_post.html"  %} </li>
     {% endfor %}
  </ul>
     </div></div></div></div>
     {% endif %}
-    <ul class="stream">
 
 {% endblock post_content %}
 

@@ -1,30 +1,29 @@
 {%  extends "accounts/profile_base.html" %}
 {% load staticfiles %}
-
-
 {% load i18n %}
 {% load humanize %}
 
 {% block head %}
     {% load static %}
   <link href="{% static 'posts/css/posts.css' %}?v=1" rel="stylesheet">
-  <script src="{% static 'posts/js/posts.js' %}?v=1"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 {% endblock head %}
 
 
    {% block profile_content %}
-    <div class="row">
-    <div class="col-md-6 col-md-offset-3">
+
+
 
  {% if  user.userprofileinfo.profile_pic %}
-            <img  style="margin-left: -53%;" src ="{{ user.userprofileinfo.profile_pic.url }}" width="240">
+            <img  src ="{{ user.userprofileinfo.profile_pic.url }}" class="user_pic">
+     {% else %}
+        <img src="/media/user_pic/user.png" class="user_pic"">
         {% endif %}
-<ul style="margin-top: -25%;">
+
+<ul style="">
     <h3>{{ user.first_name }} {{ user.last_name }} </h3>
      {{ user.email }}
 <p style="font-size:16px;">
- <span>Following</span>&nbsp;&nbsp; <b><a style="color:black" onclick="document.getElementById('modal-wrapper').style.display='block'">{{ my_groups.count }}<b></a>
+ <span>Following</span>&nbsp;&nbsp; <b><a style="color:black" onclick="document.getElementById('modal-wrapper').style.display='block'">{{ my_groups.count }}</b></a>
 </p>
 </ul>
 
@@ -51,18 +50,15 @@
 
   {% block post_content %}
     <div class="row">
-    <div class="col-md-6 col-md-offset-3">
+    <div class="col-md-6 col-md-offset-3" style="margin-left: 0%; !important">
       <div class="panel panel-default panel-feed">
         <div class="panel-heading">
           <h3 class="panel-title">{% trans 'User Posts' %}</h3>
         </div>
         <div class="panel-body">
-       <div class="stream-update">
-            <a href="#"><span class="new-posts"></span> {% trans 'new posts' %}</a>
-          </div>
 <ul class="stream">
 	{% for post in my_post %}
-		{% include "posts/_post.html" %}
+	 <li>	{% include "posts/_post.html" %} </li>
 	{% endfor %}
   </ul>
     </div></div></div></div>

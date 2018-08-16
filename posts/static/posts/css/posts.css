@@ -4,9 +4,26 @@ ul.stream {
 }
 
 ul.stream li {
-  list-style: none;
-  border-bottom: 1px solid #eeeeee;
-  padding: 1em 0;
+    list-style: none;
+    border-bottom: 1px solid #eeeeee;
+    padding: 1em 0;
+
+}
+
+.stream{
+    display: list-item;
+    text-align: -webkit-match-parent;
+    list-style: none;
+    border-bottom: 1px solid #eeeeee;
+    padding: 1em 0;
+
+}
+.stream-item {
+    position: relative;
+}
+li {
+    text-align: left;
+        text-align: -webkit-match-parent;
 }
 .group_name{
     margin-top: -47px;
@@ -33,7 +50,7 @@ ul.stream li a img.user {
 }
 
 ul.stream li div.post {
-  margin-left: 60px;
+  margin-left: -10px;
   padding: 0 0 0 1.2em;
   overflow-x: auto;
 }
@@ -63,7 +80,8 @@ ul.stream li div.post div.interaction a {
 }
 
 .stream-update {
-  text-align: center;
+
+
   border-bottom: 1px solid #eeeeee;
   display: none;
 }
@@ -121,6 +139,11 @@ ul.stream li div.post div.interaction a {
     color:black;
     font-weight: 500;
 }
+.user_pic{
+    width: 250px;
+    border-radius: 100px;
+    float: left;
+}
 
 .comments ol li img.user-comment {
   width: 35px;
@@ -157,7 +180,6 @@ ul.stream li div.post div.interaction a {
 }
 
 .load {
-  text-align: center;
   padding-top: 1em;
   border-top: 1px solid #eeeeee;
   display: none;
@@ -215,6 +237,6 @@ ul.stream li div.post div.interaction a {
   padding: 12px 20px 12px 40px;
   border: 1px solid #1879cd;
  display: inline; /* the default for span */
-     width: 200px;
+ width: 200px;
 
  }
