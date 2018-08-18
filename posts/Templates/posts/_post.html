@@ -77,7 +77,7 @@
             {% for user in post.likes.all %}
              <ul class="list-group list-group-flush">
          <li class="list-group-item" style="text-align:center;margin-top: -19px;">
-                <a class="follow_h2" href="{% url 'accounts:profile' username=post.user.username %}">{{ user.username }}</a>
+                <a class="follow_h2" style="font-size:15px" href="{% url 'accounts:profile' username=post.user.username %}">{{ user.username }}</a>
              <div style="font-size:15px;color: #999;">{{ user.first_name }}{{ user.last_name }}</div>
          </li>
             </ul>

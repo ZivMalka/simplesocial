@@ -64,11 +64,11 @@
 
 .follow_h2{
 
-    scolor: black;
-    text-align: center;
+    color: black !important;
+    text-align: center !important;
     font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    font-size:15px;
-    font-weight: 500;
+    font-size:15px !important;
+    font-weight: 500 !important;
 }
 .popup {
 	display:none;
