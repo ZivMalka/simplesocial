@@ -33,6 +33,7 @@ from django.db.models import Q
 from django.utils import timezone
 from django.contrib.contenttypes.models import ContentType
 import datetime
+from posts.decorators import ajax_required
 
 class SingleGroup(generic.DetailView):
     model = Group
@@ -163,7 +164,6 @@ class DeletePost(LoginRequiredMixin, SelectRelatedMixin, generic.DeleteView):
         return super().delete(*args, **kwargs)
 
 
-
 class like(RedirectView, LoginRequiredMixin):
 
     def get_redirect_url(self, *args, **kwargs):
@@ -178,6 +178,44 @@ class like(RedirectView, LoginRequiredMixin):
 
         return url_
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import authentication, permissions
+
+class PostLikeAPIToggle(APIView):
+    authentication_classes = (authentication.SessionAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, pk=None, format=None):
+        obj = get_object_or_404(Post, pk=self.kwargs.get("pk"))
+        url_ = obj.get_posts_url()
+        user = self.request.user
+        updated = False
+        liked = False
+        if user in obj.likes.all():
+                liked = False
+                obj.likes.remove(user)
+        else:
+                liked = True
+                obj.likes.add(user)
+        updated = True
+        data = {
+            "updated": updated,
+            "liked": liked
+        }
+        return Response(data)
 
 
+@ajax_required
+def like2(request):
+    feed_id = request.POST['post']
+    post = Post.objects.get(pk=feed_id)
+    user = request.user
+    if user in feed.likes.all():
+        liked = False
+        post.likes.remove(user)
+    else:
+        liked = True
+        post.likes.add(user)
 
+    return HttpResponse(post.calculate_likes())

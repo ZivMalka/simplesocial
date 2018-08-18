@@ -32,23 +32,6 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 # Application definition
 
-INSTALLED_APPS = [
-
-
-    'django.contrib.humanize',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'bootstrap3',
-    'accounts',
-    'groups',
-    'posts',
-    'activities',
-
-]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -64,6 +47,7 @@ ROOT_URLCONF = 'simplesocial.urls'
 
 TEMPLATES = [
     {
+
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [TEMPLATE_DIR],
         'APP_DIRS': True,
@@ -169,11 +153,17 @@ ALLOWED_HOSTS = []
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
+# django-channels setup
+ASGI_APPLICATION = 'routing.application'
+
+
+
+
 # Application definition
 
 INSTALLED_APPS = [
-
-
+    'sorl.thumbnail',
+    'rest_framework',
     'django.contrib.humanize',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -188,7 +178,8 @@ INSTALLED_APPS = [
     'activities',
     'nutrition',
     'workout',
-
+    'messenger',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -265,6 +256,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+CHANNEL_LAYERS = {}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/

@@ -4,22 +4,27 @@
 {% load humanize %}
 
 {% block head %}
-    {% load static %}
-  <link href="{% static 'posts/css/posts.css' %}?v=1" rel="stylesheet">
+     <link href="{% static 'accounts/css/css.css' %}?v=1" rel="stylesheet">
 {% endblock head %}
 
 
    {% block profile_content %}
 
-
-
- {% if  user.userprofileinfo.profile_pic %}
+ {% if user.userprofileinfo.profile_pic %}
             <img  src ="{{ user.userprofileinfo.profile_pic.url }}" class="user_pic">
      {% else %}
         <img src="/media/user_pic/user.png" class="user_pic"">
         {% endif %}
+ {% if request.user == user %}
+  <form enctype="multipart/form-data" role="form" method="post" id="compose-form" action="{% url 'accounts:upload_picture' %}">
+   <div class="form-group">
+{% csrf_token %}
+    <input type="file" id="btn btn-default" name="profile_pic" class="form-control-file" placeholder="Upload new picture">
+     </div>
+</form>
+{% endif %}
 
-<ul style="">
+<ul style="margin-left: 22%;">
     <h3>{{ user.first_name }} {{ user.last_name }} </h3>
      {{ user.email }}
 <p style="font-size:16px;">
@@ -49,8 +54,9 @@
 
 
   {% block post_content %}
+
     <div class="row">
-    <div class="col-md-6 col-md-offset-3" style="margin-left: 0%; !important">
+    <div class="col-md-6 col-md-offset-3">
       <div class="panel panel-default panel-feed">
         <div class="panel-heading">
           <h3 class="panel-title">{% trans 'User Posts' %}</h3>
@@ -63,7 +69,11 @@
   </ul>
     </div></div></div></div>
 
-
+<style>
+.col-md-offset-3 {
+    margin-left: 10%;
+}
+</style>
 {% endblock post_content %}
 
 

@@ -139,8 +139,9 @@ ul.stream li div.post div.interaction a {
     color:black;
     font-weight: 500;
 }
+
 .user_pic{
-    width: 250px;
+    width: 200px;
     border-radius: 100px;
     float: left;
 }
@@ -240,3 +241,30 @@ ul.stream li div.post div.interaction a {
  width: 200px;
 
  }
+.follow_h{
+    text-align: center;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:17px;
+    font-weight: 500;
+    color:black;
+}
+
+.follow_h2{
+
+    scolor: black;
+    text-align: center;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:15px;
+    font-weight: 500;
+}
+.popup {
+	display:none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}

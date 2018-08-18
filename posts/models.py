@@ -67,12 +67,16 @@ class Post(models.Model):
 
 
     def get_like_url(self):
-        return reverse("posts:like", kwargs={"slug": self.slug})
+        return reverse("posts:like", kwargs={"pk": self.pk})
 
     def get_api_like_url(self):
-        return reverse("posts:like-api-toggle", kwargs={"slug": self.slug})
+        return reverse("posts:like-api-toggle", kwargs={"pk": self.pk})
 
-
+    def calculate_likes(self):
+        likes = Post.objects.filter(post=self.pk).count()
+        self.likes = likes
+        self.save()
+        return self.likes
 
 
 

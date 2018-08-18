@@ -17,12 +17,13 @@ class UserForm(forms.ModelForm):
 class UserProfileInfoForm(forms.ModelForm):
     class Meta:
         model = UserProfileInfo
-        fields = ['profile_pic', 'description']
+        fields = ['profile_pic']
 
 class EditProfileForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput())
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email')
+        fields = ('first_name', 'last_name', 'email', 'password')
 
 
 class UserPersonalProfileInfoForm(forms.ModelForm):

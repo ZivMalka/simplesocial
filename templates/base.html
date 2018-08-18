@@ -20,11 +20,11 @@
     <!-- Google Font API -->
  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
     <!-- Custom CSS File -->
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="{% static 'accounts/js/accounts.js' %}"></script>
-
+   <!-- style -->
+      <link href="{% static 'accounts/css/css.css' %}?v=1" rel="stylesheet">
+     <link href="{% static 'posts/css/posts.css' %}?v=1" rel="stylesheet">
 
 </head>
 
@@ -47,12 +47,7 @@
               {% if user.is_superuser %}
                  <li>    <a href="\admin">Admin Dashboard</a></li>
                {% endif %}
-
-                    <li>
-                       <a href="{% url 'accounts:profile' username=request.user.username %}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp; {{ request.user.username }}</a></li>
-
-                <li>
-                    <a href="{% url 'groups:all' %}"><span class="glyphicon glyphicon-th" aria-hidden="true"></span>&nbsp;Groups</a>
+                    <li><a href="{% url 'groups:all' %}"><span class="glyphicon glyphicon-th" aria-hidden="true"></span>&nbsp;Groups</a>
                 </li>
                 <li>
                     <a href="{% url 'groups:create' %}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Create Groups</a>
@@ -68,9 +63,18 @@
                 </li>
               </ul>
       <ul class="nav navbar-nav navbar-right">
-          <li>
-              <a href="{% url 'accounts:logout' %}"><span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp;Logout</a>
+
+   <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ request.user.username }}
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="{% url 'accounts:profile' username=user.username %}">Profile</a></li>
+          <li><a href="{% url 'accounts:edit_profile' %}">Settings</a></li>
+         <li>   <a href="{% url 'accounts:logout' %}"><span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp;Logout</a>
           </li>
+        </ul>
+      </li>
+
       </ul>
                 {% else %}
                 <li>
@@ -88,11 +92,23 @@
   </div><!-- /.container-fluid -->
 </nav>
 
-
-
-
     <div class="container mycontent">
-        {% block content %} {% endblock content %}
+    {% block head %}{% endblock head %}
+        {% block content %}{% endblock content %}
+{% block modal %}{% endblock modal %}
+
+          <script src="{% static 'posts/js/posts.js' %}?v=1"></script>
+   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <!-- Your stuff: Third-party javascript libraries go here -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js" type="text/javascript"></script>
+        <!-- place project specific Javascript in this file -->
+        <script src="{% static 'js/bootcamp.js' %}" type="text/javascript"></script>
+        <script src="{% static 'channels/js/websocketbridge.js' %}" type="text/javascript"></script>
+
+
+
     </div>
 
     <canvas id="canvas"></canvas>
@@ -107,5 +123,9 @@
 </body>
 <!-- Custom JS File -->
 
-  <script src="{% static 'posts/js/posts.js' %}?v=1"></script>
+
+
+
+
+
 </html>

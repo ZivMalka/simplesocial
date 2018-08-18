@@ -1,4 +1,3 @@
-
 $(document).ready(function(){
 
         $(".comment-reply-btn").click(function(){
@@ -131,4 +130,3 @@ window.onclick = function(event) {
 
 
 });
-

@@ -27,6 +27,16 @@ import math
 from posts.models import Post
 from activities.models import Comment
 from groups.models import Group,GroupMember
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import DetailView
+
+
+
+class UserDetailView(LoginRequiredMixin, DetailView):
+    model = User
+    # These next two lines tell the view to index lookups by username
+    slug_field = 'username'
+    slug_url_kwarg = 'username'
 
 
 def register(request):
@@ -51,6 +61,21 @@ def register(request):
                       {'user_form': user_form,
                        'profile_form': profile_form,
                        'registered': registered})
+
+
+def upload_pic(request):
+
+    if request.method == 'POST':
+        form = UserProfileInfoForm(request.POST, request.FILES)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            if 'profile_pic' in request.FILES:
+                form.profile_pic = request.FILES['profile_pic']
+
+            m = get_object_or_404(UserProfileInfo, user=request.user)
+            m.profile_pic = form.cleaned_data['profile_pic']
+            m.save()
+            return HttpResponseRedirect(reverse("accounts:profile", kwargs={"username": request.user.username}))
 
 @login_required
 def profile(request):

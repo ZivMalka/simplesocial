@@ -1,25 +1,33 @@
 {%  extends "accounts/profile_base.html" %}
 {% load staticfiles %}
+{% load i18n %}
 
  {% block profile_content %}
+
 
 <div class="container">
   <div class="row">
 
     <h1>Edit</h1>
+   <form enctype="multipart/form-data" method="POST">
+       {% csrf_token %}
+         {% for field in user_form_edit.visible_fields %}
+  <div class="form-group">
+ <label for="{{ field.label }}" class="col-sm-2 control-label">{{ field.label }}</label>
+      {% if field.label == "Password" %}
+       <input type="password" class="form-control" style="width: 35%;"  id="exampleInputPassword1" placeholder="Password">
+      {% else %}
+    <input class="form-control" style="width: 35%;"  placeholder={{ field }} {% endif %}
+  </div>  {% endfor %}
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
 
 
-    <h3>Update your details</h3>
-    <form enctype="multipart/form-data" method="POST">
-        {%  csrf_token %}
-        {{ user_form_edit.as_p }}
-        {{ profile_form.as_p }}
-
-
-        <input type="submit" class='bth bth default'  value="Update">
-
-
-    </form>
-
-</div>
+   </div> </div>
 {% endblock %}
+
+<Style>
+    .form-control {
+    width: 35% !important;
+    }
+</Style>
