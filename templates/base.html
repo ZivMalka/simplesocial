@@ -36,17 +36,19 @@
       <ul class="nav navbar-nav navbar-left">
           {% if user.is_authenticated %}
               {% if user.is_superuser %}
-                 <li>    <a href="\admin">Admin Dashboard</a></li>
+                   <li>    <a href="\admin"><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span>&nbsp;Admin Dashboard</a></li>
                {% endif %}
-                    <li><a href="{% url 'groups:all' %}"><span class="glyphicon glyphicon-th" aria-hidden="true"></span>&nbsp;Groups</a>
+                <li>
+                    <a href="{% url 'groups:all' %}"><span class="glyphicon glyphicon-th" aria-hidden="true"></span>&nbsp;Groups</a>
                 </li>
+                <li>
                     <a href="{% url 'nutrition:list' username=request.user.username %}"><span class="glyphicon glyphicon-cutlery" aria-hidden="true"></span>&nbsp;Nutrition</a>
                 </li>
                 <li>
                     <a href="{% url 'workout:overview' username=request.user.username %}"><span class="glyphicon glyphicon-scale" aria-hidden="true"></span>&nbsp;Workout</a>
                 </li>
                </li>
-                  <li><a href="{% url 'messenger:messages_list' %}"><span class="glyphicon glyphicon-th" aria-hidden="true"></span>Chat</a>
+                  <li><a href="{% url 'messenger:messages_list' %}"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>&nbsp;Chat</a>
                 </li>
               <li>
                     <a href="{% url 'accounts:all_users' %}"><span class="glyphicon glyphicon-sunglasses" aria-hidden="true"></span>&nbsp;Friends</a>
