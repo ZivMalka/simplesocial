@@ -40,10 +40,6 @@
                {% endif %}
                     <li><a href="{% url 'groups:all' %}"><span class="glyphicon glyphicon-th" aria-hidden="true"></span>&nbsp;Groups</a>
                 </li>
-                <li>
-                    <a href="{% url 'groups:create' %}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Create Groups</a>
-
-                <li>
                     <a href="{% url 'nutrition:list' username=request.user.username %}"><span class="glyphicon glyphicon-cutlery" aria-hidden="true"></span>&nbsp;Nutrition</a>
                 </li>
                 <li>
@@ -53,7 +49,7 @@
                   <li><a href="{% url 'messenger:messages_list' %}"><span class="glyphicon glyphicon-th" aria-hidden="true"></span>Chat</a>
                 </li>
               <li>
-                    <a href="{% url 'accounts:all_users' %}">&nbsp;Friends</a>
+                    <a href="{% url 'accounts:all_users' %}"><span class="glyphicon glyphicon-sunglasses" aria-hidden="true"></span>&nbsp;Friends</a>
                 </li>
               </ul>
       <ul class="nav navbar-nav navbar-right">
