@@ -1,0 +1,53 @@
+{% extends  "appoint_base.html" %}
+{% load i18n  %}
+{% load staticfiles %}
+
+{% block content %}
+
+<div class="container">
+    <h3>Here are your scheduled appointments</h3>
+    <h4><i>Date and time right now: {% now "jS F Y H:i" %} </i></h4>
+    <br>
+    <div class="container">
+        <table style="width:100%;" class="table">
+            <thead>
+                <th>Task</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Action</th>
+            </thead>
+            <tbody>
+                {%for appointment in appointment%}
+                <tr>
+                    <td>{{appointment.task}}</td>
+                    <td>{{appointment.date}}</td>
+                    <td>{{appointment.time}}</td>
+                    <td>
+                    {% if user.is_superuser %}
+                    <div>
+                        <a href="{% url 'appointments:delete_event' appointment.id %}"
+                           title="{% trans 'Delete' %}">
+                          <span class="glyphicon glyphicon-trash"></span>&nbsp;</a>
+                    </div>
+                    {% endif %}
+                </td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+    {% if request.user.is_superuser %}
+        <tr>
+            <td colspan="6">
+            <a href="{% url 'appointments:create_event' %}">
+                <span class="glyphicon glyphicon-plus"></span>&nbsp;
+                {% trans "Schedule new appointment" %}
+            </a>
+            </td>
+        <tr>
+        {% endif %}
+
+{% endblock %}
