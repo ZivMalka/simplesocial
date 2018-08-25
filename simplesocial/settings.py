@@ -180,6 +180,7 @@ INSTALLED_APPS = [
     'workout',
     'channels',
     'messenger',
+    'appointments',
 
 ]
 
