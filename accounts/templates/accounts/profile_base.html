@@ -29,7 +29,7 @@
      <li>  <a href="{% url 'accounts:personal_profile' username=user.username %}">Personal Profile</a></li>
        <li><a href="{% url 'nutrition:list' username=user.username%}">Nutrition</a>
           <li><a href="{% url 'workout:overview' username=request.user.username %}"> Workout</a>
-         <li>  <a href="{% url 'accounts:chart' username=user.username %}">VISUAL PROGRESS</a></li>
+         <li>  <a href="{% url 'accounts:chart' username=user.username %}">Visual Progress</a></li>
        </li>
 {% endif %}
       {% if request.user.is_superuser %}
