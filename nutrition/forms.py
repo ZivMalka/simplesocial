@@ -1,5 +1,5 @@
 from django import forms
-
+from django.contrib.admin.widgets import AdminTimeWidget
 from .models import Plan, Nutrition
 
 
@@ -11,6 +11,7 @@ class PlanForm(forms.ModelForm):
 
 
 class NutritionForm(forms.ModelForm):
+    time = forms.TimeField(widget= AdminTimeWidget)
 
     class Meta:
         model = Nutrition
