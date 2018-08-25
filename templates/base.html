@@ -60,9 +60,9 @@
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ request.user.username }}
         <span class="caret"></span></a>
         <ul class="dropdown-menu">
-          <li><a href="{% url 'accounts:profile' username=user.username %}">Profile</a></li>
-          <li><a href="{% url 'accounts:edit_profile' %}">Settings</a></li>
-         <li>   <a href="{% url 'accounts:logout' %}"><span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp;Logout</a>
+          <li><a href="{% url 'accounts:profile' username=user.username %}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp; Profile</a></li>
+          <li><a href="{% url 'accounts:edit_profile' %}"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span>&nbsp; Settings</a></li>
+         <li>   <a href="{% url 'accounts:logout' %}"><span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp; Logout</a>
           </li>
         </ul>
       </li>
