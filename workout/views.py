@@ -18,7 +18,7 @@ def add_workout(request):
         }
         return render(request, 'workout/add_workout.html', context)
     else:
-        return HttpResponse("No access to this page")
+        return HttpResponse("Only authorized user can add workout plans")
 
 
 
