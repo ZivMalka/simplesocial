@@ -76,6 +76,9 @@ def upload_pic(request):
             m.profile_pic = form.cleaned_data['profile_pic']
             m.save()
             return HttpResponseRedirect(reverse("accounts:profile", kwargs={"username": request.user.username}))
+        else:
+            form = UserProfileInfoForm(request.POST, request.FILES)
+            return render(request, 'accounts/profile.html',{'form': form})
 
 @login_required
 def profile(request):
@@ -103,6 +106,11 @@ def edit_profile(request):
                 profile_form.save()
                 messages.success(request, 'Your profile was successfully updated!')
                 return HttpResponseRedirect(reverse("accounts:profile", kwargs={"username": request.user.username}))
+            else:
+                user_form_edit = EditProfileForm(instance=request.user)
+                profile_form = UserProfileInfoForm(instance=request.user.userprofileinfo)
+                return render(request, 'accounts/edit_profile.html',
+                              {'user_form_edit': user_form_edit, 'profile_form': profile_form})
         else:
             user_form_edit = EditProfileForm(instance=request.user)
             profile_form = UserProfileInfoForm(instance=request.user.userprofileinfo)
@@ -379,7 +387,7 @@ def weight_lossDistrbotion(request, username):
         "palettecolors": "#0075c2",
     }
     labels = ["0","1-9", "10-19", "20-29", "30-39", "40-49", "50"]
-    negatives =  ["-1--9","-10-19","-20--29","-30-39","-40--49","-50"]
+    negatives =  ["0","-1--9","-10-19","-20--29","-30-39","-40--49","-50"]
     dataSource['data'] = []
     # Iterate through the data in `Revenue` model and insert in to the `dataSource['data']` list.
     if request.user.username == username or request.user.is_superuser:
@@ -394,6 +402,8 @@ def weight_lossDistrbotion(request, username):
 
 
                 for i in range (negatives.__len__()-1, -1,-1):
+                    if i==0:
+                        continue
                     data = {}
                     data['label'] = negatives[i]
                     data['value'] = arr.count(-i)
@@ -556,12 +566,14 @@ def  GeneratePdf(request, username):
         if request.method == "POST":
             form = FilterDate(request.POST, instance=request.user.userprofileinfo)
             if form.is_valid():
+
                 time = form.cleaned_data.get('timestamp')
                 month = myconverter_month(time)
                 year = myconverter_year(time)
                 list = user.userprofileinfo.weight_history.filter(timestamp__year=year, timestamp__month=month)
                 type  = time
                 if not list:
+
                     return render(request, 'accounts/reports.html')
 
         elif request.GET.get('year'):
@@ -575,7 +587,7 @@ def  GeneratePdf(request, username):
 
         for k in list:
                 data = {}
-                data['body_fat'].k.body_fat
+                data['body_fat']= k.body_fat
                 data['weight'] = k.weight
                 data['timestamp'] = k.timestamp
                 current = k.weight

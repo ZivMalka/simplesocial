@@ -44,3 +44,9 @@ class UserProfileInfo(models.Model):
     def __str__(self):
         return self.user.username
 
+    def get_profile_pic(self):
+        if self.profile_pic is None:
+            return "/media/user_pic/user.png"
+        else:
+            return "{{ user.userprofileinfo.profile_pic.url }}"
+

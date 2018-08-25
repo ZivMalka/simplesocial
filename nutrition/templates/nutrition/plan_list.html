@@ -27,6 +27,8 @@
         {% trans "No nutrition plans." %}<br>
         {% trans "Add one now." %}
         </a>
+            {% else %}
+              {% trans "No nutrition plans yet." %}
         {% endif %}
     {% endfor %}
 </div>

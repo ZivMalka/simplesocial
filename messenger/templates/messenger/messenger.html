@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% load static %}
+{% load staticfiles %}
+
+
+{% block head  %}
+
+<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
+<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
+    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
+
+    {% endblock head %}
+
+{% block content %}
+ <link href="{% static 'messenger/css/messenger.css' %}?v=1" rel="stylesheet">
+
+
+
+<div id="frame">
+	<div id="sidepanel">
+		<div id="profile">
+			<div class="wrap">
+        {% if other_user.userprofileinfo.profile_pic %}
+			<img  id="profile-img" src="{{ other_user.userprofileinfo.profile_pic.url }}" alt="" />
+             {% else %}
+        <img  id="profile-img" src="/media/user_pic/user.jpg" class="user_pic"">
+        {% endif %}
+				<p>{{ user }}</p>
+
+			</div>
+		</div>
+		<div id="search">
+			<label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
+			<input type="text" placeholder="Search contacts..." />
+		</div>
+		<div id="contacts">
+             {% for user in users_list %}
+			<ul>
+                 <a href="{% url 'messenger:conversation_detail' user.username  %}">
+				<li class="contact">
+					<div class="wrap">
+						  {% if user.userprofileinfo.profile_pic %}
+		    	<img src="{{ user.userprofileinfo.profile_pic.url }}" alt=""  style="width: 39px;">
+                        {% else %}
+               <img src="/media/user_pic/user.jpg" class="user_pic"">
+                   {% endif %}
+	    					<div class="meta">
+							{{ user.username|title }}
+						</div>
+					</div>
+				</li>
+                   </a>
+			</ul>
+               {% endfor %}
+		</div>
+	</div>
+	<div class="content">
+		<div class="contact-profile">
+             {% if other_user.userprofileinfo.profile_pic %}
+			<img src="{{ other_user.userprofileinfo.profile_pic.url }}" alt="" />
+             {% else %}
+        <img src="/media/user_pic/user.jpg" class="user_pic"">
+        {% endif %}
+			<p>{{ other_user }}</p>
+		</div>
+		<div class="chat-items">
+
+			<ul>
+                {% for chat in object.chatmessage_set.all %}
+               {% if chat.user ==  user  %}
+				<li class="sent">
+					<p>{{ chat.message }}</p>
+				</li>
+            {% else %}
+            	<li class="replies">
+					<p>{{ chat.message }}</p>
+				</li>
+            {% endif %}
+                  {% endfor %}
+			</ul>
+
+		</div>
+		<div class="message-input">
+			<div class="wrap">
+           <form id='fo' method='POST' action="#">
+             {% csrf_token %}
+               {{form.as_p }}
+        	<button type="submit" class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+           </form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src='//production-assets.codepen.io/assets/common/stopExecutionOnTimeout-b2a7b3fe212eaa732349046d8416e00a9dec26eb7fd347590fbced3ab38af52e.js'></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.js"></script>
+
+<script>
+
+$(".chat-items").animate({ scrollTop: $(document).height() }, "fast");
+
+
+var loc = window.location
+var wsStart = 'ws://'
+var formData = $("#fo")
+var chatHolder = $("#send")
+
+
+if (loc.protocol == 'https:'){
+    wsStart = 'wss://'
+}
+var endpoint = wsStart  + loc.host + loc.pathname
+var websocket = new WebSocket(endpoint)
+var msgInput = $("#id_message")
+var user = "{{ user.username }}"
+
+websocket.onmessage = function(e){
+    console.log("message", e)
+    var chatMsg = JSON.parse(e.data)
+
+    if (chatMsg.username == user) {
+        $('<li class="sent"><p>' + chatMsg.message + '</p></li>').appendTo($('.chat-items ul'));
+    }
+    else{
+        $('<li class="replies"><p>' + chatMsg.message + '</p></li>').appendTo($('.chat-items ul'));
+    }
+$(".chat-items").animate({ scrollTop: $(document).height() }, "fast");
+
+}
+
+websocket.onopen = function(e){
+    console.log("open", e)
+    formData.submit(function(event){
+        event.preventDefault()
+        var msgText = msgInput.val()
+        var finalData= {
+            'message' : msgText
+        }
+        websocket.send(JSON.stringify(finalData))
+        formDate[0].reset()
+    })
+}
+
+websocket.onerror= function(e){
+    console.log("error", e)
+}
+
+websocket.onclose= function(e){
+    console.log("close", e)
+}
+
+
+//# sourceURL=pen.js
+</script>
+
+{% endblock content %}

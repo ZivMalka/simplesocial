@@ -1,8 +1,62 @@
-$(document).ready(function(){
 
-        $(".comment-reply-btn").click(function(){
-        $(".comment-reply").toggle();
-    })
+// Submit post on submit
+/**$('#comment-form').on('submit', function(event){
+    event.preventDefault();
+    console.log("form submitted!")  // sanity check
+    create_comment();
+});
+
+// AJAX for posting
+function create_comment() {
+    console.log("create post is working!") // sanity check
+    var post_id = $('.post-id').val()
+    var form = $(this).closest("form");
+     $.ajax({
+        url : "posts/comment/", // the endpoint
+        type : "POST", // http method
+        data :  $("#comment-form").serialize(), // data sent with the post request
+
+        // handle a successful response
+        success : function(json) {
+            $('#comment-text').val(''); // remove the value from the input
+            console.log(json); // log the returned json to the console
+            console.log("success"); // another sanity check
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
+};
+/***/
+
+
+  $("ul.stream").on("keydown", ".comments input[name='content']", function (evt) {
+    var keyCode = evt.which?evt.which:evt.keyCode;
+    if (keyCode == 13) {
+      var form = $(this).closest("#comment-form");
+      var container = $(this).closest(".comments");
+      var input = $(this);
+      console.log("form submitted!")  // sanity check
+      $.ajax({
+        url: '/posts/comment/',
+        data: $(form).serialize(),
+        type: 'post',
+        cache: false,
+        beforeSend: function () {
+          $(input).val("");
+        },
+
+       success : function(json) {
+          $("ol", container).prepend("<li><div>" + json.text + "</div>" + "<h4><a>" + json.author + "</h4></a></li>");
+        }
+      });
+      return false;
+    }
+  });
 
 
 $("body").keydown(function (evt) {
@@ -58,8 +112,9 @@ $("body").keydown(function (evt) {
     });
   });
 
-  $("ul.stream").on("click", ".comment", function () {
+  $("ul.stream").on("click", ".comment", function (e) {
     var post = $(this).closest(".post");
+     e.preventDefault();
     if ($(".comments", post).hasClass("tracking")) {
       $(".comments", post).slideUp();
       $(".comments", post).removeClass("tracking");
@@ -67,66 +122,47 @@ $("body").keydown(function (evt) {
     else {
       $(".comments", post).show();
       $(".comments", post).addClass("tracking");
-      $(".comments input[name='post']", post).focus();
-      var feed = $(post).closest("li").attr("feed-id");
-      $.ajax({
-        url: '/feeds/comment/',
-        data: { 'feed': feed },
-        cache: false,
-        beforeSend: function () {
-          $("ol", post).html("<li class='loadcomment'><img src='/static/img/loading.gif'></li>");
-        },
-        success: function (data) {
-          $("ol", post).html(data);
-          $(".comment-count", post).text($("ol li", post).not(".empty").length);
-        }
-      });
+      $(".comments input[name='content']", post).focus();
+      var feed = $(post).closest("li").attr("feed-id");;
     }
-    return false;
+     return false;
   });
 
-  $("ul.stream").on("keydown", ".comments input[name='post']", function (evt) {
-    var keyCode = evt.which?evt.which:evt.keyCode;
-    if (keyCode == 13) {
-      var form = $(this).closest("form");
-      var container = $(this).closest(".comments");
-      var input = $(this);
-      $.ajax({
-        url: '/feeds/comment/',
-        data: $(form).serialize(),
-        type: 'post',
-        cache: false,
-        beforeSend: function () {
-          $(input).val("");
-        },
-        success: function (data) {
-          $("ol", container).html(data);
-          var post_container = $(container).closest(".post");
-          $(".comment-count", post_container).text($("ol li", container).length);
-        }
-      });
-      return false;
-    }
-  });
 
-  var modal = document.getElementById('t-wrapper');
-window.onclick = function(event) {
-    if (event.target == t) {
-        modal.style.display = "none";
-    }
-}
-
-     $('.date-picker').datepicker( {
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: true,
-            onClose: function(dateText, inst) {
-                $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+   function updateText(btn, newCount, verb){
+          btn.text(newCount + " " + verb)
+          btn.attr("data-likes", newCount)
+      }
+      $(".like").click(function(e){
+        e.preventDefault()
+        var this_ = $(this)
+        var likeUrl = this_.attr("data-href")
+        var likeCount = parseInt(this_.attr("data-likes")) | 0
+        var addLike = likeCount + 1
+        var removeLike = likeCount - 1
+        if (likeUrl){
+           $.ajax({
+            url: likeUrl,
+            method: "GET",
+            data: {},
+            success: function(data){
+              console.log(data)
+              var newLikes;
+              if (data.liked){
+                  updateText(this_, addLike, "Unlike")
+              } else {
+                  updateText(this_, removeLike, "Like")
+                  // remove one like
+              }
+            }, error: function(error){
+              console.log(error)
+              console.log("error")
             }
-            });
-             $('.date-picker').focus(function () {
-	        	$(".ui-datepicker-calendar").hide();
-			});
+          })
+        }
+
+      })
 
 
-});
+
+

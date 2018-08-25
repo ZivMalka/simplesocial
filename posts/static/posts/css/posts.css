@@ -123,12 +123,18 @@ ul.stream li div.post div.interaction a {
   overflow-x: auto;
 }
 
-.comments ol li {
+.comments ol {
   list-style: none;
   padding: 0;
 }
+
+.append{
+  list-style: none;
+  padding: 0;
+}
+
 .like-count{
-  color: #337ab7;
+  color: #262626;
 }
 
 
@@ -146,14 +152,14 @@ ul.stream li div.post div.interaction a {
     float: left;
 }
 
-.comments ol li img.user-comment {
+.comments ol img.user-comment {
   width: 35px;
   border-radius: 4px;
   float: left;
   margin-left: 10px;
 }
 
-.comments ol li div {
+.comments ol  div {
   margin-left: 45px;
   padding: 0 .8em;
   font-size: .9em;
@@ -164,14 +170,14 @@ ul.stream li div.post div.interaction a {
   border-bottom: none;
 }
 
-.comments ol li h4 {
+.comments ol  h4 {
   margin: 0;
   margin-left: 45px;
   padding: 0 0 .2em .8em;
   font-size: .9em;
 }
 
-.comments ol li h4 small {
+.comments ol  h4 small {
   margin-left: .3em;
 }
 

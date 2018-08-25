@@ -1,6 +1,6 @@
-
+import json
 from django.contrib import messages
-
+from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404, redirect
@@ -134,6 +134,7 @@ def add_comment_to_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
    # post = Post.objects.get(pk=1)
 
+
     if request.method == "POST":
             form = CommentForm(data=request.POST)
             if form.is_valid():
@@ -178,6 +179,7 @@ class like(RedirectView, LoginRequiredMixin):
 
         return url_
 
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
@@ -206,16 +208,35 @@ class PostLikeAPIToggle(APIView):
         return Response(data)
 
 
-@ajax_required
-def like2(request):
-    feed_id = request.POST['post']
-    post = Post.objects.get(pk=feed_id)
-    user = request.user
-    if user in feed.likes.all():
-        liked = False
-        post.likes.remove(user)
-    else:
-        liked = True
-        post.likes.add(user)
 
-    return HttpResponse(post.calculate_likes())
+@csrf_exempt
+def comment(request):
+    print("jkashdkjsad")
+    if request.method == 'POST':
+
+        print("S")
+        post_id = request.POST.get('post_id')
+        print(post_id)
+        post = Post.objects.get(pk=post_id)
+        content = request.POST.get('content')
+        user = request.user
+        response_data = {}
+        new_comment = Comment.objects.create(content_object=post, content=content, user=request.user)
+
+        response_data['result'] = 'Create post successful!'
+        response_data['postpk'] = new_comment.pk
+        response_data['text'] = new_comment.content
+        response_data['created'] = new_comment.timestamp.strftime('%B %d, %Y %I:%M %p')
+        response_data['author'] = new_comment.user.username
+
+        return HttpResponse(
+            json.dumps(response_data),
+            content_type="application/json"
+        )
+    else:
+        return HttpResponse(
+            json.dumps({"nothing to see": "this isn't happening"}),
+            content_type="application/json"
+        )
+
+

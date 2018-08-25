@@ -12,13 +12,36 @@
 
  {% block profile_content %}
 
-    <h3>Add new weighing</h3>
-    <form enctype="multipart/form-data" method="POST">
-        {%  csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" class='bth bth default'  value="Update">
-    </form>
+
+
+     {% if form.non_field_errors %}
+  <div class="alert alert-danger" role="alert">
+    {% for error in form.non_field_errors %}
+      {{ error }}
+    {% endfor %}
+  </div>
+{% endif %}
+
+   <form enctype="multipart/form-data" method="POST">
+       {% csrf_token %}
+         {% for field in form.visible_fields %}
+
+  <div class="form-group">
+ <label for="{{ field.label }}" class="col-sm-2 control-label">{{ field.label }}</label>
+    <input class="form-control" style="width: 35%;"  placeholder={{ field }}
+               {{ field.errors }}
+  </div>  {% endfor %}
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+
 
 
 
 {% endblock %}
+
+<Style>
+    .form-control {
+    width: 35% !important;
+    }
+</Style>

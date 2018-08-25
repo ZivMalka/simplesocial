@@ -12,10 +12,7 @@
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
-
 {% endblock %}
-
 
   <div class="feed-container">
 <div class="post media">
@@ -24,7 +21,7 @@
          {% if  post.user.userprofileinfo.profile_pic %}
           <img src ="{{ post.user.userprofileinfo.profile_pic.url }}" class="user">
                {% else %}
-                       <img src="/media/user_pic/user.png" class="user">
+                       <img src="/media/user_pic/user.jpg" class="user">
                   {% endif %}
               </a>
 		<small>	<time class="time" ><a style="color: #616770;" href="{% url 'posts:single' username=post.user.username pk=post.pk %}">
@@ -48,23 +45,22 @@
     <br>
 
       <div class="interaction">
-      <p><a class='like-btn' data-href='{{ post.get_api_like_url }}' data-likes='{{ post.likes.count }}' href='{{ post.get_like_url }}'>{{ post.likes.count }} Like</a></p>
 
 
         {% if user in post.likes.all %}
-         	<a href="#" style="text-decoration: none;" class="like unlike" data-href='{{ post.get_api_like_url }}' data-likes='{{ post.likes.count }}' href='{{ post.get_like_url }}'>
 
-            <span class="glyphicon glyphicon-thumbs-up"></span>
-            <span class="text">{% trans 'Unlike' %}</span>
+         	<a href="#" style="text-decoration: none;" class="like unlike" data-href='{{ post.get_api_like_url }}' data-likes='{{ post.likes.count }}' href='{{ post.get_like_url }}'>
+              {{ post.likes.count }}
+                <span class="text">{% trans 'Unlike' %}</span>
           </a>
         {% else %}
         	<a href="#" style="text-decoration: none;" class="like" data-href='{{ post.get_api_like_url }}' data-likes='{{ post.likes.count }}' href='{{ post.get_like_url }}'>
-            <span class="glyphicon glyphicon-thumbs-up"></span>
+          {{ post.likes.count }}
             <span class="text">{% trans 'Like' %}</span>
           </a>
         {% endif %}
 
-          <span class="like-count"><a class="like-count1" data-toggle="modal" data-target="#myModal{{ post.pk }}">({{ post.likes.count }})</a> <span>
+          <span class="like-count" id="u"><a class="like-count1" data-toggle="modal" data-target="#myModal{{ post.pk }}">see all likes</a> <span>
                   <!-- Modal -->
   <div class="modal" id="myModal{{ post.pk }}" role="dialog">
     <div class="modal-dialog">
@@ -90,20 +86,23 @@
              <span class="glyphicon glyphicon-comment"></span> {% trans 'Comment' %}
             (<span class="comment-count">{{ post.comment.count }}</span>)
              </a>
+
        </div>
 
  <div class="comments" style="display: none;">
-  <form role="form" method="post" action="{% url 'posts:comment' pk=post.pk %}">
+  <form role="form" method="post" action="#" id="comment-form">
  {% csrf_token %}
-     <input type="hidden" name="feed" value="{{ post.pk }}" onsubmit="return false">
-   <input type="text" class="form-control input-sm" placeholder="{% trans 'Write a comment...' %}" name="content" maxlength="255">
+ <input type="hidden" class="post-id" name="post_id" value="{{ post.pk }}"  onsubmit="return false">
+   <input type="text" class="form-control input-sm" placeholder="{% trans 'Write a comment...' %}" name="content" maxlength="255" id="comment-text">
  </form>
-<ul class="list-group list-group-flush">
+
+ <ol class="clearfix">
+
      {% for comment in post.comment.all %}
+            <li>
      {% if comment.user == user %}
   <span class="glyphicon glyphicon-remove remove-feed" title="{% trans 'Click to remove this comment' %}"></span>
              {% endif %}
-     <li feed-id="{{ comment.pk }}" csrf="{{ csrf_token }}">
      <div>{{ comment.content }}</div>
     <h4>
       <a href="{% url 'accounts:profile' username=post.user.username %}">
@@ -111,12 +110,11 @@
       </a>
       <small>{{ comment.timestamp|naturaltime }}</small>
     </h4>
-
-  </li>
+</li>
 {% empty %}
   <li class="empty">{% trans 'Be the first one to comment' %}</li>
    {% endfor %}
-                    <ul/></div></div></div></div>
+                    </ol></div></div></div></div>
 
 	{% endif %}
 

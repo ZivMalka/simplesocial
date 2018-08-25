@@ -1,9 +1,15 @@
 from django.contrib import admin
-from messenger.models import Message
-# Register your models here.
-#admin.site.register(models.Message)
 
-@admin.register(Message)
-class MessageAdmin(admin.ModelAdmin):
-    list_display = ("sender", "recipient", "timestamp")
-    list_filter = ("sender", "recipient")
+
+from .models import Thread, ChatMessage
+
+class ChatMessage(admin.TabularInline):
+    model = ChatMessage
+
+class ThreadAdmin(admin.ModelAdmin):
+    inlines = [ChatMessage]
+    class Meta:
+        model = Thread
+
+
+admin.site.register(Thread, ThreadAdmin)

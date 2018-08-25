@@ -1,12 +1,13 @@
-from django.conf.urls import url
-
+from django.urls import path, re_path
 from messenger import views
+from django.conf.urls import url
+from .views import ThreadView, InboxView, ConversationListView
 
 app_name = 'messenger'
-
 urlpatterns = [
-    url(r'^$', views.MessagesListView.as_view(), name='messages_list'),
-    url(r'^send-message/$', views.send_message, name='send_message'),
-    url(r'^receive-message/$',views.receive_message, name='receive_message'),
+    path("", InboxView.as_view(), name="messages_list"),
+    re_path(r"^(?P<username>[\w.@+-]+)/$", ThreadView.as_view()),
     url(r'^(?P<username>[\w.@+-]+)/$', views.ConversationListView.as_view(),name='conversation_detail'),
+
+
 ]

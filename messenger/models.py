@@ -1,37 +1,27 @@
 from django.db import models
 
-import uuid
-
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
-
-from asgiref.sync import async_to_sync
-
-from channels.layers import get_channel_layer
+from django.db.models import Q
 
 
-
-class MessageQuerySet(models.query.QuerySet):
-    """Personalized queryset created to improve model usability."""
-
-    def get_conversation(self, sender, recipient):
-        """Returns all the messages sent between two users."""
-        qs_one = self.filter(sender=sender, recipient=recipient)
-        qs_two = self.filter(sender=recipient, recipient=sender)
-        return qs_one.union(qs_two).order_by('timestamp')
+class ThreadManager(models.Manager):
+    def by_user(self, user):
+        qlookup = Q(first=user) | Q(second=user)
+        qlookup2 = Q(first=user) & Q(second=user)
+        qs = self.get_queryset().filter(qlookup).exclude(qlookup2).distinct()
+        return qs
 
     def get_most_recent_conversation(self, recipient):
         """Returns the most recent conversation counterpart's username."""
         try:
-            qs_sent = self.filter(sender=recipient)
-            qs_recieved = self.filter(recipient=recipient)
+            qs_sent = self.filter(first=recipient)
+            qs_recieved = self.filter(second=recipient)
             qs = qs_sent.union(qs_recieved).latest("timestamp")
-            if qs.sender == recipient:
-                return qs.recipient
+            if qs.first == recipient:
+                return qs.second
 
-            return qs.sender
+            return qs.first
 
         except self.model.DoesNotExist:
             return get_user_model().objects.get(username=recipient.username)
@@ -41,63 +31,51 @@ class MessageQuerySet(models.query.QuerySet):
         qs = self.filter(sender=sender, recipient=recipient)
         return qs.update(unread=False)
 
+    def get_or_new(self, user, other_username):  # get_or_create
+        username = user.username
+        if username == other_username:
+            return None
+        qlookup1 = Q(first__username=username) & Q(second__username=other_username)
+        qlookup2 = Q(first__username=other_username) & Q(second__username=username)
+        qs = self.get_queryset().filter(qlookup1 | qlookup2).distinct()
+        if qs.count() == 1:
+            return qs.first(), False
+        elif qs.count() > 1:
+            return qs.order_by('timestamp').first(), False
+        else:
+            Klass = user.__class__
+            user2 = Klass.objects.get(username=other_username)
+            if user != user2:
+                obj = self.model(
+                    first=user,
+                    second=user2
+                )
+                obj.save()
+                return obj, True
+            return None, False
 
 
-
-class Message(models.Model):
-    """A private message sent between users."""
-    uuid_id = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, editable=False)
-    sender = models.ForeignKey(
-        settings.AUTH_USER_MODEL, related_name='sent_messages',
-        verbose_name=_("Sender"), null=True, on_delete=models.SET_NULL)
-    recipient = models.ForeignKey(
-        settings.AUTH_USER_MODEL, related_name='received_messages', null=True,
-        blank=True, verbose_name=_("Recipient"), on_delete=models.SET_NULL)
+class Thread(models.Model):
+    first = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='chat_thread_first')
+    second = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='chat_thread_second')
+    updated = models.DateTimeField(auto_now=True)
     timestamp = models.DateTimeField(auto_now_add=True)
-    message = models.TextField(max_length=1000, blank=True)
-    unread = models.BooleanField(default=True, db_index=True)
-    objects = MessageQuerySet.as_manager()
 
-    class Meta:
-        verbose_name = _("Message")
-        verbose_name_plural = _("Messages")
-    #    ordering = ("-timestamp", )
+    objects = ThreadManager()
 
-    def __str__(self):
-        return self.message
+    @property
+    def room_group_name(self):
+        return f'chat_{self.id}'
 
-    def mark_as_read(self):
-        """Method to mark a message as read."""
-        if self.unread:
-            self.unread = False
-            self.save()
-
-    @staticmethod
-    def send_message(sender, recipient, message):
-        """Method to create a new message in a conversation.
-        :requires:
-        :param sender: User instance of the user sending the message.
-        :param recipient: User instance of the user to recieve the message.
-        :param message: Text piece shorter than 1000 characters containing the
-                        actual message.
-        """
-        new_message = Message.objects.create(
-            sender=sender,
-            recipient=recipient,
-            message=message
-        )
-        channel_layer = get_channel_layer()
-        payload = {
-                'type': 'receive',
-                'key': 'message',
-                'message_id': new_message.uuid_id,
-                'sender': sender,
-                'recipient': recipient
-            }
-
-   #     async_to_sync(channel_layer.group_send)(recipient.username, payload)
-        return new_message
+    def broadcast(self, msg=None):
+        if msg is not None:
+            broadcast_msg_to_chat(msg, group_name=self.room_group_name, user='admin')
+            return True
+        return False
 
 
-
+class ChatMessage(models.Model):
+    thread = models.ForeignKey(Thread, null=True, blank=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='sender', on_delete=models.CASCADE)
+    message = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)

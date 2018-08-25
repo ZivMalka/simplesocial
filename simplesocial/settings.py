@@ -154,7 +154,7 @@ ALLOWED_HOSTS = []
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 # django-channels setup
-ASGI_APPLICATION = 'routing.application'
+ASGI_APPLICATION = 'simplesocial.routing.application'
 
 
 
@@ -178,8 +178,9 @@ INSTALLED_APPS = [
     'activities',
     'nutrition',
     'workout',
-    'messenger',
     'channels',
+    'messenger',
+
 ]
 
 MIDDLEWARE = [
@@ -256,7 +257,17 @@ USE_L10N = True
 
 USE_TZ = True
 
-CHANNEL_LAYERS = {}
+
+#REDIS_URL = f'{env("REDIS_URL", default="redis://127.0.0.1:6379")}/{0}'
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],
+            #  'hosts': [REDIS_URL, ],
+        },
+    },
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/

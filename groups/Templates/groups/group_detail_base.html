@@ -15,9 +15,9 @@
   </div></div><div class="brand__name"><h1 class="group_name" style="margin-top: -47px;margin-left: 100px;">{{group.name}}</h1></div><div class="brand__actions">
   </div></div><div class="brand__name"></div><div class="brand__actions">
       	{% if user in group.members.all %}
-					<a  href="{% url 'groups:leave' slug=group.slug %}" class="btn btn-default btn-cancel-compose" style="margin-top: -77px;margin-left: 774px;background:white; color: #1879cd;"><span class="glyphicon glyphicon-remove-circle"></span> Unfollow</a>
+					<a  href="{% url 'groups:leave' slug=group.slug %}" class="btn btn-default btn-cancel-compose" style="margin-top: -77px;margin-left: 774px;background:white; color: #1879cd;"><span class="glyphicon glyphicon-minus"></span> Unfollow</a>
 				{% else %}
-					<a  href="{% url 'groups:join' slug=group.slug %}" class="btn btn-default btn-cancel-compose" style="margin-top: -77px;margin-left: 774px;background:white; color: #1879cd;"><span class="glyphicon glyphicon-ok-circle"></span> Follow</a>
+					<a  href="{% url 'groups:join' slug=group.slug %}" class="btn btn-default btn-cancel-compose" style="margin-top: -77px;margin-left: 774px;background:white; color: #1879cd;"><span class="glyphicon glyphicon-plus"></span> Follow</a>
 				{% endif %}
          <nav class="navbar navbar-default" style="margin-top: -22px;">
     <!-- Collect the nav links, forms, and other content for toggling -->

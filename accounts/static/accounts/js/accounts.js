@@ -1,5 +1,3 @@
-
-
 $(document).ready(function() {
 
 
@@ -20,7 +18,7 @@ $(document).ready(function() {
         });
 
     $( function() {
-    $( ".datepicker" ).datepicker();
+    $( "#datepicker" ).datepicker();
   } );
 
     $(".a").click(function () {
@@ -48,14 +46,18 @@ $(document).ready(function() {
 
 
     // Apply the search
- $("#myInput").on("keyup", function() {
-    var value = $(this).val().toLowerCase();
-    $("#myTable tr").filter(function() {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    });
-  });
+   $('.date-picker').datepicker( {
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            onClose: function(dateText, inst) {
+                $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+            }
+            });
+             $('.date-picker').focus(function () {
+	        	$(".ui-datepicker-calendar").hide();
+			});
 
 
-})
-
+});
 

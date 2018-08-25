@@ -6,7 +6,7 @@
 
 {% block head %}
      <link href="{% static 'posts/css/posts.css' %}?v=1" rel="stylesheet">
-      <script src="{% static 'posts/js/jquery.bullseye-1.0-min.js' %}"></script>
+
       <link href="{% static 'accounts/css/css.css' %}?v=1" rel="stylesheet">
          <link href="{% static 'accounts/css/css.css' %}?v=1" rel="stylesheet">
 {% endblock head %}
@@ -33,48 +33,15 @@
 <ul class="stream">
 
     {% for post in post_list %}
-<li feed-id="{{ post.pk }}" csrf="{{ csrf_token }}">  {% include "posts/_post.html"  %} </li>
+<li  feed-id="{{ post.pk }}" csrf="{{ csrf_token }}">
+    {% include "posts/_post.html"  %} </li>
     {% endfor %}
  </ul>
     </div></div></div></div>
     {% endif %}
 
   <script>
-     $(document).ready(function(){
-          function updateText(btn, newCount, verb){
-          btn.text(newCount + " " + verb)
-          btn.attr("data-likes", newCount)
-      }
-      $(".like").click(function(e){
-        e.preventDefault()
-        var this_ = $(this)
-        var likeUrl = this_.attr("data-href")
-        var likeCount = parseInt(this_.attr("data-likes")) | 0
-        var addLike = likeCount + 1
-        var removeLike = likeCount - 1
-        if (likeUrl){
-           $.ajax({
-            url: likeUrl,
-            method: "GET",
-            data: {},
-            success: function(data){
-              console.log(data)
-              var newLikes;
-              if (data.liked){
-                  updateText(this_, addLike, "Unlike")
-              } else {
-                  updateText(this_, removeLike, "Like")
-                  // remove one like
-              }
-            }, error: function(error){
-              console.log(error)
-              console.log("error")
-            }
-          })
-        }
 
-      })
-  })
     </script>
 {% endblock post_content %}
 

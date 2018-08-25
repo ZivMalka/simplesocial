@@ -1,41 +1,76 @@
-from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
+from django.http import Http404, HttpResponseForbidden
 from django.shortcuts import render
-from django.views.decorators.http import require_http_methods
-from django.views.generic import ListView
+from django.urls import reverse
+from django.views.generic.edit import FormMixin
+from django.contrib.auth import get_user_model
+from django.views.generic import DetailView, ListView
 
-from messenger.models import Message
-from helpers import ajax_required
+from .forms import ComposeForm
+from .models import Thread, ChatMessage
 
 
-class MessagesListView(LoginRequiredMixin, ListView):
-    """CBV to render the inbox, showing by default the most recent
-    conversation as the active one.
-    """
-    model = Message
-    paginate_by = 50
-    template_name = "messenger/message_list.html"
+class InboxView(LoginRequiredMixin, ListView):
+    template_name = 'messenger/inbox.html'
+    def get_queryset(self):
+        return Thread.objects.by_user(self.request.user)
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['users_list'] = get_user_model().objects.filter(
             is_active=True).exclude(
-                username=self.request.user).order_by('username')
-        last_conversation = Message.objects.get_most_recent_conversation(
+            username=self.request.user).order_by('username')
+        last_conversation = Thread.objects.get_most_recent_conversation(
             self.request.user
         )
+        return context
+
+
+class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
+    template_name = 'messenger/messenger.html'
+    form_class = ComposeForm
+    success_url = './'
+
+    def get_queryset(self):
+        return Thread.objects.by_user(self.request.user)
+
+    def get_object(self):
+        other_username  = self.kwargs.get("username")
+        obj, created    = Thread.objects.get_or_new(self.request.user, other_username)
+        if obj == None:
+            raise Http404
+        return obj
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['users_list'] = get_user_model().objects.filter(
+            is_active=True).exclude(
+            username=self.request.user).order_by('username')
+        last_conversation = Thread.objects.get_most_recent_conversation(
+            self.request.user
+        )
+        context['other_user']  = get_user_model().objects.get(username=self.kwargs["username"])
         context['active'] = last_conversation.username
         return context
 
-    def get_queryset(self):
-        active_user = Message.objects.get_most_recent_conversation(
-            self.request.user)
-        return Message.objects.get_conversation(active_user, self.request.user)
+    def post(self, request, *args, **kwargs):
+
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        thread = self.get_object()
+        user = self.request.user
+        message = form.cleaned_data.get("message")
+        ChatMessage.objects.create(user=user, thread=thread, message=message)
+        return super().form_valid(form)
 
 
-class ConversationListView(MessagesListView):
+class ConversationListView(ThreadView):
     """CBV to render the inbox, showing an specific conversation with a given
     user, who requires to be active too."""
     def get_context_data(self, *args, **kwargs):
@@ -44,38 +79,5 @@ class ConversationListView(MessagesListView):
         return context
 
     def get_queryset(self):
-        active_user = get_user_model().objects.get(
-            username=self.kwargs["username"])
-        return Message.objects.get_conversation(active_user, self.request.user)
-
-
-@login_required
-@ajax_required
-@require_http_methods(["POST"])
-def send_message(request):
-    """AJAX Functional view to recieve just the minimum information, process
-    and create the new message and return the new data to be attached to the
-    conversation stream."""
-    sender = request.user
-    recipient_username = request.POST.get('to')
-    recipient = get_user_model().objects.get(username=recipient_username)
-    message = request.POST.get('message')
-    if len(message.strip()) == 0:
-        return HttpResponse()
-
-    if sender != recipient:
-        msg = Message.send_message(sender, recipient, message)
-        return render(request, 'messenger/single_message.html',{'message': msg})
-
-    return HttpResponse()
-
-
-@login_required
-@ajax_required
-@require_http_methods(["GET"])
-def receive_message(request):
-    """Simple AJAX functional view to return a rendered single message on the
-    receiver side providing realtime connections."""
-    message_id = request.GET.get('message_id')
-    message = Message.objects.get(pk=message_id)
-    return render(request,'messenger/single_message.html', {'message': message})
+        active_user = get_user_model().objects.get(username=self.kwargs["username"])
+        return Thread.objects.get_or_new(active_user, self.request.user)
