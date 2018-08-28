@@ -6,6 +6,10 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 
+def manageView(request):
+    workouts = Workout.objects.all()
+    return render(request, 'workout/manageView.html', {'workouts': workouts})
+
 def add_workout(request):
     if request.user.is_superuser:
         form = WorkoutForm(request.POST or None)
@@ -18,7 +22,7 @@ def add_workout(request):
         }
         return render(request, 'workout/add_workout.html', context)
     else:
-        return HttpResponse("No access to this page")
+        return HttpResponse("Only authorized user can add workout plans")
 
 
 
@@ -90,5 +94,45 @@ def overview(request, username):
         else:
             return render(request, 'workout/overview.html', {'workouts': workouts})
 
+    def edit_set(request,workout_id , set_id):
+    template = 'workout/edit_set.html'
+    workout = get_object_or_404(Workout, pk=workout_id)
+    set = get_object_or_404(Set, pk=set_id)
+    if request.method == "POST":
+        form = SetForm(request.POST, instance=set)
+        try:
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Your Set Has Been Updated')
+                return render(request, 'workout/view.html', {'workout': workout})
+        except Exception as e:
+            messages.warning(request, 'Your set was not saved due to an error: {}'.format(e))
+    else:
+        form = SetForm(instance=set)
+    context = {
+        'form': form,
+        'workout': workout,
+    }
+    return render(request, template, context)
+
+def edit_workout(request, workout_id):
+    template = 'workout/edit_workout.html'
+    workout = get_object_or_404(Workout, pk=workout_id)
+    if request.method == "POST":
+        form = WorkoutForm(request.POST, instance=workout)
+        try:
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Your Workout Has Been Updated')
+                return render(request, 'workout/view.html', {'workout': workout})
+        except Exception as e:
+            messages.warning(request, 'Your workout was not saved due to an error: {}'.format(e))
+    else:
+        form = WorkoutForm(instance=workout)
+    context = {
+        'form': form,
+        'workout': workout,
+    }
+    return render(request, template, context)
 
 

@@ -16,6 +16,23 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
         crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
+   
+     
+    <!-- for admin widgets for input -->
+    <script type="text/javascript" src="/admin/jsi18n/"></script>
+    <script type="text/javascript" src="/static/admin/js/core.js"></script>
+    <script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
+    <script type="text/javascript" src="/static/admin/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
+    <script type="text/javascript" src="/static/admin/js/actions.min.js"></script>
+    <script type="text/javascript" src="/static/admin/js/calendar.js"></script>
+    <script type="text/javascript" src="/jsi18n/"></script>
+    <script type="text/javascript" src="{% static 'admin/js/core.js' %}"></script>
+    <script type="text/javascript" src="{% static 'admin/js/admin/RelatedObjectLookups.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'admin/css/widgets.css' %}"/>
+    {{ form.media }}
+
 
 </head>
 
@@ -36,13 +53,11 @@
       <ul class="nav navbar-nav navbar-left">
           {% if user.is_authenticated %}
               {% if user.is_superuser %}
-                 <li>    <a href="\admin">Admin Dashboard</a></li>
+                   <li>    <a href="\admin"><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span>&nbsp;Admin Dashboard</a></li>
                {% endif %}
-                    <li><a href="{% url 'groups:all' %}"><span class="glyphicon glyphicon-th" aria-hidden="true"></span>&nbsp;Groups</a>
-                </li>
                 <li>
-                    <a href="{% url 'groups:create' %}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Create Groups</a>
-
+                    <a href="{% url 'groups:all' %}"><span class="glyphicon glyphicon-th" aria-hidden="true"></span>&nbsp;Groups</a>
+                </li>
                 <li>
                     <a href="{% url 'nutrition:list' username=request.user.username %}"><span class="glyphicon glyphicon-cutlery" aria-hidden="true"></span>&nbsp;Nutrition</a>
                 </li>
@@ -50,10 +65,10 @@
                     <a href="{% url 'workout:overview' username=request.user.username %}"><span class="glyphicon glyphicon-scale" aria-hidden="true"></span>&nbsp;Workout</a>
                 </li>
                </li>
-                  <li><a href="{% url 'messenger:messages_list' %}"><span class="glyphicon glyphicon-th" aria-hidden="true"></span>Chat</a>
+                  <li><a href="{% url 'messenger:messages_list' %}"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>&nbsp;Chat</a>
                 </li>
               <li>
-                    <a href="{% url 'accounts:all_users' %}">&nbsp;Friends</a>
+                    <a href="{% url 'accounts:all_users' %}"><span class="glyphicon glyphicon-sunglasses" aria-hidden="true"></span>&nbsp;Friends</a>
                 </li>
               </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -62,9 +77,9 @@
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ request.user.username }}
         <span class="caret"></span></a>
         <ul class="dropdown-menu">
-          <li><a href="{% url 'accounts:profile' username=user.username %}">Profile</a></li>
-          <li><a href="{% url 'accounts:edit_profile' %}">Settings</a></li>
-         <li>   <a href="{% url 'accounts:logout' %}"><span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp;Logout</a>
+          <li><a href="{% url 'accounts:profile' username=user.username %}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp; Profile</a></li>
+          <li><a href="{% url 'accounts:edit_profile' %}"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span>&nbsp; Settings</a></li>
+         <li>   <a href="{% url 'accounts:logout' %}"><span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp; Logout</a>
           </li>
         </ul>
       </li>

@@ -17,6 +17,8 @@ urlpatterns = [
     url(r"^nutrition/", include('nutrition.urls', namespace='nutrition')),
     url(r"^workout/", include('workout.urls', namespace='workout')),
     url(r"messenger/", include('messenger.urls', namespace='messenger')),
+    url(r"^appointments/", include('appointments.urls', namespace='appointments')),
+
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
