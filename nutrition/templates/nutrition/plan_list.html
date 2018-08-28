@@ -4,8 +4,6 @@
 
 {% block content %}
     {% if user.is_authenticated %}
-    <h1 class="underline">Your nutritions</h1>
-
 <div class="list-group">
     {% for plan in plans %}
         <a href="{{ plan.get_absolute_url }}" class="list-group-item">

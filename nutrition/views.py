@@ -23,7 +23,7 @@ def create_plan(request):
         }
         return render(request, 'nutrition/create_plan.html', context)
     else:
-        return HttpResponse("Only authorized user can add nutrition meals")
+        return HttpResponse("No access to this page")
 
 def create_nutrition(request, plan_id):
     if request.user.is_superuser:

@@ -17,16 +17,12 @@
                 <p class="list-group-item-text"><b>Created on:</b>&nbsp;{{ workout.creation_date }}</p>
             </a>
         {% empty %}
-            {% if user.is_superuser %}
             <a href="{% url 'workout:add_workout' %}" class="list-group-item">
-            {% trans "No workouts found." %}<br>
-            {% trans "Add one now." %}
+            {% trans "No workouts found." %}<br>{% trans "Add one now." %}
             </a>
-        {% else %}
-              {% trans "No workouts added yet." %}
-        {% endif %}
-    {% endfor %}
+        {% endfor %}
     </div>
+        {% endif %}
 
 
      {% if user.is_superuser %}
@@ -39,7 +35,6 @@
             </a>
          </div>
             {% endif %}
-    {% endif %}
 
 {% endblock %}
 
