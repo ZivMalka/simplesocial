@@ -20,9 +20,9 @@ class InboxView(LoginRequiredMixin, ListView):
         context['users_list'] = get_user_model().objects.filter(
             is_active=True).exclude(
             username=self.request.user).order_by('username')
-        last_conversation = Thread.objects.get_most_recent_conversation(
-            self.request.user
-        )
+      #  last_conversation = Thread.objects.get_most_recent_conversation(
+       #     self.request.user
+        #)
         return context
 
 

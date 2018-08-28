@@ -159,7 +159,7 @@ ASGI_APPLICATION = 'simplesocial.routing.application'
 
 
 
-# Application definition
+# Application defin'django_extensions''django_extensions'ition
 
 INSTALLED_APPS = [
     'sorl.thumbnail',
@@ -180,6 +180,7 @@ INSTALLED_APPS = [
     'workout',
     'channels',
     'messenger',
+
 
 ]
 

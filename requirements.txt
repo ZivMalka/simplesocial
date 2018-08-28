@@ -1,0 +1,13 @@
+
+asgi-redis==1.4.3
+asgiref==2.3.2
+asn1crypto==0.24.0
+async-timeout==2.0.1
+channel==0.1.0
+channels==2.1.2
+channels-redis==2.3.0
+django-redis==4.9.0
+redis==2.10.6
+reportlab==3.5.4
+Twisted==18.7.0
+
