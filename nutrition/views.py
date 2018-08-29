@@ -1,15 +1,11 @@
 from django.shortcuts import render
 from .forms import PlanForm, NutritionForm
 from django.shortcuts import get_object_or_404
-from django.views import generic
 from nutrition.models import Plan, Nutrition
 from django.db.models import Q
-from django.template.context_processors import csrf
-from django.views.generic import (
-    UpdateView
-)
-from django.utils.translation import ugettext_lazy
 from django.contrib.auth.models import User
+from django.http import HttpResponse
+from django.contrib import messages
 
 def create_plan(request):
     if request.user.is_superuser:
@@ -17,6 +13,7 @@ def create_plan(request):
         if form.is_valid():
             plan = form.save(commit=False)
             plan.save()
+            messages.success(request, 'Plan Added!')
             return render(request, 'nutrition/detail.html', {'plan': plan})
         context = {
             "form": form,
@@ -42,6 +39,7 @@ def create_nutrition(request, plan_id):
             nutrition = form.save(commit=False)
             nutrition.plan = plan
             nutrition.save()
+            messages.success(request, 'Meal Added!')
             return render(request, 'nutrition/detail.html', {'plan': plan})
         context = {
             'plan': plan,
@@ -92,6 +90,51 @@ def plan_list(request, username):
             })
         else:
             return render(request, 'nutrition/plan_list.html', {'plans': plans})
+
+
+
+def edit_meal(request,plan_id , nutrition_id):
+    template = 'nutrition/edit_meal.html'
+    plan = get_object_or_404(Plan, pk=plan_id)
+    nutrition = get_object_or_404(Nutrition, pk=nutrition_id)
+    if request.method == "POST":
+        form = NutritionForm(request.POST, instance=nutrition)
+        try:
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Your Nutrition Has Been Updated')
+                return render(request, 'nutrition/detail.html', {'plan': plan})
+        except Exception as e:
+            messages.warning(request, 'Your set was not saved due to an error: {}'.format(e))
+    else:
+        form = NutritionForm(instance=nutrition)
+    context = {
+        'form': form,
+        'plan': plan,
+    }
+    return render(request, template, context)
+
+def edit_plan(request, plan_id):
+    template = 'nutrition/edit_plan.html'
+    plan = get_object_or_404(Plan, pk=plan_id)
+    if request.method == "POST":
+        form = PlanForm(request.POST, instance=plan)
+        try:
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Your Plan Has Been Updated')
+                return render(request, 'nutrition/detail.html', {'plan': plan})
+        except Exception as e:
+            messages.warning(request, 'Your plan was not saved due to an error: {}'.format(e))
+    else:
+        form = PlanForm(instance=plan)
+    context = {
+        'form': form,
+        'plan': plan,
+    }
+    return render(request, template, context)
+
+
 
 
 
