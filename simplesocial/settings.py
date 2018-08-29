@@ -181,6 +181,7 @@ INSTALLED_APPS = [
     'channels',
     'messenger',
     'appointments',
+    'manager',
 
 ]
 
