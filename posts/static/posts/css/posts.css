@@ -56,7 +56,7 @@ ul.stream li div.post {
 }
 
 ul.stream li div.post h3 {
-  font-size: 1em;
+  font-size: 20px;
   margin: 0;
   margin-bottom: .2em;
 }
@@ -67,6 +67,7 @@ ul.stream li div.post h3 small {
 }
 
 ul.stream li div.post p {
+  font-size:17px;
   margin: 0;
 }
 
@@ -240,7 +241,7 @@ ul.stream li div.post div.interaction a {
   background-position: 10px 10px;
   background-repeat: no-repeat;
   width: 15%;
-  font-size: 16px;
+  font-size: 20px;
   padding: 12px 20px 12px 40px;
   border: 1px solid #1879cd;
  display: inline; /* the default for span */

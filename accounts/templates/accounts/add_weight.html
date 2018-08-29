@@ -1,6 +1,6 @@
 {%  extends "accounts/profile_base.html" %}
 {% load staticfiles %}
-
+{% load bootstrap3 %}
 
 {% block head %}
       {% load static %}
@@ -14,24 +14,14 @@
 
 
 
-     {% if form.non_field_errors %}
-  <div class="alert alert-danger" role="alert">
-    {% for error in form.non_field_errors %}
-      {{ error }}
-    {% endfor %}
-  </div>
-{% endif %}
+  <form method="POST"  id="groupForm" style="width: 35% !important;">
+  	{% csrf_token %}
+  	{% bootstrap_form form %}
+  	<input type="submit" value="Create" class="btn btn-primary btn-large">
+  </form>
 
-   <form enctype="multipart/form-data" method="POST">
-       {% csrf_token %}
-         {% for field in form.visible_fields %}
 
-  <div class="form-group">
- <label for="{{ field.label }}" class="col-sm-2 control-label">{{ field.label }}</label>
-    <input class="form-control" style="width: 35%;"  placeholder={{ field }}
-               {{ field.errors }}
-  </div>  {% endfor %}
-  <button type="submit" class="btn btn-primary">Submit</button>
+
 </form>
 
 
@@ -42,6 +32,6 @@
 
 <Style>
     .form-control {
-    width: 35% !important;
+        width: 35% !important;
     }
 </Style>

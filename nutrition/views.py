@@ -11,6 +11,7 @@ from django.views.generic import (
 from django.utils.translation import ugettext_lazy
 from django.contrib.auth.models import User
 
+
 def create_plan(request):
     if request.user.is_superuser:
         form = PlanForm(request.POST or None)

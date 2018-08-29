@@ -59,7 +59,6 @@ class Thread(models.Model):
     second = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='chat_thread_second')
     updated = models.DateTimeField(auto_now=True)
     timestamp = models.DateTimeField(auto_now_add=True)
-
     objects = ThreadManager()
 
     @property

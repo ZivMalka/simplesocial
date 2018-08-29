@@ -16,15 +16,6 @@
      {% else %}
         <img src="/media/user_pic/user.png" class="user_pic"">
         {% endif %}
- {% if request.user == user %}
-  <form enctype="multipart/form-data" role="form" method="post" id="compose-form" action="{% url 'accounts:upload_picture' %}">
-   <div class="form-group">
-{% csrf_token %}
-<input type="file" id="btn btn-default" name="profile_pic" class="form-control-file" placeholder="Upload new picture">
-     </div>
-</form>
-
-{% endif %}
 
 <ul style="margin-left: 22%;">
     <h3>{{ user.first_name }} {{ user.last_name }} </h3>

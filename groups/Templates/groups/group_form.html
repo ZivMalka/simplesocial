@@ -2,10 +2,42 @@
 {% load bootstrap3 %}
 
 {% block group_content %}
+
+        <div class="col-sm-12 col-md-7">
+            <div class="panel panel-default">
+                <div class="panel-body">
 <h4>Create A New Group</h4>
+     <div style="width:50%">
   <form method="POST" action="{% url 'groups:create' %}" id="groupForm">
   	{% csrf_token %}
-  	{% bootstrap_form form %}
+       {% for field in form %}
+          <b> {{ field.label }} </b>
+        <div class="form-group" style="width:100% !important;">
+               {{field}}
+            </div>
+       {% endfor %}
   	<input type="submit" value="Create" class="btn btn-primary btn-large">
   </form>
+     </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-5">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h3>Connect with others who understand</h3>
+                    <p>create a group and connect to other patients, on any subject you desire.</p>
+                    <h3>What is a peer-to-peer support network?</h3>
+                    <p>In a peer-to-peer support network, patients, caregivers and health advocates connect online with guidance from credible organizations and institutions.
+                    Peer support is the mutual exchange of help and conversation based on a shared understanding, respect and mutual empowerment between people in similar situations.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
 {% endblock %}

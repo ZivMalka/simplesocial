@@ -27,9 +27,11 @@ class EditProfileForm(forms.ModelForm):
 
 
 class UserPersonalProfileInfoForm(forms.ModelForm):
+    birth_date = forms.DateField(widget=forms.TextInput(attrs={"id": "datepicker"}), required=False)
+
     class Meta:
         model = UserProfileInfo
-        fields = ('height','body_fat','birth_date','current_weight')
+        fields = ('height','birth_date')
 
 class WeightHistoryForm(forms.ModelForm):
     weight = forms.FloatField(required=True, min_value=30, widget=forms.TextInput(attrs={'required': 'true'}),)

@@ -76,58 +76,6 @@ class PostDetail(SelectRelatedMixin, generic.DetailView):
             user__username__iexact=self.kwargs.get("username")
         )
 
-def upload_pic(request, post_id):
-
-    if request.method == 'POST':
-        form = PostForm(request.POST, request.FILES)
-        if form.is_valid():
-            profile = form.save(commit=False)
-            if 'post_pic' in request.FILES:
-                form.post_pic = request.FILES['post_pic']
-
-            m = get_object_or_404(Post, pk=post_id)
-            m.post_pic = form.cleaned_data['post_pic']
-            m.save()
-
-
-def write_post(request, pk):
-    group = get_object_or_404(Group, pk=pk)
-
-    if request.user.is_authenticated:
-        if request.method == 'POST':
-            form = PostForm(request.POST, request.FILES)
-            if form.is_valid():
-                message = form.cleaned_data.get("message")
-
-                if 'post_pic' in request.FILES:
-                    form.post_pic = request.FILES['post_pic']
-
-                new_post = Post.objects.create(group=group, message=message, user=request.user)
-                upload_pic(request, new_post.id)
-
-            return HttpResponseRedirect(reverse("posts:single_2" , kwargs={"slug": group.slug}))
-        else:
-            form = PostForm()
-
-        return render(request, 'posts/post_form.html', {'form': form})
-
-
-class CreatePost(LoginRequiredMixin, SelectRelatedMixin, generic.CreateView):
-    # form_class = forms.PostForm
-    fields = ('message','group', 'post_pic')
-    model = models.Post
-
-    # def get_form_kwargs(self):
-    #     kwargs = super().get_form_kwargs()
-    #     kwargs.update({"user": self.request.user})
-    #     return kwargs
-
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.user = self.request.user
-        self.object.save()
-        return super().form_valid(form)
-
 
 
 def add_comment_to_post(request, pk):

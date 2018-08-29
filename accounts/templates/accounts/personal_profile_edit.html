@@ -1,23 +1,23 @@
 {%  extends "accounts/profile_base.html" %}
 {% load staticfiles %}
+{% load bootstrap3 %}
 
  {% block profile_content %}
 
-<div class="container">
+ <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+   <script src="{% static 'accounts/js/accounts.js' %}"></script>
 
     <h1>Edit</h1>
 
 
     <h3>Update your details</h3>
-    <form enctype="multipart/form-data" method="POST">
-        {%  csrf_token %}
-        {{ profile_form.as_p }}
+
+     <form method="POST"  id="groupForm" style="width: 35% !important;">
+  	{% csrf_token %}
+  	{% bootstrap_form profile_form %}
+  	<input type="submit" value="Create" class="btn btn-primary btn-large">
+  </form>
 
 
-        <input type="submit" class='bth bth default'  value="Update">
-
-
-    </form>
-
-</div>
 {% endblock %}

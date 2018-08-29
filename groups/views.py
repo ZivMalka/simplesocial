@@ -10,14 +10,18 @@ from django.shortcuts import get_object_or_404
 from django.views import generic
 from groups.models import Group,GroupMember
 from . import models
-
+from django.views.generic.edit import FormMixin
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import RedirectView
 from posts.models import Post
+from emoji_picker.widgets import EmojiPickerTextInput, EmojiPickerTextarea
+from django import forms
+from posts.forms import PostForm
+from .forms import GroupForm
 
 class CreateGroup(LoginRequiredMixin, generic.CreateView):
-    fields = ("name", "description")
+    form_class = GroupForm
     model = Group
 
     def form_valid(self, form):
@@ -27,9 +31,33 @@ class CreateGroup(LoginRequiredMixin, generic.CreateView):
         print(p1)
         return redirect("groups:all")
 
+def upload_pic(request, post_id):
+        if request.method == 'POST':
+            form = PostForm(request.POST, request.FILES)
+            if form.is_valid():
+                profile = form.save(commit=False)
+                if 'post_pic' in request.FILES:
+                    form.post_pic = request.FILES['post_pic']
+                m = get_object_or_404(Post, pk=post_id)
+                m.post_pic = form.cleaned_data['post_pic']
+                m.save()
 
-class SingleGroup(generic.DetailView):
+class SingleGroup(FormMixin, generic.DetailView):
     model = Group
+    form_class = PostForm
+
+    def post(self, request, *args, **kwargs):
+
+        self.object = self.get_object()
+        form = self.get_form()
+        if request.method == 'POST':
+            if form.is_valid():
+                if 'post_pic' in request.FILES:
+                    form.post_pic = request.FILES['post_pic']
+                message = form.cleaned_data.get("message")
+                new_post = Post.objects.create(group=self.object, message=message, user=request.user)
+                upload_pic(request, new_post.id)
+                return HttpResponseRedirect( self.object.get_absolute_url())
 
 class ListGroups(generic.ListView):
     model = Group
