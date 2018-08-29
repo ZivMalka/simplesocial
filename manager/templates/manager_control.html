@@ -5,11 +5,6 @@
 
 {% block content %}
 
-    <form method="GET" action="{% url 'manager:search' %}">
-        <input name="q" value="{{ request.GET.q }}" placeholder="search">
-        <button class="btn btn-success" type="submit">Search</button>
-    </form>
-
     <table class="table table-striped" style="position: absolute; top: 10%;  left: 0; right: 0;" table-layout: fixed;>
         <thead style="background-color: #101010; color: #ffffff;">
         <tr>
