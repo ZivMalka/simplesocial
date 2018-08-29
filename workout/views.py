@@ -5,6 +5,8 @@ from workout.models import Workout, Set
 from django.db.models import Q
 from django.http import HttpResponse
 from django.contrib.auth.models import User
+from django.contrib import messages
+
 
 
 
@@ -18,6 +20,7 @@ def add_workout(request):
         if form.is_valid():
             workout = form.save(commit=False)
             workout.save()
+            messages.success(request, 'Workout Day Added!')
             return render(request, 'workout/view.html', {'workout': workout})
         context = {
             "form": form,
@@ -44,6 +47,7 @@ def add_set(request, workout_id):
                     return render(request, 'workout/add_set.html', context)
             set = form.save(commit=False)
             set.workout = workout
+            messages.success(request, 'Exercise Added!')
             set.save()
             return render(request, 'workout/view.html', {'workout': workout})
         context = {
@@ -96,6 +100,7 @@ def overview(request, username):
         else:
             return render(request, 'workout/overview.html', {'workouts': workouts})
 
+<<<<<<< HEAD
 def edit_set(request,workout_id , set_id):
         template_name = 'workout/edit_set.html'
         workout = get_object_or_404(Workout, pk=workout_id)
@@ -116,6 +121,29 @@ def edit_set(request,workout_id , set_id):
             'workout': workout,
         }
         return render(request, template, context)
+=======
+    def edit_set(request,workout_id , set_id):
+    template = 'workout/edit_set.html'
+    workout = get_object_or_404(Workout, pk=workout_id)
+    set = get_object_or_404(Set, pk=set_id)
+    if request.method == "POST":
+        form = SetForm(request.POST, instance=set)
+        try:
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Your Exercise Has Been Updated')
+                messages.success(request, 'Your Set Has Been Updated')
+                return render(request, 'workout/view.html', {'workout': workout})
+        except Exception as e:
+            messages.warning(request, 'Your set was not saved due to an error: {}'.format(e))
+    else:
+        form = SetForm(instance=set)
+    context = {
+        'form': form,
+        'workout': workout,
+    }
+    return render(request, template, context)
+>>>>>>> 468fdce40c15aac9f3f4e9a6d570c59744e5b38e
 
 def edit_workout(request, workout_id):
     template = 'workout/edit_workout.html'

@@ -26,21 +26,19 @@ def appoint(request, username):
         else:
             return render(request, 'appointment.html', {'appointment': appointment})
 
-
 def create_event(request):
-    if request.user.is_superuser:
-        form = AppointmentForm(request.POST or None)
-        if form.is_valid():
-            appointment = form.save(commit=False)
-            appointment.save()
-            return redirect('home')
-        context = {"form": form, }
-        return render(request, 'create_event.html', context)
-    else:
-        return HttpResponse("No access to this page")
+    form = AppointmentForm(request.POST, )
+    if form.is_valid():
+        appointment = form.save(commit=False)
+        appointment.owner = request.user
+        appointment = appointment.save()
+        appointment = Appointment.objects.filter(user=request.user)
+        messages.success(request, 'Appointment Added!')
+        return render(request, 'appointment.html', {'appointment': appointment})
+    context = {'form': form}
+    return render(request, 'create_event.html', context)
 
 
-#
 
 
 def delete_event(request, appoint_id):

@@ -1,0 +1,48 @@
+{% extends  "base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+
+{% block content %}
+
+    <table class="table table-striped" style="position: absolute; top: 10%;  left: 0; right: 0;" table-layout: fixed;>
+        <thead style="background-color: #101010; color: #ffffff;">
+        <tr>
+            <th scope="col">Username</th>
+            <th scope="col">Full Name</th>
+            <th scope="col">Title</th>
+            <th scope="col">Phone Number</th>
+            <th scope="col">Staff</th>
+            <th scope="col">Workouts</th>
+            <th scope="col">Meal Plans</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.username }}</td>
+            <td>{{ user.get_full_name }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.phone }} </td>
+            <td>{{ user.is_staff | yesno:"Yes,No"}}</td>
+            <td><a href="{% url 'manager:work_list' username=user.username %}"><button class="btn btn-info">View</button></a></td>
+            <td><a href="{% url 'manager:list' username=user.username %}"><button class="btn btn-info">View</button></a></td>
+            <td><a href="#"><button class="btn btn-danger" onclick="confirm('This user will be deleted, are you sure?')">Delete User</button></a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+         <tr>
+        <td class="">
+            <a href="{% url 'accounts:register' %}">
+                <button type="button" class="btn btn-success">
+                    <span class="glyphicon glyphicon-plus"></span>&nbsp; Add User
+                </button>
+            </a>
+         </td>
+    </tr>
+    </table>
+
+
+{% endblock %}
+
