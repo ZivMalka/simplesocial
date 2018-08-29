@@ -1,0 +1,48 @@
+{% extends  "base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+
+{% block content %}
+
+    <table class="table table-striped" style="position: absolute; top: 10%;  left: 0; right: 0;" table-layout: fixed;>
+        <thead style="background-color: #101010; color: #ffffff;">
+        <tr>
+            <th scope="col">Username</th>
+            <th scope="col">Subtitle</th>
+            <th scope="col">Creation Date</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for plan in plans %}
+        <tr>
+            <td>{{ plan.user.username }}</td>
+            <td>{{ plan.subtitle }}</td>
+            <td>{{ plan.date }}</td>
+            <td></td>
+            <td></td>
+            <td><a href="#"><button class="btn btn-warning">Edit</button></a></td>
+            <td><a href="#"><button class="btn btn-danger">Delete</button></a></td>
+            <td><a href="{{ plan.get_absolute_url }}"><button class="btn btn-info">View</button></a></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+         <tr>
+        <td class="">
+           <a href="{% url 'nutrition:create_plan' %}">
+            <button type="button" class="btn btn-success">
+                <span class="glyphicon glyphicon-plus"></span>&nbsp; Add Plan
+            </button>
+        </a>
+         </td>
+    </tr>
+    </table>
+
+
+{% endblock %}
+
