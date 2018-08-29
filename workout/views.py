@@ -5,6 +5,8 @@ from workout.models import Workout, Set
 from django.db.models import Q
 from django.http import HttpResponse
 from django.contrib.auth.models import User
+from django.contrib import messages
+
 
 def manageView(request):
     workouts = Workout.objects.all()
@@ -16,6 +18,7 @@ def add_workout(request):
         if form.is_valid():
             workout = form.save(commit=False)
             workout.save()
+            messages.success(request, 'Workout Day Added!')
             return render(request, 'workout/view.html', {'workout': workout})
         context = {
             "form": form,
@@ -42,6 +45,7 @@ def add_set(request, workout_id):
                     return render(request, 'workout/add_set.html', context)
             set = form.save(commit=False)
             set.workout = workout
+            messages.success(request, 'Exercise Added!')
             set.save()
             return render(request, 'workout/view.html', {'workout': workout})
         context = {
@@ -103,6 +107,7 @@ def overview(request, username):
         try:
             if form.is_valid():
                 form.save()
+                messages.success(request, 'Your Exercise Has Been Updated')
                 messages.success(request, 'Your Set Has Been Updated')
                 return render(request, 'workout/view.html', {'workout': workout})
         except Exception as e:
