@@ -4,10 +4,10 @@ from .models import Plan, Nutrition
 
 
 class PlanForm(forms.ModelForm):
-
+    date = forms.DateTimeField(required=True, widget=forms.TextInput(attrs={"id": "datepicker"}))
     class Meta:
         model = Plan
-        fields = ['user','subtitle']
+        fields = ['user','subtitle' ,'date']
 
 
 class NutritionForm(forms.ModelForm):

@@ -28,8 +28,8 @@
             <td>{{ user.phone }} </td>
             <td>{{ user.is_staff | yesno:"Yes,No"}}</td>
             <td><a href="{% url 'accounts:personal_profile' username=user.username %}"><button class="btn btn-info">View</button></a></td>
-            <td><a href="{% url 'manager:work_list' username=user.username %}"><button class="btn btn-info">View</button></a></td>
-            <td><a href="{% url 'manager:list' username=user.username %}"><button class="btn btn-info">View</button></a></td>
+            <td><a href="{% url 'nutrition:plan_list' username=user.username %}"><button class="btn btn-info">View</button></a></td>
+            <td><a href="{% url 'workout:work_list' username=user.username %}"><button class="btn btn-info">View</button></a></td>
             <td><a href="#"><button class="btn btn-danger" onclick="confirm('This user will be deleted, are you sure?')">Delete User</button></a></td>
             </tr>
         {% endfor %}

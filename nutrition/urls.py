@@ -12,5 +12,6 @@ urlpatterns = [
     url(r'^(?P<plan_id>[0-9]+)/delete_nutrition/(?P<nutrition_id>[0-9]+)/$', views.delete_nutrition, name='delete_nutrition'),
     url(r'^(?P<plan_id>[0-9]+)/edit_meal/(?P<nutrition_id>[0-9]+)/$', views.edit_meal, name='edit_meal'),
     url(r'^(?P<plan_id>[0-9]+)/edit_plan/$', views.edit_plan, name='edit_plan'),
+    url(r"plans(?P<username>[-\w]+)/$", views.plan_list_manage, name="plan_list"),
 ]
 

@@ -4,9 +4,10 @@ from emoji_picker.widgets import EmojiPickerTextInput, EmojiPickerTextarea
 
 class WorkoutForm(forms.ModelForm):
     title = forms.CharField(widget=EmojiPickerTextInput)
+    creation_date = forms.DateTimeField(required=True, widget=forms.TextInput(attrs={"id": "datepicker"}))
     class Meta:
         model = Workout
-        fields = ['user', 'day', 'title']
+        fields = ['user', 'day', 'title' , 'creation_date']
 
 
 

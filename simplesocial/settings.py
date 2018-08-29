@@ -181,12 +181,9 @@ INSTALLED_APPS = [
     'channels',
     'messenger',
     'appointments',
-<<<<<<< HEAD
     'emoji_picker',
-
-=======
     'manager',
->>>>>>> 468fdce40c15aac9f3f4e9a6d570c59744e5b38e
+
 
 ]
 

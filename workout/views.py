@@ -100,7 +100,7 @@ def overview(request, username):
         else:
             return render(request, 'workout/overview.html', {'workouts': workouts})
 
-<<<<<<< HEAD
+
 def edit_set(request,workout_id , set_id):
         template_name = 'workout/edit_set.html'
         workout = get_object_or_404(Workout, pk=workout_id)
@@ -121,8 +121,8 @@ def edit_set(request,workout_id , set_id):
             'workout': workout,
         }
         return render(request, template, context)
-=======
-    def edit_set(request,workout_id , set_id):
+
+def edit_set(request,workout_id , set_id):
     template = 'workout/edit_set.html'
     workout = get_object_or_404(Workout, pk=workout_id)
     set = get_object_or_404(Set, pk=set_id)
@@ -143,7 +143,7 @@ def edit_set(request,workout_id , set_id):
         'workout': workout,
     }
     return render(request, template, context)
->>>>>>> 468fdce40c15aac9f3f4e9a6d570c59744e5b38e
+
 
 def edit_workout(request, workout_id):
     template = 'workout/edit_workout.html'
@@ -165,4 +165,7 @@ def edit_workout(request, workout_id):
     }
     return render(request, template, context)
 
-
+def work_list_manage(request, username):
+        user = User.objects.get(username=username)
+        workouts = Workout.objects.filter(user=user)
+        return render(request, 'work_list_manage.html', {'workouts': workouts})

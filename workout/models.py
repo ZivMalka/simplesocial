@@ -28,7 +28,7 @@ class Workout(models.Model):
 
 
     user = models.ForeignKey(User, related_name="workout", on_delete=models.CASCADE)
-    creation_date = models.DateField(name='creation_date', auto_now_add=True)
+    creation_date = models.DateField(blank=True, null=True)
     day = models.IntegerField(choices=DAYS_OF_WEEK)
     title = models.CharField(max_length=15)
 

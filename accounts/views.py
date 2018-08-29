@@ -28,15 +28,14 @@ from posts.models import Post
 from activities.models import Comment
 from groups.models import Group,GroupMember
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import DetailView
 
 
-
-class UserDetailView(LoginRequiredMixin, DetailView):
-    model = User
-    # These next two lines tell the view to index lookups by username
-    slug_field = 'username'
-    slug_url_kwarg = 'username'
+def manager_control(request):
+    if request.user.is_superuser:
+        users = User.objects.all()
+        return render(request, 'manager_control.html', {'users': users})
+    else:
+        return redirect('/')
 
 
 def register(request):

@@ -13,11 +13,11 @@ def manager_control(request):
 def plan_list(request, username):
         user = User.objects.get(username=username)
         plans = Plan.objects.filter(user=user)
-        return render(request, 'plan_list.html', {'plans': plans})
+        return render(request, 'plan_list_manage.html', {'plans': plans})
 
 def work_list(request, username):
         user = User.objects.get(username=username)
         workouts = Workout.objects.filter(user=user)
-        return render(request, 'work_list.html', {'workouts': workouts})
+        return render(request, 'work_list_manage.html', {'workouts': workouts})
 
 

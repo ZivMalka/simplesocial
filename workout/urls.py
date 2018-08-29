@@ -13,7 +13,7 @@ urlpatterns = [
     url(r'^(?P<workout_id>[0-9]+)/delete_set/(?P<set_id>[0-9]+)/$', views.delete_set, name='delete_set'),
     url(r'^(?P<workout_id>[0-9]+)/edit_set/(?P<set_id>[0-9]+)/$', views.edit_set, name='edit_set'),
     url(r'^(?P<workout_id>[0-9]+)/edit_workout/$', views.edit_workout, name='edit_workout'),
-
+    url(r"workout/(?P<username>[-\w]+)/$", views.work_list_manage, name="work_list"),
 
 ]
 

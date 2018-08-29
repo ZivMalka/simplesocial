@@ -23,11 +23,6 @@ urlpatterns = [
     url(r"report/(?P<username>[a-zA-Z0-9]+)$", views.GeneratePdf, name="report"),
     url(r'personal/report/filter/$', views.generate_reports, name='filter_report'),
     url(r'^settings/upload_picture/$', views.upload_pic, name='upload_picture'),
-
-    url(
-        regex=r'^(?P<username>[\w.@+-]+)/$',
-        view=views.UserDetailView.as_view(),
-        name='detail'
-    ),
+    url(r"menu/$", views.manager_control, name="manager"),
 
 ]
