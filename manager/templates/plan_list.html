@@ -26,8 +26,8 @@
             <td>{{ plan.date }}</td>
             <td></td>
             <td></td>
-            <td><a href="#"><button class="btn btn-warning">Edit</button></a></td>
-            <td><a href="#"><button class="btn btn-danger">Delete</button></a></td>
+            <td><a href="{% url 'nutrition:edit_plan' plan.id %}#"><button class="btn btn-warning">Edit</button></a></td>
+            <td><a href="{% url 'nutrition:delete_plan' plan.id %}"><button class="btn btn-danger">Delete</button></a></td>
             <td><a href="{{ plan.get_absolute_url }}"><button class="btn btn-info">View</button></a></td>
         </tr>
         {% endfor %}
