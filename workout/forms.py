@@ -19,5 +19,3 @@ class SetForm(forms.ModelForm):
     class Meta:
         model = Set
         fields = ['exercise', 'sets', 'reps', 'unit']
-
-
