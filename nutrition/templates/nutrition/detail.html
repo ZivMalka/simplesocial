@@ -73,7 +73,7 @@
         {% endif %}
     </tbody>
 </table>
-
+    {% if request.user.is_superuser %}
      <div class="col-sm-12">
                 <br>
                 <a href="{% url 'nutrition:delete_plan' plan.id plan.user %}">
@@ -82,6 +82,7 @@
                     </button>
                 </a>
             </div>
+    {% endif %}
 
 
 {% endblock %}
