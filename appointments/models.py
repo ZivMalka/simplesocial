@@ -11,6 +11,7 @@ def no_future(value):
 
 class Appointment(models.Model):
     user = models.ForeignKey(User, related_name="appointment", on_delete=models.CASCADE)
+    sender = models.ForeignKey(User, related_name="sender", on_delete=models.CASCADE)
     task = models.CharField(max_length=255)
     date = models.DateField(help_text="Enter date", validators=[no_future])
     time = models.TimeField(blank=True, null=True)
