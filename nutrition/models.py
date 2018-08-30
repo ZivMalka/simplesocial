@@ -16,7 +16,7 @@ def no_future(value):
 class Plan(models.Model):
 
     class Meta:
-        ordering = ['-date']
+        ordering = ['date']
 
     user = models.ForeignKey(User, related_name="nutrition", on_delete=models.CASCADE)
     subtitle = models.CharField(max_length=40)
