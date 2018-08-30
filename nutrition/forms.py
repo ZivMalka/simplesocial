@@ -1,10 +1,12 @@
 from django import forms
-from django.contrib.admin.widgets import AdminTimeWidget
 from .models import Plan, Nutrition
+from django.contrib.admin.widgets import AdminDateWidget, AdminTimeWidget
+from django.forms.fields import DateField
+
 
 
 class PlanForm(forms.ModelForm):
-    date = forms.DateTimeField(required=True, widget=forms.TextInput(attrs={"id": "datepicker"}))
+    date = DateField(widget = AdminDateWidget())
     class Meta:
         model = Plan
         fields = ['user','subtitle' ,'date']
