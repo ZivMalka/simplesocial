@@ -16,24 +16,25 @@
             <th scope="col">Username</th>
             <th scope="col">Full Name</th>
             <th scope="col">Email</th>
-            <th scope="col">Phone Number</th>
             <th scope="col">Task</th>
             <th scope="col">Date</th>
             <th scope="col">Hour</th>
+            <th scope="col">Created By</th>
             <th></th>
             <th></th>
+
         </tr>
         </thead>
         <tbody>
-            {%for event in events_today%}
+            {% for event in events_today %}
         <tr>
             <td>{{ event.user }}</td>
             <td>{{ event.user.get_full_name }}</td>
             <td>{{ event.user.email }}</td>
-            <td>{{ event.user.phone }} </td>
             <td>{{ event.task }}</td>
             <td>{{ event.date }}</td>
             <td>{{ event.time }}</td>
+            <td>{{ event.sender }}</td>
             <td><a href="{% url 'appointments:delete_event' event.id event.user.username %}"><button class="btn btn-danger" onclick="confirm('This user will be deleted, are you sure?')">Delete</button></a></td>
             <td><a href="{% url 'appointments:edit_event' event.id event.user.username %}"><button class="btn btn-warning">Edit</button></a></td>
             </tr>
@@ -44,10 +45,10 @@
             <th scope="col">Username</th>
             <th scope="col">Full Name</th>
             <th scope="col">Email</th>
-            <th scope="col">Phone Number</th>
             <th scope="col">Task</th>
             <th scope="col">Date</th>
             <th scope="col">Hour</th>
+            <th scope="col">Created By</th>
             <th></th>
             <th></th>
         </tr>
@@ -58,10 +59,10 @@
             <td>{{ later.user }}</td>
             <td>{{ later.user.get_full_name }}</td>
             <td>{{ later.user.email }}</td>
-            <td>{{ later.user.phone }} </td>
             <td>{{ later.task }}</td>
             <td>{{ later.date }}</td>
             <td>{{ later.time }}</td>
+            <td><b>{{ later.sender }}</b></td>
             <td><a href="{% url 'appointments:delete_event' later.id later.user.username %}"><button class="btn btn-danger" onclick="confirm('This user will be deleted, are you sure?')">Delete</button></a></td>
             <td><a href="{% url 'appointments:edit_event' later.id later.user.username %}"><button class="btn btn-warning">Edit</button></a></td>
             </tr>
