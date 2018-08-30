@@ -1,10 +1,16 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.urls import reverse
-from django.db.models import Sum
-
 from django.shortcuts import get_object_or_404
+from datetime import date
+from django.core.exceptions import ValidationError
 User = get_user_model()
+
+def no_future(value):
+    today = date.today()
+    if value < today:
+        raise ValidationError('Date has passed.')
+
 
 
 class Plan(models.Model):
