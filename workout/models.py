@@ -32,7 +32,7 @@ UNIT = (
 
 class Workout(models.Model):
     class Meta:
-        ordering = ["-creation_date", ]
+        ordering = ["creation_date", ]
 
 
     user = models.ForeignKey(User, related_name="workout", on_delete=models.CASCADE)
