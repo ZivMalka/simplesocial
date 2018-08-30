@@ -138,7 +138,7 @@ def edit_plan(request, plan_id):
 def plan_list_manage(request, username):
     user = User.objects.get(username=username)
     plans = Plan.objects.filter(user=user)
-    return render(request, 'plan_list_manage.html', {'plans': plans})
+    return render(request, 'nutrition/plan_list_manage.html', {'plans': plans})
 
 
 
