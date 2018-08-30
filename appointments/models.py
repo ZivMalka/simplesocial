@@ -9,7 +9,6 @@ def no_future(value):
         raise ValidationError('Date has passed.')
 
 
-
 class Appointment(models.Model):
     user = models.ForeignKey(User, related_name="appointment", on_delete=models.CASCADE)
     task = models.CharField(max_length=255)
