@@ -1,19 +1,20 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.contrib import messages
 from appointments.models import Appointment
-from django.contrib.auth.models import User
-
 from .forms import AppointmentForm
 from django.shortcuts import get_object_or_404
+from datetime import datetime, date
 
 # Create your views here.
 
-
 def appoint(request, username):
     if request.user.username == username or request.user.is_superuser:
-        user = User.objects.get(username=username)
-        appointment = Appointment.objects.filter(user=user)
-        return render(request, 'appointment.html', {'appointment': appointment})
+        now = datetime.now()
+        context={
+                'events_today' : Appointment.objects.filter(date__year=now.year, date__month=now.month, date__day=now.day).order_by('date', 'time'),
+                'events_later' : Appointment.objects.filter(date__gt=date.today()).order_by('date', 'time'),
+        }
+        return render(request, 'appointment.html', context)
 
 def create_event(request):
     if request.user.is_superuser:
@@ -22,7 +23,6 @@ def create_event(request):
             appointment = form.save(commit=False)
             appointment.owner = request.user
             appointment = appointment.save()
-            appointment = Appointment.objects.filter(user=request.user)
             messages.success(request, 'Appointment Added!')
             return render(request, 'appointment.html', {'appointment': appointment})
         context = {'form': form}
