@@ -20,7 +20,7 @@ class Plan(models.Model):
 
     user = models.ForeignKey(User, related_name="nutrition", on_delete=models.CASCADE)
     subtitle = models.CharField(max_length=40)
-    date = models.DateField(null=True, blank=True)
+    date = models.DateField(help_text="Enter date", validators=[no_future])
 
     def __str__(self):
         return self.subtitle
