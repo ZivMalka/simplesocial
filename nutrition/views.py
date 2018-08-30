@@ -1,8 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .forms import PlanForm, NutritionForm
 from django.shortcuts import get_object_or_404
 from nutrition.models import Plan, Nutrition
-from django.db.models import Q
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.contrib import messages
@@ -49,12 +48,11 @@ def create_nutrition(request, plan_id):
         return render(request, 'nutrition/create_nutrition.html', context)
 
 
-def delete_plan(request, plan_id):
+def delete_plan(request, plan_id, username):
     if request.user.is_superuser:
         plan = Plan.objects.get(pk=plan_id)
         plan.delete()
-        plans = Plan.objects.filter(user=request.user)
-        return render(request, 'nutrition/plan_list.html', {'plans': plans})
+        return redirect('nutrition:plan_list_manage', username)
 
 
 def delete_nutrition(request, plan_id, nutrition_id):
@@ -75,27 +73,11 @@ def plan_list(request, username):
     if request.user.username == username or request.user.is_superuser:
         user = User.objects.get(username=username)
         plans = Plan.objects.filter(user=user)
-        nutrition_results = Nutrition.objects.all()
-        query = request.GET.get("q")
-        if query:
-            plans = plans.filter(
-                Q(plan_title__icontains=query) |
-                Q(subtitle__icontains=query)
-            ).distinct()
-            nutrition_results = nutrition_results.filter(
-                Q(nutrition_description__icontains=query)
-            ).distinct()
-            return render(request, 'nutrition/plan_list.html', {
-                'plans': plans,
-                'nutritions': nutrition_results,
-            })
-        else:
-            return render(request, 'nutrition/plan_list.html', {'plans': plans})
+        return render(request, 'nutrition/plan_list.html', {'plans': plans})
 
 
 
-def edit_meal(request,plan_id , nutrition_id):
-    template = 'nutrition/edit_meal.html'
+def edit_meal(request,plan_id , nutrition_id, username):
     plan = get_object_or_404(Plan, pk=plan_id)
     nutrition = get_object_or_404(Nutrition, pk=nutrition_id)
     if request.method == "POST":
@@ -104,7 +86,7 @@ def edit_meal(request,plan_id , nutrition_id):
             if form.is_valid():
                 form.save()
                 messages.success(request, 'Your Nutrition Has Been Updated')
-                return render(request, 'nutrition/detail.html', {'plan': plan})
+                return render(request, 'nutrition/detail.html', {'plan': plan}, username)
         except Exception as e:
             messages.warning(request, 'Your set was not saved due to an error: {}'.format(e))
     else:
@@ -113,27 +95,21 @@ def edit_meal(request,plan_id , nutrition_id):
         'form': form,
         'plan': plan,
     }
-    return render(request, template, context)
+    return render(request, 'nutrition/edit_meal.html', context)
 
-def edit_plan(request, plan_id):
-    template = 'nutrition/edit_plan.html'
+
+
+
+def edit_plan(request, plan_id, username):
     plan = get_object_or_404(Plan, pk=plan_id)
-    if request.method == "POST":
-        form = PlanForm(request.POST, instance=plan)
-        try:
-            if form.is_valid():
-                form.save()
-                messages.success(request, 'Your Plan Has Been Updated')
-                return render(request, 'nutrition/detail.html', {'plan': plan})
-        except Exception as e:
-            messages.warning(request, 'Your plan was not saved due to an error: {}'.format(e))
-    else:
-        form = PlanForm(instance=plan)
-    context = {
-        'form': form,
-        'plan': plan,
-    }
-    return render(request, template, context)
+    form = PlanForm(request.POST or None, instance=plan)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Your Plan Has Been Updated')
+        return redirect('nutrition:plan_list_manage', username)
+    return render(request, 'nutrition/edit_plan.html', {'form':form})
+
+
 
 def plan_list_manage(request, username):
     user = User.objects.get(username=username)
