@@ -37,10 +37,10 @@
                     <td>
                     {% if user.is_superuser %}
                     <div>
-                        <a href="{% url 'appointments:delete_event' event.id %}"
+                        <a href="{% url 'appointments:delete_event' event.id event.user %}"
                            title="{% trans 'Delete' %}">
                           <span class="glyphicon glyphicon-trash"></span>&nbsp;</a>
-                        <a href="{% url 'appointments:edit_event' event.id %}"
+                        <a href="{% url 'appointments:edit_event' event.id event.user %}"
                            title="{% trans 'edit' %}">
                           <span class="glyphicon glyphicon-pencil"></span>&nbsp;</a>
                     </div>
