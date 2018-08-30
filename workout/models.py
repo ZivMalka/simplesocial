@@ -1,10 +1,11 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 from django.core.validators import (
     MaxValueValidator,
     MinValueValidator
 )
+User = get_user_model()
 
 
 DAYS_OF_WEEK = (
@@ -24,7 +25,7 @@ UNIT = (
 
 class Workout(models.Model):
     class Meta:
-        ordering = ["creation_date", ]
+        ordering = ["-creation_date", ]
 
 
     user = models.ForeignKey(User, related_name="workout", on_delete=models.CASCADE)
@@ -32,13 +33,15 @@ class Workout(models.Model):
     day = models.IntegerField(choices=DAYS_OF_WEEK)
     title = models.CharField(max_length=15)
 
+
+    def __str__(self):
+        return self.title
+
+
     def get_absolute_url(self):
 
         return reverse('workout:view', kwargs={'workout_id': self.id})
 
-    def __str__(self):
-
-        return self.title
 
 
 class Set(models.Model):
