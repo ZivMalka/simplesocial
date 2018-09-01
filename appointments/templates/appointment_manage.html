@@ -34,7 +34,7 @@
             <td>{{ event.task }}</td>
             <td>{{ event.date }}</td>
             <td>{{ event.time }}</td>
-            <td>{{ event.sender }}</td>
+            <td>{{ event.sender.get_full_name }}</td>
             <td><a href="{% url 'appointments:delete_event' event.id event.user.username %}"><button class="btn btn-danger" onclick="confirm('This user will be deleted, are you sure?')">Delete</button></a></td>
             <td><a href="{% url 'appointments:edit_event' event.id event.user.username %}"><button class="btn btn-warning">Edit</button></a></td>
             </tr>
@@ -62,7 +62,7 @@
             <td>{{ later.task }}</td>
             <td>{{ later.date }}</td>
             <td>{{ later.time }}</td>
-            <td><b>{{ later.sender }}</b></td>
+            <td><b>{{ later.sender.get_full_name }}</b></td>
             <td><a href="{% url 'appointments:delete_event' later.id later.user.username %}"><button class="btn btn-danger" onclick="confirm('This user will be deleted, are you sure?')">Delete</button></a></td>
             <td><a href="{% url 'appointments:edit_event' later.id later.user.username %}"><button class="btn btn-warning">Edit</button></a></td>
             </tr>
