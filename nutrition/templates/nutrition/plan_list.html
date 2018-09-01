@@ -10,19 +10,11 @@
     {% for plan in plans %}
         <a href="{{ plan.get_absolute_url }}" class="list-group-item">
             <span class="glyphicon glyphicon-chevron-right pull-right"></span>
-
-            <h4 class="list-group-item-heading">{{ plan.subtitle }}
-            <br>
-                {{ plan.get_energy_value }} {% trans "kcal" %}
-            </h4>
-
-            <p class="list-group-item-text">
-                {{ plan.date }}
-
-
-
-            </p>
+            <h4 class="list-group-item-heading">{{ plan.subtitle }}</h4>
+            <p class="list-group-item-text"><b>Energy: </b>&nbsp; {{ plan.get_energy_value }} {% trans "kcal" %}</p>
+            <p class="list-group-item-text"><b>Created on:</b>&nbsp;{{ plan.date }}</p>
         </a>
+
     {% empty %}
         {% if user.is_superuser %}
         <a href="{% url 'nutrition:create_plan' %}" class="list-group-item">
@@ -34,7 +26,7 @@
         {% endif %}
     {% endfor %}
 </div>
-        {% if user.is_superuser %}
+        {% if request.user.is_superuser %}
      <div class="col-sm-12">
         <br>
         <a href="{% url 'nutrition:create_plan' %}">

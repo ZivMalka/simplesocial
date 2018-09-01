@@ -4,8 +4,19 @@
 
 {% block content %}
 
+
+{% if messages %}
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+                {% for message in messages %}
+                <p {% if message.tags == "success" %} class="alert alert-success" {% endif %}> {{ message }}</p>
+                {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
 <div class="container">
-    <h3>Here are your scheduled appointments</h3>
+    <h3>Here are your scheduled appointments for today</h3>
     <h4><i>Date and time right now: {% now "jS F Y H:i" %} </i></h4>
     <br>
     <div class="container">
@@ -14,20 +25,24 @@
                 <th>Task</th>
                 <th>Date</th>
                 <th>Time</th>
-                <th>Action</th>
+                <th>Created By</th>
             </thead>
             <tbody>
-                {%for appointment in appointment%}
+                {%for event in events_today%}
                 <tr>
-                    <td>{{appointment.task}}</td>
-                    <td>{{appointment.date}}</td>
-                    <td>{{appointment.time}}</td>
+                    <td>{{event.task}}</td>
+                    <td>{{event.date}}</td>
+                    <td>{{event.time}}</td>
+                    <td>{{ event.sender.get_full_name }}</td>
                     <td>
                     {% if user.is_superuser %}
                     <div>
-                        <a href="{% url 'appointments:delete_event' appointment.id %}"
-                           title="{% trans 'Delete' %}">
+                        <a href="{% url 'appointments:delete_event' event.id event.user %}"
+                           title="{% trans 'Delete' %}" onclick="return confirm('Are you sure you wish to delete this Appointmennt?')">
                           <span class="glyphicon glyphicon-trash"></span>&nbsp;</a>
+                        <a href="{% url 'appointments:edit_event' event.id event.user %}"
+                           title="{% trans 'edit' %}">
+                          <span class="glyphicon glyphicon-pencil"></span>&nbsp;</a>
                     </div>
                     {% endif %}
                 </td>
@@ -37,17 +52,52 @@
         </table>
     </div>
 </div>
+    <h3>Here are your other appointments</h3>
+
+    <div class="container">
+        <table style="width:100%;" class="table">
+            <thead>
+                <th>Task</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Created By</th>
+            </thead>
+            <tbody>
+                {%for later in events_later%}
+                <tr>
+                    <td>{{later.task}}</td>
+                    <td>{{later.date}}</td>
+                    <td>{{later.time}}</td>
+                    <td>{{ later.sender.get_full_name }}</td>
+                    <td>
+                    {% if user.is_superuser %}
+                    <div>
+                        <a href="{% url 'appointments:delete_event' later.id later.user %}"
+                           title="{% trans 'Delete' %}" onclick="return confirm('Are you sure you wish to delete this Appointment?')">
+                          <span class="glyphicon glyphicon-trash"></span>&nbsp;</a>
+                        <a href="{% url 'appointments:edit_event' later.id later.user %}"
+                           title="{% trans 'Edit' %}">
+                          <span class="glyphicon glyphicon-pencil"></span>&nbsp;</a>
+                    </div>
+                    {% endif %}
+                </td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
 
 
-    {% if request.user.is_superuser %}
-        <tr>
-            <td colspan="6">
+
+    {% if user.is_superuser %}
+         <div class="col-sm-4">
+            <br>
             <a href="{% url 'appointments:create_event' %}">
-                <span class="glyphicon glyphicon-plus"></span>&nbsp;
-                {% trans "Schedule new appointment" %}
+                <button type="button" class="btn btn-success">
+                    <span class="glyphicon glyphicon-plus"></span>&nbsp; Add Plan
+                </button>
             </a>
-            </td>
-        <tr>
-        {% endif %}
+         </div>
+            {% endif %}
 
 {% endblock %}

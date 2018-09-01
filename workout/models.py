@@ -1,12 +1,20 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 from django.core.validators import (
     MaxValueValidator,
     MinValueValidator
 )
+from datetime import date
+from django.core.exceptions import ValidationError
+User = get_user_model()
 
-
+def no_future(value):
+    today = date.today()
+    if value < today:
+        raise ValidationError('Date has passed.')
+        
+        
 DAYS_OF_WEEK = (
     (0, 'Monday'),
     (1, 'Tuesday'),
@@ -28,17 +36,19 @@ class Workout(models.Model):
 
 
     user = models.ForeignKey(User, related_name="workout", on_delete=models.CASCADE)
-    creation_date = models.DateField(blank=True, null=True)
+    creation_date = models.DateField(help_text="Enter date", validators=[no_future])
     day = models.IntegerField(choices=DAYS_OF_WEEK)
     title = models.CharField(max_length=15)
+
+
+    def __str__(self):
+        return self.title
+
 
     def get_absolute_url(self):
 
         return reverse('workout:view', kwargs={'workout_id': self.id})
 
-    def __str__(self):
-
-        return self.title
 
 
 class Set(models.Model):

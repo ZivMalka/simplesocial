@@ -11,7 +11,7 @@
             <th scope="col">Username</th>
             <th scope="col">Subtitle</th>
             <th scope="col">Creation Date</th>
-            <th></th>
+            <th scope="col">Calories</th>
             <th></th>
             <th></th>
             <th></th>
@@ -24,17 +24,17 @@
             <td>{{ plan.user.username }}</td>
             <td>{{ plan.subtitle }}</td>
             <td>{{ plan.date }}</td>
+            <td>{{ plan.get_energy_value }}</td>
             <td></td>
-            <td></td>
-            <td><a href="{% url 'nutrition:edit_plan' plan.id %}#"><button class="btn btn-warning">Edit</button></a></td>
-            <td><a href="{% url 'nutrition:delete_plan' plan.id %}"><button class="btn btn-danger">Delete</button></a></td>
             <td><a href="{{ plan.get_absolute_url }}"><button class="btn btn-info">View</button></a></td>
+            <td><a href="{% url 'nutrition:edit_plan' plan.id plan.user.username %}#"><button class="btn btn-warning">Edit</button></a></td>
+            <td><a href="{% url 'nutrition:delete_plan' plan.id plan.user.username %}"><button class="btn btn-danger" onclick="return confirm('Are you sure you wish to delete this Plan?')">Delete</button></a></td>
         </tr>
         {% endfor %}
         </tbody>
          <tr>
         <td class="">
-           <a href="{% url 'nutrition:create_plan' %}">
+           <a href="{% url 'nutrition:create_plan'  %}">
             <button type="button" class="btn btn-success">
                 <span class="glyphicon glyphicon-plus"></span>&nbsp; Add Plan
             </button>

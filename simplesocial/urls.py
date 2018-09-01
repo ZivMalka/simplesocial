@@ -19,8 +19,11 @@ urlpatterns = [
     url(r"^workout/", include('workout.urls', namespace='workout')),
     url(r"messenger/", include('messenger.urls', namespace='messenger')),
     url(r"^appointments/", include('appointments.urls', namespace='appointments')),
+<<<<<<< HEAD
     url(r'^notifications/', include('notify.urls', 'notifications')),
 
+=======
+>>>>>>> ff7804a63a0c25e762fe08fc4b76d75091a5110f
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

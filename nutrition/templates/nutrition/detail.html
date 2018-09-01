@@ -38,13 +38,13 @@
             {% trans "Nr."%} {{ forloop.counter }}
             {% if meal.time %} &ndash; {{meal.time|time:"H:i"}}{% endif %}
             </strong>
-            {% if user.is_superuser %}
+            {% if request.user.is_superuser %}
                     <div class="editoptions">
                         <a href="{% url 'nutrition:delete_nutrition' plan.id meal.id %}"
                            title="{% trans 'Delete' %}" onclick="return confirm('Are you sure you wish to delete this meal?')">
                           <span class="glyphicon glyphicon-trash"></span>&nbsp;</a>
-                       <a href="{% url 'nutrition:edit_meal'  plan.id meal.id %}"
-                           title="{% trans 'Delete' %}">
+                       <a href="{% url 'nutrition:edit_meal'  plan.id meal.id plan.user %}"
+                           title="{% trans 'Edit' %}">
                           <span class="glyphicon glyphicon-pencil"></span>&nbsp;</a>
                     </div>
             {% endif %}
@@ -73,15 +73,16 @@
         {% endif %}
     </tbody>
 </table>
-
+    {% if request.user.is_superuser %}
      <div class="col-sm-12">
                 <br>
-                <a href="{% url 'nutrition:delete_plan' plan.id %}">
+                <a href="{% url 'nutrition:delete_plan' plan.id plan.user %}">
                     <button type="button" class="btn btn-danger" onclick="return confirm('Are you sure you wish to delete this plan?')">
                         <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete Plan
                     </button>
                 </a>
             </div>
+    {% endif %}
 
 
 {% endblock %}
