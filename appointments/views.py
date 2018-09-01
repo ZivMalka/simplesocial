@@ -5,66 +5,53 @@ from .forms import AppointmentForm
 from django.shortcuts import get_object_or_404
 from datetime import datetime, date
 from django.contrib.auth.models import User
-
-
+from django.views.generic import DetailView, ListView
+from django.db.models import Q
 # Create your views here.
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 
-def appointment_manage(request,username):
-    if request.user.is_superuser:
-        user = User.objects.get(username=username)
-        list = Appointment.objects.filter(user=user)
-        now = datetime.now()
-        context={
-                'events_today' : Appointment.objects.filter(date__year=now.year, date__month=now.month, date__day=now.day).order_by('date', 'time'),
-                'events_later' : Appointment.objects.filter(date__gt=date.today()).order_by('date', 'time'),
-                'list' : list,
-        }
-        return render(request, 'appointment_manage.html', context)
 
 def appoint(request, username):
     if request.user.username == username or request.user.is_superuser:
         now = datetime.now()
-        context={
-                'events_today' : Appointment.objects.filter(date__year=now.year, date__month=now.month, date__day=now.day).order_by('date', 'time'),
-                'events_later' : Appointment.objects.filter(date__gt=date.today()).order_by('date', 'time'),
-        }
-        return render(request, 'appointment.html', context)
+
+
+        upcoming_events =  Appointment.objects.filter(date__gt = now).order_by('date', 'time')
+        previous_events = Appointment.objects.filter(date__lte=now).order_by('date', 'time')
+
+        list_upcoming = []
+        for app in upcoming_events:
+            if app.user == request.user or app.sender == request.user:
+                list_upcoming.append(app)
+
+        list_previous = []
+        for app in previous_events:
+            if app.user == request.user or app.sender == request.user:
+                list_previous.append(app)
+
+        return render(request, 'appointment.html', {"previous_events" : list_previous, "upcoming_events": list_upcoming})
 
 def create_event(request):
-<<<<<<< HEAD
-    form = AppointmentForm(request.POST, )
-    if form.is_valid():
-        appointment = form.save(commit=False)
-        appointment.owner = request.user
-        appointment = appointment.save()
-
-        appointment = Appointment.objects.filter(user=request.user)
-
-        messages.success(request, 'Appointment Added!')
-        return render(request, 'appointment.html', {'appointment': appointment})
-    context = {'form': form}
-    return render(request, 'create_event.html', context)
-
-=======
     if request.user.is_superuser:
         form = AppointmentForm(request.POST)
         if form.is_valid():
-            appointment = form.save(commit=False)
-            appointment.sender = request.user
-            appointment.save()
+            user = form.cleaned_data.get('user')
+            task = form.cleaned_data.get('task')
+            date = form.cleaned_data.get('date')
+            time = form.cleaned_data.get('time')
+            Appointment.objects.create(user=user, task=task, time=time, date=date, sender=request.user)
             messages.success(request, 'Appointment Added!')
-            return redirect('appointments:appointment_manage', request.user)
+            return HttpResponseRedirect(reverse("appointments:appoint", kwargs={"username": request.user.username}))
+
         context = {'form': form}
         return render(request, 'create_event.html', context)
->>>>>>> ff7804a63a0c25e762fe08fc4b76d75091a5110f
-
-
 
 def delete_event(request, appoint_id, username):
     if request.user.is_superuser:
         appointment = Appointment.objects.get(pk=appoint_id)
         appointment.delete()
-        return redirect('appointments:appointment_manage', username)
+        return appoint(request, username)
 
 
 def edit_event(request, appointment_id, username):
@@ -73,5 +60,8 @@ def edit_event(request, appointment_id, username):
     if form.is_valid():
         form.save()
         messages.success(request, 'Event Updated Successfully')
-        return redirect('appointments:appointment_manage', username )
+        return HttpResponseRedirect(reverse("appointments:appoint", kwargs={"username": request.user.username}))
     return render(request, 'edit_event.html', {'form': form})
+
+
+

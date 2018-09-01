@@ -182,10 +182,8 @@ INSTALLED_APPS = [
     'messenger',
     'appointments',
     'emoji_picker',
-<<<<<<< HEAD
     'notify',
-=======
->>>>>>> ff7804a63a0c25e762fe08fc4b76d75091a5110f
+
 
 ]
 

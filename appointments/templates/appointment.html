@@ -14,10 +14,10 @@
         </div>
     </div>
 {% endif %}
-
+{% if upcoming_events  %}
 <div class="container">
-    <h3>Here are your scheduled appointments for today</h3>
-    <h4><i>Date and time right now: {% now "jS F Y H:i" %} </i></h4>
+    <h3>Upcoming events</h3>
+
     <br>
     <div class="container">
         <table style="width:100%;" class="table">
@@ -25,14 +25,16 @@
                 <th>Task</th>
                 <th>Date</th>
                 <th>Time</th>
+                <th>With</th>
                 <th>Created By</th>
             </thead>
             <tbody>
-                {%for event in events_today%}
+                {%for event in upcoming_events %}
                 <tr>
                     <td>{{event.task}}</td>
                     <td>{{event.date}}</td>
                     <td>{{event.time}}</td>
+                     <td>{{event.user}}</td>
                     <td>{{ event.sender.get_full_name }}</td>
                     <td>
                     {% if user.is_superuser %}
@@ -47,12 +49,23 @@
                     {% endif %}
                 </td>
                 </tr>
+
+
                 {%endfor%}
             </tbody>
         </table>
     </div>
 </div>
-    <h3>Here are your other appointments</h3>
+
+{% else %}
+                   <div class="list-group">
+    {% trans 'No upcoming events' %}
+    </div>
+{% endif %}
+
+
+{% if previous_events  %}
+    <h3>Previous events</h3>
 
     <div class="container">
         <table style="width:100%;" class="table">
@@ -60,14 +73,16 @@
                 <th>Task</th>
                 <th>Date</th>
                 <th>Time</th>
+                 <th>Invited</th>
                 <th>Created By</th>
             </thead>
             <tbody>
-                {%for later in events_later%}
+                {%for later in  previous_events %}
                 <tr>
                     <td>{{later.task}}</td>
                     <td>{{later.date}}</td>
                     <td>{{later.time}}</td>
+                     <td>{{later.user}}</td>
                     <td>{{ later.sender.get_full_name }}</td>
                     <td>
                     {% if user.is_superuser %}
@@ -87,14 +102,18 @@
         </table>
     </div>
 
-
+ {% else %}
+    <div class="list-group">
+    {% trans 'No previous events' %}
+    </div>
+    {% endif %}
 
     {% if user.is_superuser %}
          <div class="col-sm-4">
             <br>
             <a href="{% url 'appointments:create_event' %}">
                 <button type="button" class="btn btn-success">
-                    <span class="glyphicon glyphicon-plus"></span>&nbsp; Add Plan
+                    <span class="glyphicon glyphicon-plus"></span>&nbsp;Scehdual new meeting
                 </button>
             </a>
          </div>
