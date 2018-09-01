@@ -35,13 +35,13 @@ def create_event(request):
         form = AppointmentForm(request.POST)
         if form.is_valid():
             appointment = form.save(commit=False)
-            appointment.owner = request.user
-            appointment = appointment.save()
+            appointment.sender = request.user
+            appointment.save()
             messages.success(request, 'Appointment Added!')
-            context = {'user': request.user, 'appointment': appointment}
             return redirect('appointments:appointment_manage', request.user)
         context = {'form': form}
         return render(request, 'create_event.html', context)
+
 
 
 def delete_event(request, appoint_id, username):
