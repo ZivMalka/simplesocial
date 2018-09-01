@@ -3,14 +3,12 @@ from django.db import models
 from datetime import date
 from django.core.exceptions import ValidationError
 from django.db.models import Q
+from django.urls import reverse
 
 def no_future(value):
     today = date.today()
     if value < today:
         raise ValidationError('Date has passed.')
-
-
-
 
 
 class Appointment(models.Model):
@@ -25,3 +23,5 @@ class Appointment(models.Model):
 
         return self.task
 
+    def get_absolute_url(self):
+        return reverse('appointments:appoint', kwargs={"username": self.user.username})

@@ -229,7 +229,7 @@ def delete_weight(request, pk, username):
 
 
 def add_weight(request, username):
-    if request.user.is_superuser:
+    if request.user.is_superuser or request.user.username == username:
         if request.method == 'POST':
             form = WeightHistoryForm(request.POST, instance=request.user.userprofileinfo)
 

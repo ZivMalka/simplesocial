@@ -10,7 +10,7 @@ from django.db.models import Q
 # Create your views here.
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-
+from notify.signals import notify
 
 def appoint(request, username):
     if request.user.username == username or request.user.is_superuser:
@@ -40,7 +40,9 @@ def create_event(request):
             task = form.cleaned_data.get('task')
             date = form.cleaned_data.get('date')
             time = form.cleaned_data.get('time')
-            Appointment.objects.create(user=user, task=task, time=time, date=date, sender=request.user)
+            app = Appointment.objects.create(user=user, task=task, time=time, date=date, sender=request.user)
+            notify.send(request.user, recipient=app.user, actor=request.user, verb='Added a new Meeting.',
+                        nf_type='app_by_one_user', target=app)
             messages.success(request, 'Appointment Added!')
             return HttpResponseRedirect(reverse("appointments:appoint", kwargs={"username": request.user.username}))
 

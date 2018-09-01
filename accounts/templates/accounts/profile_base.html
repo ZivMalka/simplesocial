@@ -30,16 +30,15 @@
        <li><a href="{% url 'nutrition:list' username=user.username%}">Nutrition</a>
           <li><a href="{% url 'workout:overview' username=request.user.username %}"> Workout</a> </li>
          <li>  <a href="{% url 'accounts:chart' username=user.username %}">Visual Progress</a></li>
-        <li>  <a href="{% url 'accounts:edit_personal_profile' username=user.username %}">Update Personal profile</a></li>
 
-{% endif %}
+
+
 
 
 
       </ul>
           <ul class="nav navbar-nav navbar-right">
-   {% if request.user == user %}
-      <li><a href="{% url 'accounts:edit_profile' %}">Update my profile</a></li>
+      <li><a href="{% url 'accounts:edit_profile' %}">Settings</a></li>
     {% endif %}
              </ul>
 

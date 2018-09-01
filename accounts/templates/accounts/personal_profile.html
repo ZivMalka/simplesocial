@@ -37,12 +37,12 @@
      <li> Bmi:  {{ bmi }}  </li>
 </ul>
 
-           <a href="{% url 'accounts:filter_report' %}" class="btn btn-default btn-cancel-compose" style="display: inline-block;margin-top: -32%;margin-left:20%;background:white; color: #1879cd;"><span class="glyphicon glyphicon-ok-circle"></span>Export Report</a>
+           <a href="{% url 'accounts:filter_report' %}" class="btn btn-default btn-cancel-compose" style="display: inline-block;margin-top: -5%;margin-left:21%;background:white; color: #1879cd;"><span class="glyphicon glyphicon-ok-circle"></span>Export Report</a>
 
             <h2>Weight History: </h2>
  <div>
 
-       {% if request.user.is_superuser %}
+       {% if request.user.is_superuser or request.user == user  %}
           <a href="{% url 'accounts:add_weight' username=user.username %}" class="btn btn-default btn-cancel-compose" style="display: inline-block;margin-top: -77px;margin-left: 245px;background:white; color: #1879cd;"><span class="glyphicon glyphicon-ok-circle"></span>Add</a>
  {% endif %}
 

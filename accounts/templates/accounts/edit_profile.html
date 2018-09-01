@@ -25,6 +25,12 @@
 
 
    </div> </div>
+
+          <div class="list-group" style="width: 20%;margin-top: -25%;margin-left: 77%;">
+  <a href="{% url 'accounts:edit_profile'  %}" class="list-group-item">Profile</a>
+   <a href="{% url 'accounts:edit_personal_profile' username=user.username %}" class="list-group-item">Personal profile</a>
+
+</div>
 {% endblock %}
 
 <Style>
