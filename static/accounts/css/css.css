@@ -64,11 +64,11 @@
 
 .follow_h2{
 
-    scolor: black;
-    text-align: center;
+    color: black !important;
+    text-align: center !important;
     font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    font-size:15px;
-    font-weight: 500;
+    font-size:15px !important;
+    font-weight: 500 !important;
 }
 .popup {
 	display:none;
@@ -81,3 +81,26 @@
     overflow: auto;
     background-color: rgba(0,0,0,0.4);
 }
+
+
+
+.user_pic{
+    width: 160px;
+    border-radius: 100px;
+    float: left;
+}
+.search-table-outter { overflow-x: scroll; }
+
+
+ #myInput {
+  background-image: url('/css/searchicon.png');
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  width: 15%;
+  font-size: 16px;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #1879cd;
+ display: inline; /* the default for span */
+     width: 200px;
+
+ }

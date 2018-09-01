@@ -1,11 +1,14 @@
+{% load notification_tags %}
 {% load staticfiles %}
 {% load bootstrap3 %}
+{% include_notify_js_variables %}
+{% load i18n %}
 
 <!DOCTYPE html>
 <html>
 
 <head>
-     <meta charset="UTF-8">
+  <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Social Network</title>
@@ -18,17 +21,14 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
-   
-     
+ <link href="{% static 'accounts/css/base.css' %}?v=1" rel="stylesheet">
+
     <!-- for admin widgets for input -->
   <!--   <script type="text/javascript" src="/admin/jsi18n/"></script>
 
 
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
-
-
-
 
     <!-- admin widgets for input -->
       <!--   <script type="text/javascript" src="/admin/jsi18n/"></script>
@@ -67,9 +67,29 @@
                <li><a href="{% url 'accounts:manager' %}"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>&nbsp;Manage</a></li>
                {% endif %}
 
+
+ <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Notification<span class="label label-primary label-indicator animation-floating notification-counter">{{  user.notifications.unread.count }}</span></a>
+          <ul class="dropdown-menu notify-drop">
+            <div class="notify-drop-title">
+            </div>
+            <div class="drop-content">
+  <div class="notification-box-list">
+{% user_notifications %}
+
+</div>
+
+            </div>
+           <div class="notify-drop-footer text-center">
+            	<a href="/notifications/all"><i class="fa fa-eye"></i>See all</a>
+            </div>
+        </ul>
+ </li>
+
                 <li>
                     <a href="{% url 'groups:all' %}"><span class="glyphicon glyphicon-th" aria-hidden="true"></span>&nbsp;Groups</a>
                 </li>
+
                 <li>
                     <a href="{% url 'nutrition:list' username=request.user.username %}"><span class="glyphicon glyphicon-cutlery" aria-hidden="true"></span>&nbsp;Nutrition</a>
                 </li>
@@ -104,7 +124,7 @@
                     <a href="{% url 'accounts:login' %}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp; Login</a>
                 </li>
                 <li>
-                    <a href="{% url 'accounts:register' %}">Sign Up</a>
+                    <a href="">Sign Up</a>
                 </li>
 {% endif %}
 
@@ -118,16 +138,10 @@
     <div class="container mycontent">
     {% block head %}{% endblock head %}
         {% block content %}{% endblock content %}
-      {% block javascript %}
-        <!-- Required by Bootstrap v4
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-        <!-- Your stuff: Third-party javascript libraries go here -->
-      <!--    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js" type="text/javascript"></script>
-        <!-- place project specific Javascript in this file -->
 
-      {% endblock javascript %}
+
+
+
 {% block modal %}{% endblock modal %}
 
     </div>
@@ -137,14 +151,36 @@
   </body>
 
 
+<script>
 
+     $(".dropdown-toggle").click(function () {
+         var mark_all_post_data = {
+            action: 'read',
+            csrftoken: csrftoken
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: markAllNotificationUrl,
+            data: mark_all_post_data,
+            success: function (response) {
+                console.log(response);
+                markAllSuccess(response);
+            }
+        });
+    });
+
+</script>
 
 </html>
 
 </body>
 <!-- Custom JS File -->
 
+</script>
+<script src="{% static "notify/notifyX.js" %}"></script>
   <script src="{% static 'posts/js/posts.js' %}?v=1"></script>
+
 
 
 

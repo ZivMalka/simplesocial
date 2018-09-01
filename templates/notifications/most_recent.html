@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load notification_tags staticfiles %}
+{% include_notify_js_variables %}
+{% include default_box %}
+{% block content %}
+
+<div class="notification-box-list">
+{% user_notifications %}
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="{% static "notify/notifyX.min.js" %}"></script>
+{% endblock %}

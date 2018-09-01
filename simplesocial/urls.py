@@ -9,6 +9,7 @@ from . import views
 urlpatterns = [
     url(r"^admin/", admin.site.urls),
     url(r'^$', views.HomePage.as_view(), name='home'),
+    url(r"notification/", views.get_latest_notifications, name='latest'),
     url(r"^accounts/", include("django.contrib.auth.urls")),
     url(r'^user/', include('accounts.urls')),
     url(r"^posts/", include('posts.urls', namespace='posts')),
@@ -18,8 +19,7 @@ urlpatterns = [
     url(r"^workout/", include('workout.urls', namespace='workout')),
     url(r"messenger/", include('messenger.urls', namespace='messenger')),
     url(r"^appointments/", include('appointments.urls', namespace='appointments')),
-    url(r"^manager/", include('manager.urls', namespace='manager')),
-
+    url(r'^notifications/', include('notify.urls', 'notifications')),
 
 
 

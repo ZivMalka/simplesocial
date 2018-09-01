@@ -32,7 +32,9 @@ def create_event(request):
         appointment = form.save(commit=False)
         appointment.owner = request.user
         appointment = appointment.save()
+
         appointment = Appointment.objects.filter(user=request.user)
+
         messages.success(request, 'Appointment Added!')
         return render(request, 'appointment.html', {'appointment': appointment})
     context = {'form': form}

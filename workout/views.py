@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib import messages
-
+from notify.signals import notify
 
 
 
@@ -20,11 +20,14 @@ def add_workout(request):
         if form.is_valid():
             workout = form.save(commit=False)
             workout.save()
+            notify.send(request.user, recipient=workout.user, actor=request.user, verb='Added a new workout.',
+                        nf_type='plan_by_one_user', target=workout)
             messages.success(request, 'Workout Day Added!')
             return render(request, 'workout/view.html', {'workout': workout})
         context = {
             "form": form,
         }
+
         return render(request, 'workout/add_workout.html', context)
     else:
         return HttpResponse("Only authorized user can add workout plans")

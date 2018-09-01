@@ -33,7 +33,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 def manager_control(request):
     if request.user.is_superuser:
         users = User.objects.all()
-        return render(request, 'manager_control.html', {'users': users})
+        return render(request, 'accounts/manager_control.html', {'users': users})
     else:
         return redirect('/')
 

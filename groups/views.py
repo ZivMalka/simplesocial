@@ -19,6 +19,7 @@ from emoji_picker.widgets import EmojiPickerTextInput, EmojiPickerTextarea
 from django import forms
 from posts.forms import PostForm
 from .forms import GroupForm
+from notify.signals import notify
 
 class CreateGroup(LoginRequiredMixin, generic.CreateView):
     form_class = GroupForm
@@ -66,8 +67,7 @@ def get_members(request, slug):
 
     group = Group.objects.get(slug=slug)
     members_list = GroupMember.objects.filter(group=group)
-    args = { 'members_list' : members_list,
-             'group' : group}
+    args = { 'members_list' : members_list, 'group' : group}
     return render (request, 'groups/users_in_group.html', args)
 
 
@@ -88,6 +88,11 @@ class JoinGroup(LoginRequiredMixin, generic.RedirectView):
         group = get_object_or_404(Group,slug=self.kwargs.get("slug"))
 
         try:
+            followers = []
+            for user in GroupMember.objects.filter(group=group):
+                followers.append(user.user)
+            notify.send(request.user, recipient_list=followers, actor=request.user,
+                        verb = 'start followed ', nf_type = 'followed_by_one_user', target=group)
             GroupMember.objects.create(user=self.request.user,group=group)
 
         except IntegrityError:

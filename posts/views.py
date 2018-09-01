@@ -34,7 +34,7 @@ from django.utils import timezone
 from django.contrib.contenttypes.models import ContentType
 import datetime
 from posts.decorators import ajax_required
-
+from notify.signals import notify
 class SingleGroup(generic.DetailView):
     model = Group
 
@@ -77,28 +77,6 @@ class PostDetail(SelectRelatedMixin, generic.DetailView):
         )
 
 
-
-def add_comment_to_post(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-   # post = Post.objects.get(pk=1)
-
-
-    if request.method == "POST":
-            form = CommentForm(data=request.POST)
-            if form.is_valid():
-
-                content_data = form.cleaned_data.get("content")
-
-                Comment.objects.create(content_object=post, content=content_data, user=request.user)
-
-            return HttpResponseRedirect(post.get_posts_url())
-    else:
-        form = CommentForm()
-
-    return render(request, 'posts/partial_feed_comment.html', {'form': form})
-
-
-
 class DeletePost(LoginRequiredMixin, SelectRelatedMixin, generic.DeleteView):
     model = models.Post
     select_related = ("user", "group")
@@ -121,6 +99,8 @@ class like(RedirectView, LoginRequiredMixin):
         user = self.request.user
         if user in obj.likes.all():
             obj.likes.remove(user)
+
+
         else:
             obj.likes.add(user)
             obj.date_of_like = datetime.datetime.now()
@@ -148,11 +128,15 @@ class PostLikeAPIToggle(APIView):
         else:
                 liked = True
                 obj.likes.add(user)
+                notify.send(request.user, recipient=obj.user, actor=request.user, verb='Like your post.',
+                    nf_type='liked_by_one_user', target=obj)
         updated = True
         data = {
             "updated": updated,
             "liked": liked
         }
+
+
         return Response(data)
 
 
@@ -170,6 +154,10 @@ def comment(request):
         user = request.user
         response_data = {}
         new_comment = Comment.objects.create(content_object=post, content=content, user=request.user)
+
+        #notifications
+        notify.send(request.user, recipient=post.user, actor=request.user, verb='comment on your post.',
+                    nf_type='comment_by_one_user', target=post)
 
         response_data['result'] = 'Create post successful!'
         response_data['postpk'] = new_comment.pk

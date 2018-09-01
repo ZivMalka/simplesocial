@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.contrib import messages
-
+from notify.signals import notify
 
 def create_plan(request):
     if request.user.is_superuser:
@@ -15,10 +15,14 @@ def create_plan(request):
             plan = form.save(commit=False)
             plan.save()
             messages.success(request, 'Plan Added!')
+            notify.send(request.user, recipient=plan.user, actor=request.user, verb='Added a new plan.',
+                        nf_type='plan_by_one_user', target=plan)
+
             return render(request, 'nutrition/detail.html', {'plan': plan})
         context = {
             "form": form,
         }
+
         return render(request, 'nutrition/create_plan.html', context)
     else:
         return HttpResponse("Only authorized user can add nutrition meals")
@@ -41,6 +45,7 @@ def create_nutrition(request, plan_id):
             nutrition.plan = plan
             nutrition.save()
             messages.success(request, 'Meal Added!')
+
             return render(request, 'nutrition/detail.html', {'plan': plan})
         context = {
             'plan': plan,
