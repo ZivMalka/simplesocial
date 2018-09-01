@@ -34,7 +34,7 @@
             <td>{{ event.task }}</td>
             <td>{{ event.date }}</td>
             <td>{{ event.time }}</td>
-            <td>{{ event.sender.get_full_name }}</td>
+            <td><b>{{ event.sender.get_full_name }}</b></td>
             <td><a href="{% url 'appointments:delete_event' event.id event.user.username %}"><button class="btn btn-danger" onclick="confirm('This user will be deleted, are you sure?')">Delete</button></a></td>
             <td><a href="{% url 'appointments:edit_event' event.id event.user.username %}"><button class="btn btn-warning">Edit</button></a></td>
             </tr>
