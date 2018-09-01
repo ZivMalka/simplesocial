@@ -25,8 +25,3 @@ class Appointment(models.Model):
 
         return self.task
 
-    def by_user(self, user):
-        qlookup = Q(user=user) | Q(sender=user)
-        qlookup2 = Q(user=user) & Q(sender=user)
-        qs = self.get_queryset().filter(qlookup).exclude(qlookup2).distinct()
-        return qs
