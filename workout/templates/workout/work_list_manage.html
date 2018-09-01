@@ -28,7 +28,7 @@
             <td>{{ workout.creation_date }}</td>
             <td><a href=" {{ workout.get_absolute_url }} "><button class="btn btn-info">View</button></a></td>
             <td><a href="{% url 'workout:edit_workout' workout.id workout.user.username %}"><button class="btn btn-warning">Edit</button></a></td>
-            <td><a href="{% url 'workout:delete_workout' workout.id workout.user.username %}"><button class="btn btn-danger">Delete</button></a></td>
+            <td><a href="{% url 'workout:delete_workout' workout.id workout.user.username %}"><button class="btn btn-danger" onclick="return confirm('Are you sure you wish to delete this Workout plan?')">Delete</button></a></td>
         </tr>
         {% endfor %}
         </tbody>
