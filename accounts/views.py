@@ -207,10 +207,11 @@ def chart_user(request, username):
         content3 = chart_calories(request, plans)
         content5=weight_lossDistrbotion(request)
         content6=activity_log_chart(request, username)
+        value = calc_total_loss_per(user, user.userprofileinfo.current_weight)
 
         return render(request, 'accounts/Graph.html',
                       {"user": user, 'output': content1, 'output2': content2, 'output3': content3,
-                        'output5': content5, 'output6': content6, 'output6': content6})
+                        'output5': content5, 'output6': content6, 'output6': content6, 'value':value})
 
     else:
         return HttpResponseRedirect(reverse("accounts:profile", kwargs={"username": request.user.username}))
@@ -452,8 +453,8 @@ def weight_lossDistrbotion(request):
     # Chart data is passed to the `dataSource` parameter, as dict, in the form of key-value pairs.
     dataSource = { }
     dataSource['chart'] = {
-        "caption": "Weight loss distribution",
-        "subCaption": "Weight loss of all the users",
+        "caption": "Weight loss distribution ",
+        "subCaption": "Weight loss of all the users in %",
         "bgColor": "#FFFFFF",
         "theme": "fint",
         "valueFontSize": "15",
@@ -590,6 +591,7 @@ def calc_total_loss(user, current):
            total = current - key.weight
         else:
            break
+        break
     return total
 #Calculation of weight loss percentages
 def calc_total_loss_per(user, current):
@@ -597,8 +599,10 @@ def calc_total_loss_per(user, current):
     for k in user.userprofileinfo.weight_history.all():
         if total == 0:
            total = round((((k.weight- current)/k.weight)*100),2)
+           print(k.weight)
         else:
            break
+        break
     return total
 
 
@@ -608,9 +612,15 @@ from django.views.generic import View
 from accounts.printing import render_to_pdf #created in step 4
 
 #Reports page
-def generate_reports(request):
+def generate_reports(request, username):
+    user = User.objects.get(username=username)
+    return render(request, 'accounts/reports.html', {'user':user })
+
+#admin report page
+def generate_reports_admin(request):
     GeneratePdf_of_all_user(request)
-    return render(request, 'accounts/reports.html')
+    return render(request, 'accounts/admin_reports.html')
+
 
 import numpy as np
 from statistics import mean, stdev, median
@@ -651,13 +661,14 @@ def GeneratePdf_of_all_user(request):
 
     else:
         return render(request, 'accounts/reports.html')
-
+import datetime
 #progress report of one user + filter by month & year
 def  GeneratePdf(request, username):
         user = User.objects.get(username=username)
         dataSource = {}
         dataSource['data'] = []
         date = filter(request)
+
         list = list_of_weight_loss(date, user)
         for k in list:
                 data = {}
@@ -666,11 +677,14 @@ def  GeneratePdf(request, username):
                 data['timestamp'] = k.timestamp
                 current = k.weight
                 dataSource['data'].append(data)
-
+        if (isinstance(date, datetime.date)):
+            year = myconverter_year(date)
+            type = date.strftime('%B') + " " + year
+        else:
+            type =date
         total = calc_total_loss(user, current)
         total_in_per = calc_total_loss_per(user, current)
         bmi = calc_bmi(user.userprofileinfo)
-        print(data)
         pdf = render_to_pdf('accounts/pdf_template.html',
                                         {'data': dataSource, 'total': total, 'total_in_per': total_in_per,
                                          'bmi': bmi, 'user': user, 'type': type })

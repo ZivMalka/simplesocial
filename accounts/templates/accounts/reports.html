@@ -41,12 +41,7 @@
 
 </li>
   <br>
-          {% if request.user.is_superuser %}
- <li class="list-group-item">
-     <a href="{% url 'accounts:all_users_report' %}">User Progress Reports</a>
-  </li>
-           <br>
- {% endif %}
+
        <li class="list-group-item">
 <form role="form" method="post" action="#">
  {% csrf_token %}
@@ -57,16 +52,9 @@
 </li>
            <br>
 
-  <li class="list-group-item">
-<form role="form" method="post" action="{% url 'accounts:activity_log_report' %}">
- {% csrf_token %}
-    <p class="report">Activity </p>
-           <label for="startDate">Filter by month: </label>
-     <input name="timestamp" id="startDate" class="date-picker" />
- </form>
-</li>
 
 
+{
        </ul>
 
 {% endblock  %}

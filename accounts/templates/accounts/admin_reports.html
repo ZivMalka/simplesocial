@@ -1,0 +1,30 @@
+{% extends  "base.html" %}
+{% load staticfiles %}
+{% block head %}
+   <!-- JAVA SCRIPT FILES -->
+ <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.js"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css">
+   <script src="{% static 'accounts/js/accounts.js' %}"></script>
+{% endblock head %}
+
+{% block content %}
+{% if request.user.is_superuser %}
+               <h2>Export Report</h2>
+       <ul class="list-group">
+        <li class="list-group-item">
+     <a href="{% url 'accounts:all_users_report' %}">User Progress Reports</a>
+  </li>
+           <br>
+  <li class="list-group-item">
+<form role="form" method="post" action="{% url 'accounts:activity_log_report' %}">
+ {% csrf_token %}
+    <p class="report">Activity </p>
+           <label for="startDate">Filter by month: </label>
+     <input name="timestamp" id="startDate" class="date-picker" />
+ </form>
+</li>
+           </ul>
+    {% endif %}
+
+{% endblock %}

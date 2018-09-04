@@ -23,6 +23,7 @@ urlpatterns = [
    #manage control
     url(r"manage/$", views.manager_control, name="manager"),
     url(r"manage/dashboard/$", views.visual_manage_control, name="dashboard"),
+    url(r"manage/report/$", views.generate_reports_admin, name="admin_report"),
     #chart
     url(r'personal/chart/(?P<username>[a-zA-Z0-9]+)$', views.chart_user, name='chart'),
     url(r'personal/chart/filter/(?P<username>[a-zA-Z0-9]+)$', views.chart, name='filter'),
@@ -32,7 +33,8 @@ urlpatterns = [
     url(r"reports/$", views.GeneratePdf_of_all_user, name="all_users_report"),
     url(r"reports/activity/$", views.ActivityLogReport, name="activity_log_report"),
     url(r"report/(?P<username>[a-zA-Z0-9]+)$", views.GeneratePdf, name="report"),
-    url(r'personal/report/filter/$', views.generate_reports, name='filter_report'),
+    url(r"personal/report/of/(?P<username>[a-zA-Z0-9]+)$", views.generate_reports, name="reports_page"),
+
 
 
 ]
