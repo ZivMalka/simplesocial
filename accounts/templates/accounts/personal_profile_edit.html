@@ -1,6 +1,7 @@
 {%  extends "accounts/profile_base.html" %}
 {% load staticfiles %}
-{% load bootstrap3 %}
+{% load i18n %}
+
 
  {% block profile_content %}
 
@@ -8,22 +9,37 @@
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
    <script src="{% static 'accounts/js/accounts.js' %}"></script>
 
+
+
+
+<div class="container" style="margin-right: -50px;">
+  <div class="row" >
     <h1>Edit</h1>
+   <form enctype="multipart/form-data" method="POST">
+       {% csrf_token %}
+         {% for field in profile_form.visible_fields %}
+  <div class="form-group">
+ <label for="{{ field.label }}" class="col-sm-2 control-label">{{ field.label }}</label>
+    <input class="form-control" style="width: 35%;"  placeholder={{ field }}
+  </div>{% endfor %}
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+   </div> </div>
 
 
-    <h3>Update your details</h3>
 
-     <form method="POST"  id="groupForm" style="width: 35% !important;">
-  	{% csrf_token %}
-  	{% bootstrap_form profile_form %}
-  	<input type="submit" value="Create" class="btn btn-primary btn-large">
-  </form>
 
-     <div class="list-group" style="width: 20%;margin-top: -25%;margin-left: 77%;">
-  <a href="{% url 'accounts:edit_profile'  %}" class="list-group-item">Profile</a>
-   <a href="{% url 'accounts:edit_personal_profile' username=user.username %}" class="list-group-item">Personal profile</a>
 
-</div>
+<div class="col-md-3">
+<div class="list-group" style="width:70%; margin-left: 309%;margin-top: -74%;">
+  <a href="/user/settings/profile/edit/" class="list-group-item">Profile</a>
+  <a href="{% url 'accounts:edit_personal_profile' username=user.username %}"  class="list-group-item">Personal</a>
+</div></div>
 
 
 {% endblock %}
+<Style>
+    .form-control {
+    width: 35% !important;
+    }
+</Style>

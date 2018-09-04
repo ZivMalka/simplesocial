@@ -20,10 +20,10 @@
                  font-size: 14px;
              }
              .header {
-                 font-size: 20px;
+                 font-size: 12px;
                  font-weight: 100;
-                 text-align: center;
-                 color: #007cae;
+                 text-align: left;
+                 color: black;
              }
              .title {
                  font-size: 22px;
@@ -49,11 +49,15 @@
   </style>
 </head>
 <body>
-
+{% load custom_tags %}
+{% current_time "%Y-%m-%d %I:%M %p" as the_time %}
 <h1 class="s">HealthyHipe Report</h1>
    <div class='wrapper'>
              <div class='header'>
-   <p class='title'>{% if type is date %}{{ type | date:"F Y" }}{% else %}{{ type }} {% endif %} Progress Report </p>
+
+<p style="">Produced in {{ the_time }}.</p>
+
+   <p class='title'>{{ type  }} Progress Report </p>
      </div>
 
    <p> Name: {{ user.get_full_name }} <br>

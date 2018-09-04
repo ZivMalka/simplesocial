@@ -12,10 +12,17 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from notify.signals import notify
 
+
+
 def appoint(request, username):
+    '''
+    get upcoming apptmein and the past appoitment of the user
+    :param request:
+    :param username:
+
+    '''
     if request.user.username == username or request.user.is_superuser:
         now = datetime.now()
-
 
         upcoming_events =  Appointment.objects.filter(date__gt = now).order_by('date', 'time')
         previous_events = Appointment.objects.filter(date__lte=now).order_by('date', 'time')
@@ -31,8 +38,15 @@ def appoint(request, username):
                 list_previous.append(app)
 
         return render(request, 'appointment.html', {"previous_events" : list_previous, "upcoming_events": list_upcoming})
+    return redirect('/')
+
 
 def create_event(request):
+    """
+    create an event from admin to user
+    :param request:
+
+    """
     if request.user.is_superuser:
         form = AppointmentForm(request.POST)
         if form.is_valid():
@@ -44,12 +58,15 @@ def create_event(request):
             notify.send(request.user, recipient=app.user, actor=request.user, verb='Added a new Meeting.',
                         nf_type='app_by_one_user', target=app)
             messages.success(request, 'Appointment Added!')
-            return HttpResponseRedirect(reverse("appointments:appoint", kwargs={"username": request.user.username}))
+            return HttpResponseRedirect(reverse("appointments:overview", kwargs={"username": request.user.username}))
+
 
         context = {'form': form}
         return render(request, 'create_event.html', context)
+    return redirect(home)
 
 def delete_event(request, appoint_id, username):
+    '''delete'''
     if request.user.is_superuser:
         appointment = Appointment.objects.get(pk=appoint_id)
         appointment.delete()
@@ -57,6 +74,7 @@ def delete_event(request, appoint_id, username):
 
 
 def edit_event(request, appointment_id, username):
+    '''edit'''
     appointment = get_object_or_404(Appointment, pk=appointment_id)
     form = AppointmentForm(request.POST or None, instance=appointment)
     if form.is_valid():

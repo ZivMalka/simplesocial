@@ -31,6 +31,7 @@ UNIT = (
 )
 
 class Workout(models.Model):
+    '''workout class'''
     class Meta:
         ordering = ["creation_date", ]
 

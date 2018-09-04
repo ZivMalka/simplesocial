@@ -114,3 +114,6 @@
 .navbar-default .dropdown-menu.notify-drop .notify-drop-footer a:hover {
   color: #333;
 }
+.mark-notification{
+ display: none;
+}

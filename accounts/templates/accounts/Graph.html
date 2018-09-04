@@ -18,7 +18,7 @@
 
  {% block profile_content %}
 
-     {% if request.user == user and not request.user.is_superuser %}
+
      <h2>Dashboard</h2>
 
  <div id="chart-5" style="width: 100px; height: 100px;display: inline-block; margin-left: -4%;">
@@ -29,58 +29,8 @@
     </div>
 
 
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<form role="form" method="post" action="{% url 'accounts:chart' username=user.username %}">
- {% csrf_token %}
-           <label for="startDate">Filter by month :</label>
-     <input name="timestamp" id="startDate" class="date-picker" />
- </form>
-
-<form role="form" method="get" action="{% url 'accounts:chart' username=user.username %}">
- {% csrf_token %}
-           <label for="startDate">Filter by year :</label>
-     <input name="year" id="startDate1" class="date-picker1" />
- </form>
-
-<div>
-
-     <div>
-         <div id="chart-1" style="width: 100px; height: 100px;display: inline-block; margin-left: -4%;">
-        {{ output|safe }}
-    </div>
-         <div id="chart-2" style="width: 100px; height: 100px; display: inline-block;margin-right:43%; float:right;">
-
-        {{ output2|safe }}
-    </div>
-         <br><br>  <br><br><br><br>
-              <div id="chart-3" style="width: 100px; height: 100px;margin-top: 14%;display: inline-block;">
-
-        {{ output3|safe }}
-    </div>
-
-         <br><br><br><br>
-           </div>
-
-
-
-</div>
-<br><br><br><br><br><br><br>
-
-</div>
-
-{% endif %}
-
-     {% if request.user.is_superuser  %}
-     <h2>Activity of users</h2>
- <div id="chart-5" style="width: 100px; height: 100px;;display: inline-block;margin-;led">
-        {{ output5|safe }}
-    </div>
-       <div id="chart-4" style="width: 100px; height: 100px;;display: inline-block;margin-right:43%; float:right;">
-        {{ output4|safe }}
-        </div>
-     <br><br>  <br><br><br><br>     <br><br>  <br><br><br><br>
-         <center>
- <div>
+<br><br><br><br><br><br><br><br><br><br>
+      <div>
 <div style="width: 100px; height: 100px;display: inline-block;">
          <form role="form" method="post"  action="{% url 'accounts:chart' username=user.username %}">
  {% csrf_token %}
@@ -95,35 +45,39 @@
      <input name="year" id="startDate1" class="date-picker1" />
  </form></div> </div>
 
-        <div id="chart-7">
-        {{ output7|safe }}
-        </div>
-
-         </center>
-<br><br>
-
-           <h2>My activity</h2>
-
+<div>
 
      <div>
          <div id="chart-1" style="width: 100px; height: 100px;display: inline-block; margin-left: -4%;">
         {{ output|safe }}
     </div>
          <div id="chart-2" style="width: 100px; height: 100px; display: inline-block;margin-right:43%; float:right;">
+
         {{ output2|safe }}
     </div>
-         <br><br>  <br><br><br><br><br><br>  <br><br><br><br><br><br>
-              <div id="chart-3" style="width: 100px; height: 100px;display: inline-block; margin-left: -4%;">
+         <br><br>  <br><br><br><br>
+         <center>
+              <div id="chart-3" style="margin-top: 14%;">
+
         {{ output3|safe }}
     </div>
 
-    <div id="chart-6" style="width: 100px; height: 100px; display: inline-block;margin-right:43%; float:right;">
-        {{ output6|safe }}
-    </div>
- </div>
+       </center>
 
 
-{% endif %}
+
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+
 
 
 

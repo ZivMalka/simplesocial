@@ -2,18 +2,23 @@ from django import forms
 from django.contrib.auth.models import User
 from accounts.models import UserProfileInfo, WeightList
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
-
 from django.forms.fields import DateField
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm
 
 
-class UserForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput())
-
+#Create new user form
+class UserCreateForm(UserCreationForm):
     class Meta:
-        model = User
-        fields = ('username','email', 'password')
+        fields = ("username", "email", "password1", "password2")
+        model = get_user_model()
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["username"].label = "Display name"
+        self.fields["email"].label = "Email address"
 
+#Upload profile pic
 class UserProfileInfoForm(forms.ModelForm):
     class Meta:
         model = UserProfileInfo
@@ -41,7 +46,7 @@ class WeightHistoryForm(forms.ModelForm):
         model = WeightList
         fields = ('weight' , 'body_fat', 'timestamp')
 
-
+#FILTER DATE
 class FilterDate(forms.ModelForm):
     class Meta:
         model = WeightList

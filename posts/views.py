@@ -40,15 +40,18 @@ class SingleGroup(generic.DetailView):
 
 
 class PostList(SelectRelatedMixin, generic.ListView):
+    '''return the feed'''
     model = models.Post
     select_related = ("user", "group")
 
 
 class UserPosts(generic.ListView):
+    '''return user posts list'''
     model = models.Post
     template_name = "posts/user_post_list.html"
 
     def get_queryset(self):
+        '''find all user posts'''
         try:
             self.post_user = User.objects.prefetch_related("posts").get(
                 username__iexact=self.kwargs.get("username")
@@ -60,6 +63,7 @@ class UserPosts(generic.ListView):
             return self.post_user.posts.all()
 
     def get_context_data(self, **kwargs):
+        '''return post list of the user'''
         context = super().get_context_data(**kwargs)
         context["post_user"] = self.post_user
         return context
@@ -78,6 +82,7 @@ class PostDetail(SelectRelatedMixin, generic.DetailView):
 
 
 class DeletePost(LoginRequiredMixin, SelectRelatedMixin, generic.DeleteView):
+    '''delete'''
     model = models.Post
     select_related = ("user", "group")
     success_url = reverse_lazy("posts:all")
@@ -113,6 +118,9 @@ from rest_framework.response import Response
 from rest_framework import authentication, permissions
 
 class PostLikeAPIToggle(APIView):
+    """CREATE lIKE USING API REST FRAMWORK
+     ajax response
+    """
     authentication_classes = (authentication.SessionAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
@@ -143,7 +151,11 @@ class PostLikeAPIToggle(APIView):
 
 @csrf_exempt
 def comment(request):
-    print("jkashdkjsad")
+    """
+    new comment
+    :param request:
+    ajax response
+    """
     if request.method == 'POST':
 
         print("S")
@@ -152,6 +164,7 @@ def comment(request):
         post = Post.objects.get(pk=post_id)
         content = request.POST.get('content')
         user = request.user
+
         response_data = {}
         new_comment = Comment.objects.create(content_object=post, content=content, user=request.user)
 

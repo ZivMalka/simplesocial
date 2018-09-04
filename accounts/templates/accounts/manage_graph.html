@@ -1,0 +1,60 @@
+{%  extends "base.html" %}
+{% load static %}
+{% load staticfiles %}
+{% block head %}
+
+     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.js"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css">
+   <script src="{% static 'accounts/js/accounts.js' %}"></script>
+       <!-- fusioncharts -->
+     <script src="{% static "accounts/js/fusioncharts.js" %}"></script>
+           <script src="{% static "accounts/js/fusioncharts.theme.ocean.js" %}"></script>
+     <script src="{% static "accounts/js/fusioncharts.theme.fint.js" %}"></script>
+   <script src="{% static "accounts/js/fusioncharts.charts.js" %}"></script>
+       <script src="{% static "accounts/js/fusioncharts.zoomscatter.js" %}"></script>
+{% endblock head %}
+
+
+ {% block content %}
+
+         <div id="chart-4" style="width: 100px; height: 100px;;display: inline-block;margin-right:43%; float:right;">
+        {{ output4|safe }}
+        </div>
+
+ <div id="chart-5" style="width: 100px; height: 100px;display: inline-block; margin-left: -4%;">
+        {{ output5|safe }}
+    </div>
+
+<br><br><br><br><br><br><br><br><br><br>
+
+
+<center>
+      <div>
+<div style="width: 100px; height: 100px;display: inline-block;">
+         <form role="form" method="post"  action="{% url 'accounts:dashboard' %}">
+ {% csrf_token %}
+           <label for="startDate">Filter by month :</label>
+     <input name="timestamp" id="startDate" class="date-picker" />
+        </form></div>
+
+         <div style="width: 100px; height: 100px; display: inline-block;  margin-left: 8%;">
+         <form role="form" method="get"  action="{% url 'accounts:dashboard' %}">
+ {% csrf_token %}
+           <label for="startDate">Filter by year :</label>
+     <input name="year" id="startDate1" class="date-picker1" />
+ </form></div>
+
+      </center>
+
+      </div>
+ <div id="chart-7" style="width: 100px; height: 100px;;display: inline-block;margin-right:43%; float:right;">
+        {{ output7|safe }}
+    </div>
+ <div id="chart-8" style="width: 100px; height: 100px;display: inline-block; margin-left: -4%;">
+        {{ output8|safe }}
+    </div>
+
+
+
+{% endblock content %}

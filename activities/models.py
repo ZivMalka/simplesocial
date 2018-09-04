@@ -8,9 +8,9 @@ from django.db import models
 import misaka
 
 
+#Comment model for post with Generic relations
 class Comment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, default=1, on_delete=models.CASCADE)
-#    parent = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 

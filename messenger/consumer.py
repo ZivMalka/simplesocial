@@ -9,8 +9,8 @@ from .models import Thread, ChatMessage
 class ChatConsumer(AsyncConsumer):
 
     async def websocket_connect(self, event):
+        """websocekt connect"""
         print("connected", event)
-
         other_user = self.scope['url_route']['kwargs']['username']
         me = self.scope['user']
         thread_obj = await self.get_thread(me, other_user)
@@ -24,6 +24,7 @@ class ChatConsumer(AsyncConsumer):
         })
 
     async def websocket_receive(self, event):
+        """websocekt receive"""
         front_text = event.get('text', None)
         if front_text is not None:
             loaded_data = json.loads(front_text)
@@ -51,11 +52,13 @@ class ChatConsumer(AsyncConsumer):
 
     @database_sync_to_async
     def get_thread(self, user, other_username):
+        """return the therad obj"""
         print("ee")
         return Thread.objects.get_or_new(user, other_username)[0]
 
     @database_sync_to_async
     def insert_obj_to_databae(self, me, msg):
+        """create new chat message"""
         thread_obj = self.thread_obj
         new_message = ChatMessage.objects.create(
             thread= thread_obj,

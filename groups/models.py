@@ -17,6 +17,9 @@ register = template.Library()
 
 
 class Group(models.Model):
+    """
+    Class Group
+    """
     name = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(allow_unicode=True, unique=True)
     description = models.TextField(blank=True, default='')
@@ -27,15 +30,26 @@ class Group(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
+        """
+        :param args:
+        :param kwargs:
+        save group
+        """
         self.slug = slugify(self.name)
         self.description_html = misaka.html(self.description)
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
+        """
+        reverse to a single group
+        """
         return reverse("groups:single", kwargs={"slug": self.slug})
 
 
     class Meta:
+        """
+        order by name
+        """
         ordering = ["name"]
 
 
@@ -48,7 +62,6 @@ class GroupMember(models.Model):
         return self.user.username
 
     class Meta:
-
         unique_together = ("group", "user")
 
 

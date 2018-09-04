@@ -6,6 +6,9 @@ from django.forms.fields import DateField
 
 
 class AppointmentForm(forms.ModelForm):
+    """
+    create Appointment form
+    """
     date = DateField(widget = AdminDateWidget())
     time = forms.TimeField(widget= AdminTimeWidget)
 

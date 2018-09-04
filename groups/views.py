@@ -22,6 +22,9 @@ from .forms import GroupForm
 from notify.signals import notify
 
 class CreateGroup(LoginRequiredMixin, generic.CreateView):
+    """
+    Create group
+    """
     form_class = GroupForm
     model = Group
 
@@ -33,22 +36,31 @@ class CreateGroup(LoginRequiredMixin, generic.CreateView):
         return redirect("groups:all")
 
 def upload_pic(request, post_id):
-        if request.method == 'POST':
-            form = PostForm(request.POST, request.FILES)
-            if form.is_valid():
-                profile = form.save(commit=False)
-                if 'post_pic' in request.FILES:
-                    form.post_pic = request.FILES['post_pic']
-                m = get_object_or_404(Post, pk=post_id)
-                m.post_pic = form.cleaned_data['post_pic']
-                m.save()
+    """
+    Upload picture in post
+   :param request: 
+    :param post_id: 
+    :return: 
+  """
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            if 'post_pic' in request.FILES:
+                form.post_pic = request.FILES['post_pic']
+            m = get_object_or_404(Post, pk=post_id)
+            m.post_pic = form.cleaned_data['post_pic']
+            m.save()
 
 class SingleGroup(FormMixin, generic.DetailView):
+    """
+    redrict to a group page
+    """
     model = Group
     form_class = PostForm
 
     def post(self, request, *args, **kwargs):
-
+        #new post in group
         self.object = self.get_object()
         form = self.get_form()
         if request.method == 'POST':
@@ -61,10 +73,17 @@ class SingleGroup(FormMixin, generic.DetailView):
                 return HttpResponseRedirect( self.object.get_absolute_url())
 
 class ListGroups(generic.ListView):
+    """
+    List of All the Groups
+    """
     model = Group
 
 def get_members(request, slug):
-
+    """ all the members of the group
+    :param request:
+    :param slug:
+    :return: HttpResponse
+    """
     group = Group.objects.get(slug=slug)
     members_list = GroupMember.objects.filter(group=group)
     args = { 'members_list' : members_list, 'group' : group}
@@ -75,19 +94,22 @@ def get_members(request, slug):
 
 
 class GetGroup(LoginRequiredMixin, generic.RedirectView):
-
     def get_redirect_url(self, *args, **kwargs):
         return reverse("groups:single", kwargs={"slug": self.kwargs.get("slug")})
 
 class JoinGroup(LoginRequiredMixin, generic.RedirectView):
-
+    """
+    Join the group
+    """
     def get_redirect_url(self, *args, **kwargs):
         return reverse("groups:single",kwargs={"slug": self.kwargs.get("slug")})
 
     def get(self, request, *args, **kwargs):
+        """get group obj"""
         group = get_object_or_404(Group,slug=self.kwargs.get("slug"))
 
         try:
+        #Join the group and create notification for all the group members
             followers = []
             for user in GroupMember.objects.filter(group=group):
                 followers.append(user.user)
@@ -105,7 +127,7 @@ class JoinGroup(LoginRequiredMixin, generic.RedirectView):
 
 
 class LeaveGroup(LoginRequiredMixin, generic.RedirectView):
-
+    #leave group
     def get_redirect_url(self, *args, **kwargs):
         return reverse("groups:single",kwargs={"slug": self.kwargs.get("slug")})
 

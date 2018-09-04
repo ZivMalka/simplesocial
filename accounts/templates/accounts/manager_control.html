@@ -36,7 +36,7 @@
         </tbody>
          <tr>
         <td class="">
-            <a href="{% url 'accounts:register' %}">
+            <a href="{% url 'accounts:signup' %}">
                 <button type="button" class="btn btn-success">
                     <span class="glyphicon glyphicon-plus"></span>&nbsp; Add User
                 </button>
@@ -45,6 +45,11 @@
          <td class="">
             <a href="{% url 'appointments:appoint'  username=user.username %}" class="btn btn-md btn-fill btn-warning">
                 <span class="glyphicon glyphicon-pencil"></span>&nbsp; All Appointments
+            </a>
+         </td>
+             <td class="">
+            <a href="{% url 'accounts:dashboard'  %}" class="btn btn-primary btn-post">
+                Dashboard
             </a>
          </td>
     </tr>

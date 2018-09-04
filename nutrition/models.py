@@ -14,7 +14,7 @@ def no_future(value):
 
 
 class Plan(models.Model):
-
+    '''plan model'''
     class Meta:
         ordering = ['date']
 
@@ -37,7 +37,7 @@ class Plan(models.Model):
         return x
 
 class Nutrition(models.Model):
-
+    '''Nutrition class'''
     class Meta:
         ordering = ['time']
     plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
@@ -57,6 +57,7 @@ class Nutrition(models.Model):
         return self.plan
 
     def get_energy_value(self):
+        '''calc the calories in the menu'''
         plan = get_object_or_404(Plan, pk=self)
         sum = 0
         for cal in plan.nutrition_set.all():

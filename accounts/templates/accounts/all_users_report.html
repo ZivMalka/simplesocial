@@ -51,16 +51,25 @@
                  color: #333; /* old IE */
                  background-color: #fff; /* Modern Browsers */
              }
+             .date{
+                  font-size: 12px;
+                 font-weight: 100;
+                 text-align: left;
+                 color: black;
+             }
       .border_bottom {
   border-bottom:1pt solid black;
 }
   </style>
 </head>
 <body>
+{% load custom_tags %}
+{% current_time "%Y-%m-%d %I:%M %p" as the_time %}
 
 <h1 class="s">HealthyHipe Report</h1>
    <div class='wrapper'>
-             <div class='header'>
+   <div class='header'>
+ <p class="date">Produced in {{ the_time }}.</p>
    <p class='title'>User Progress Reports </p>
      </div>
 
@@ -77,10 +86,10 @@
            </tr>
 
      {% for w in data.data %}
-         <tr  class="border_bottom"><td scope="row"> {{ w.user.username }}<br> <br> </td>
+         <tr  class="border_bottom"><td scope="row"> <br> {{ w.user.username }}<br> <br> </td>
           <td scope="row"> {{ w.user.get_full_name }} <br> <br> </td>
       <td scope="row"> {{ w.weight_loss_per }} <br><br> </td>
-        <td scope="row"> {{ w.weight_loss }} <br> </td>
+        <td scope="row"> {{ w.weight_loss }} <br> <br> </td>
          <td scope="row" > {{ w.user.userprofileinfo.current_weight }}<br>  </td>
 
      {% endfor %}</tr>
@@ -89,10 +98,11 @@
       <tr >
           <td scope="row"></td>
           <td scope="row"> </td>
-               <td>Mean {{ numbers.avg }} <br>
+
+               <td>   <br>Mean {{ numbers.avg }} <br>
          Stdev {{ numbers.std }} <br>
          medin {{ numbers.med }}</td>
-           <td>Mean {{ numbers.avg2 }} <br>
+           <td>   <br>Mean {{ numbers.avg2 }} <br>
          Stdev {{ numbers.std2 }} <br>
          medin {{ numbers.med2 }}</td>
           <td scope="row"> </td>

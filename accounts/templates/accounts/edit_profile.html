@@ -2,36 +2,40 @@
 {% load staticfiles %}
 {% load i18n %}
 
+
+
+
  {% block profile_content %}
 
 
-<div class="container">
-  <div class="row">
-
+<div class="container" style="margin-right: -50px;">
+  <div class="row" >
     <h1>Edit</h1>
    <form enctype="multipart/form-data" method="POST">
        {% csrf_token %}
          {% for field in user_form_edit.visible_fields %}
   <div class="form-group">
  <label for="{{ field.label }}" class="col-sm-2 control-label">{{ field.label }}</label>
-      {% if field.label == "Password" %}
-       <input type="password" class="form-control" style="width: 35%;"  id="exampleInputPassword1" placeholder="Password">
-      {% else %}
-    <input class="form-control" style="width: 35%;"  placeholder={{ field }} {% endif %}
-  </div>  {% endfor %}
+    <input class="form-control" style="width: 35%;"  placeholder={{ field }}
+  </div>{% endfor %}
    <input type="file" id="btn btn-default" name="profile_pic" class="form-control-file" placeholder="Upload new picture"  id="btn-upload-picture">
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
-
-
    </div> </div>
 
-          <div class="list-group" style="width: 20%;margin-top: -25%;margin-left: 77%;">
-  <a href="{% url 'accounts:edit_profile'  %}" class="list-group-item">Profile</a>
-   <a href="{% url 'accounts:edit_personal_profile' username=user.username %}" class="list-group-item">Personal profile</a>
 
-</div>
+
+
+
+<div class="col-md-3">
+<div class="list-group" style="width:70%; margin-left: 309%;margin-top: -100%;">
+  <a href="/user/settings/profile/edit/" class="list-group-item">Profile</a>
+  <a href="{% url 'accounts:edit_personal_profile' username=user.username %}"  class="list-group-item">Personal</a>
+</div></div>
+
 {% endblock %}
+
+
 
 <Style>
     .form-control {

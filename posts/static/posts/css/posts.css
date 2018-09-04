@@ -18,6 +18,7 @@ ul.stream li {
     padding: 1em 0;
 
 }
+
 .stream-item {
     position: relative;
 }
@@ -73,11 +74,27 @@ ul.stream li div.post p {
 
 ul.stream li div.post div.interaction {
   padding-top: .2em;
+    font-size: 14px;
 }
 
 ul.stream li div.post div.interaction a {
   margin-right: .6em;
-  font-size: .8em;
+  font-size: 14px;
+}
+
+.interaction{
+      font-size: 14px;
+}
+.label-default{
+    background-color: #E3E3E3 !important;
+    padding: 1px 7px !important;
+    border-radius: 15px;
+    font-family: "Open Sans", Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 21px !important;
+    font-weight: 400 !important;
+    color: #333333 !important;
+    text-decoration: none;
 }
 
 .stream-update {
@@ -158,12 +175,13 @@ ul.stream li div.post div.interaction a {
   border-radius: 4px;
   float: left;
   margin-left: 10px;
+        margin-top: -19px;
 }
 
 .comments ol  div {
   margin-left: 45px;
   padding: 0 .8em;
-  font-size: .9em;
+  font-size: 16px
 }
 
 .comments ol li {
@@ -175,7 +193,7 @@ ul.stream li div.post div.interaction a {
   margin: 0;
   margin-left: 45px;
   padding: 0 0 .2em .8em;
-  font-size: .9em;
+  font-size: 16px;
 }
 
 .comments ol  h4 small {

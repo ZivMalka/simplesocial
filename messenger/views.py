@@ -11,6 +11,7 @@ from .models import Thread, ChatMessage
 
 
 class InboxView(LoginRequiredMixin, ListView):
+    """return messeges list of the user"""
     template_name = 'messenger/inbox.html'
     def get_queryset(self):
         return Thread.objects.by_user(self.request.user)
@@ -71,8 +72,6 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
 
 
 class ConversationListView(ThreadView):
-    """CBV to render the inbox, showing an specific conversation with a given
-    user, who requires to be active too."""
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['active'] = self.kwargs["username"]

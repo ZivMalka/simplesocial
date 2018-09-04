@@ -14,8 +14,9 @@
             <th scope="col">Workout Day</th>
             <th scope="col">Created On</th>
             <th></th>
-            <th scope="col">Actions</th>
             <th></th>
+                <th scope="col">Actions</th>
+             <th></th>
         </tr>
         </thead>
         <tbody>
@@ -29,15 +30,16 @@
             <td><a href=" {{ workout.get_absolute_url }} "><button class="btn btn-info">View</button></a></td>
             <td><a href="{% url 'workout:edit_workout' workout.id workout.user.username %}"><button class="btn btn-warning">Edit</button></a></td>
             <td><a href="{% url 'workout:delete_workout' workout.id workout.user.username %}"><button class="btn btn-danger" onclick="return confirm('Are you sure you wish to delete this Workout plan?')">Delete</button></a></td>
+          <td> <a href="{% url 'workout:add_workout' username=workout.user.username %}"> <button type="button" class="btn btn-success">
+                <span class="glyphicon glyphicon-plus"></span>&nbsp; Add Workout Day</button></a></td>
+
         </tr>
         {% endfor %}
         </tbody>
          <tr>
         <td class="">
-            <a href="{% url 'workout:add_workout' %}">
-                <button type="button" class="btn btn-success">
-                    <span class="glyphicon glyphicon-plus"></span>&nbsp; Add Workout Day
-                </button>
+
+
             </a>
          </td>
     </tr>

@@ -1,0 +1,115 @@
+<html>
+<head>
+  <title>Test</title>
+  <style>
+    .s {
+      background-color: #f7f7f7;
+    }
+      th{
+          text-align:center;
+
+      }
+      tr{
+                  text-align:center;
+      }
+      table {
+        font-size:12px;
+          width:200px;
+
+      }
+         .title span {
+                 color: #007cae;
+             }
+      body {
+                 font-weight: 200;
+                 font-size: 14px;
+             }
+             .header {
+                 font-size: 20px;
+                 font-weight: 100;
+                 text-align: center;
+                 color: #007cae;
+             }
+             .title {
+                 font-size: 22px;
+                 font-weight: 100;
+                /* text-align: right;*/
+                padding: 10px 20px 0px 20px;
+             }
+             .title span {
+                 color: #007cae;
+             }
+             .details {
+                 padding: 10px 20px 0px 20px;
+                 text-align: left !important;
+                 /*margin-left: 40%;*/
+             }
+             .hrItem {
+                 border: none;
+                 height: 1px;
+                 /* Set the hr color */
+                 color: #333; /* old IE */
+                 background-color: #fff; /* Modern Browsers */
+             }
+             .date{
+                  font-size: 12px;
+                 font-weight: 100;
+                 text-align: left;
+                 color: black;
+             }
+      .border_bottom {
+  border-bottom:1pt solid black;
+}
+  </style>
+</head>
+<body>
+{% load custom_tags %}
+{% current_time "%Y-%m-%d %I:%M %p" as the_time %}
+
+<h1 class="s">Healthyhipe Report</h1>
+   <div class='wrapper'>
+   <div class='header'>
+ <p class="date">Produced in {{ the_time }}.</p>
+   <p class='title'>{{ type }}, Activity Log Reports </p>
+     </div>
+
+
+     <hr class='hrItem' />
+
+<table >
+           <tr  class="border_bottom">
+          <th scope="col">Username  </th>
+          <th scope="col">Name</th><br>
+          <th scope="col">Number of follows  </th>
+          <th scope="col">Number of likes </th>
+         <th scope="col">Number of posts </th>
+               <th scope="col">Number of Comments </th>
+                   <th scope="col">Total Acitvity </th>
+           </tr>
+
+     {% for w in data.data %}
+         <tr  class="border_bottom"><td scope="row"> <br> {{ w.label.username}}<br> <br> </td>
+        <td scope="row"> {{ w.label.get_full_name }} <br> <br> </td>
+         <td scope="row"> {{ w.follow }} <br> <br> </td>
+         <td scope="row"> {{ w.like }} <br> <br> </td>
+           <td scope="row"> {{ w.post }} <br><br> </td>
+           <td scope="row"> {{ w.comment}} <br><br> </td>
+      <td scope="row">   <br>{{ w.value }} <br><br>
+      <br>
+
+      </td>
+
+
+
+     {% endfor %}</tr>
+
+
+
+
+
+</table>
+<h2> Avrage of total activity by all users:  {{avg }} </h2>
+
+
+</body>
+</html>

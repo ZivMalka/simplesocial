@@ -24,11 +24,12 @@
                   {% endif %}
               </a>
 		<small>	<time class="time" ><a style="color: #616770;" href="{% url 'posts:single' username=post.user.username pk=post.pk %}">
-                {{ post.created_at| date:"F Y" }}</a>
+                {{ post.created_at | naturaltime  }}</a>
             </time>
 			{% if post.group %}
 			<span class="group-name">in <a style="color: #616770;" href="{% url 'groups:single' slug=post.group.slug %}">{{ post.group.name }}</a></span>
 			{% endif %}</small>
+
      {% if user.is_authenticated and post.user == user and not hide_delete %}
 				<a href="{% url 'posts:delete' pk=post.pk %}" title="delete" class="btn btn-simple">
 					   <span class="glyphicon glyphicon-remove remove-feed" title="{% trans 'Click to remove this feed' %}"> </span>
@@ -49,17 +50,22 @@
         {% if user in post.likes.all %}
 
          	<a href="#" style="text-decoration: none;" class="like unlike" data-href='{{ post.get_api_like_url }}' data-likes='{{ post.likes.count }}' href='{{ post.get_like_url }}'>
-              {{ post.likes.count }}
-                <span class="text">{% trans 'Unlike' %}</span>
+               <span class="glyphicon glyphicon-thumbs-up"></span> <span class="like-count" id="u"><a class="like-count1" data-toggle="modal" data-target="#myModal{{ post.pk }}"> {{ post.likes.count }} <span> {% trans 'Unlike' %}
+
           </a>
         {% else %}
         	<a href="#" style="text-decoration: none;" class="like" data-href='{{ post.get_api_like_url }}' data-likes='{{ post.likes.count }}' href='{{ post.get_like_url }}'>
-          {{ post.likes.count }}
-            <span class="text">{% trans 'Like' %}</span>
+        <span class="glyphicon glyphicon-thumbs-up"></span> <span class="like-count" id="u"><a class="like-count1" data-toggle="modal" data-target="#myModal{{ post.pk }}"> {{ post.likes.count }} <span> {% trans 'Like' %}
           </a>
         {% endif %}
 
-          <span class="like-count" id="u"><a class="like-count1" data-toggle="modal" data-target="#myModal{{ post.pk }}">see all likes</a> <span>
+  {% if post.user.is_superuser %}
+            <span class="label label-default">Administrator</span>
+            {% endif %}
+              <a href="#" style="text-decoration: none;" class="comment">
+             <span class="glyphicon glyphicon-comment"></span> {% trans 'Comment' %}
+            (<span class="comment-count">{{ post.comment.count }}</span>)
+             </a>
                   <!-- Modal -->
   <div class="modal" id="myModal{{ post.pk }}" role="dialog">
     <div class="modal-dialog">
@@ -81,18 +87,13 @@
         </div>    </div>
 
 
-              <a href="#" style="text-decoration: none;" class="comment">
-             <span class="glyphicon glyphicon-comment"></span> {% trans 'Comment' %}
-            (<span class="comment-count">{{ post.comment.count }}</span>)
-             </a>
-
        </div>
 
  <div class="comments" style="display: none;">
   <form role="form" method="post" action="#" id="comment-form">
  {% csrf_token %}
  <input type="hidden" class="post-id" name="post_id" value="{{ post.pk }}"  onsubmit="return false">
-   <input type="text" class="form-control input-sm" placeholder="{% trans 'Write a comment...' %}" name="content" maxlength="255" id="comment-text">
+   <input type="text" class="form-control input-sm" placeholder="{% trans 'leave a comment...' %}" name="content" maxlength="255" id="comment-text">
  </form>
 
  <ol class="clearfix">
@@ -103,6 +104,13 @@
   <span class="glyphicon glyphicon-remove remove-feed" title="{% trans 'Click to remove this comment' %}"></span>
              {% endif %}
      <div>{{ comment.content }}</div>
+      <a href="{% url 'accounts:profile' username=post.user.username %}">
+          {% if  comment.user.userprofileinfo.profile_pic %}
+          <img src ="{{ comment.user.userprofileinfo.profile_pic.url }}" class="user-comment">
+               {% else %}
+                       <img src="/media/user_pic/user.jpg" class="user-comment">
+                  {% endif %}
+    </a>
     <h4>
       <a href="{% url 'accounts:profile' username=post.user.username %}">
         {{ comment.user.username }}

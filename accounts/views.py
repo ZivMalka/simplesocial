@@ -1,25 +1,18 @@
-from h5py.h5 import H5PYConfig
-
-from accounts.forms import UserForm, UserProfileInfoForm,  EditProfileForm, UserPersonalProfileInfoForm, WeightHistoryForm
+from accounts.forms import UserProfileInfoForm,  EditProfileForm, \
+    UserPersonalProfileInfoForm, WeightHistoryForm, FilterDate, UserCreateForm
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.views.generic import  View, TemplateView, ListView, DeleteView
-from django.shortcuts import render
-from django.views import generic
 from . import models
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from .models import UserProfileInfo, WeightList
 from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse
-from django.contrib.postgres.fields import ArrayField
-from groups.models import GroupMember
+from django.urls import reverse, reverse_lazy
 from accounts.fusioncharts import FusionCharts
-from accounts.forms import FilterDate
 from nutrition.models import Nutrition, Plan
 import json
 from datetime import datetime, time
@@ -28,67 +21,47 @@ from posts.models import Post
 from activities.models import Comment
 from groups.models import Group,GroupMember
 from django.contrib.auth.mixins import LoginRequiredMixin
+from . import forms
+#Django Auth
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.forms import UserCreationForm
+from django.views.generic import CreateView
 
 
-def manager_control(request):
-    if request.user.is_superuser:
-        users = User.objects.all()
-        return render(request, 'accounts/manager_control.html', {'users': users})
-    else:
-        return redirect('/')
-
-
-def register(request):
-    registered = False
-    if request.method == "POST":
-        user_form = UserForm(data=request.POST)
-        if user_form.is_valid():
-            username = user_form.cleaned_data.get('username')
-            email = user_form.cleaned_data.get('email')
-            password = user_form.cleaned_data.get('password')
-            User.objects.create_user(username=username, password=password,email=email)
-            user = authenticate(username=username, password=password)
-            registered = True
-            login(request, user)
-            return render(request, 'accounts/signup.html', {'user_form': user_form,'registered': registered})
-        else:
-            return render(request, 'accounts/signup.html')
-    else:
-        user_form = UserForm()
-        profile_form = UserProfileInfoForm()
-        return render(request, 'accounts/signup.html',
-                      {'user_form': user_form,
-                       'profile_form': profile_form,
-                       'registered': registered})
-
-
-def upload_pic(request):
+def signup(request):
+    """
+    Sign up page
+    :param request:
+    :return to Homepage
+    """
 
     if request.method == 'POST':
-        form = UserProfileInfoForm(request.POST, request.FILES)
+        form =  UserCreateForm(request.POST)
         if form.is_valid():
-            profile = form.save(commit=False)
-            if 'profile_pic' in request.FILES:
-                form.profile_pic = request.FILES['profile_pic']
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('home')
+    else:
+        form =  UserCreateForm()
+    return render(request, 'accounts/signup.html', {'form': form})
 
-            m = get_object_or_404(UserProfileInfo, user=request.user)
-            m.profile_pic = form.cleaned_data['profile_pic']
-            m.save()
-            return HttpResponseRedirect(reverse("accounts:profile", kwargs={"username": request.user.username}))
-        else:
-            form = UserProfileInfoForm(request.POST, request.FILES)
-            return render(request, 'accounts/profile.html',{'form': form})
 
 @login_required
 def profile(request):
+    '''return user progile page'''
     args = {'user' : request.user }
     return render(request, 'accounts/profile.html', args)
 
 
+#Friends List
 def get_users(request):
     users = User.objects.all()
     return render (request, 'accounts/users.html', {'users':users})
 
+#edit user profile
 @login_required
 def edit_profile(request):
     if request.user.is_authenticated:
@@ -118,54 +91,143 @@ def edit_profile(request):
     else:
         return HttpResponse("No access to this page")
 
-def chart_visualsion(request, username):
+
+def filter(request):
+    """
+    get input from the user and return the output
+    :param request: data
+    :return: date
+    """
+    if request.method == 'POST':
+        form = FilterDate(request.POST, instance=request.user.userprofileinfo)
+        if form.is_valid():
+            date = form.cleaned_data.get('timestamp')
+
+    elif request.GET.get('year'):
+        date = (request.GET.get('year'))
+
+    else:
+        date = datetime.now()
+
+    return date
+
+def manager_control(request):
+    """
+    get the manage control page for the adminstrator
+    :param request: WSGIReques
+    :return: render
+    """
+    if request.user.is_superuser:
+        users = User.objects.all()
+        return render(request, 'accounts/manager_control.html', {'users': users})
+
+
+#Dashboard Admin
+def visual_manage_control(request):
+    if request.user.is_superuser:
+        date = filter (request)
+        dataSource = list_of_activity_log(date)
+        content7 = activity_log_all(request, dataSource)
+        content4 = WeightLossPercentage(request)
+        content5 = weight_lossDistrbotion(request)
+        content8 = activity_log_by_type(request)
+        return render(request, 'accounts/manage_graph.html',
+                      {'output4': content4, 'output5': content5, 'output7': content7, 'output8': content8})
+
+
+
+def list_of_activity_log(date):
+    """
+    Get the activity log of all the users
+    :param date:
+    :return: dict
+    """
+    dataSource = {}
+    dataSource['data'] = []
+
+    if isinstance(date, str):
+        for user in User.objects.all():
+                data = {}
+                data['label'] = user.username
+                data['value'] = Post.objects.filter(user=user, created_at__year=date).count() + \
+                                Post.objects.filter(likes=user, date_of_like__year=date).count() + \
+                                Comment.objects.filter(user=user, timestamp__year=date).count() + \
+                                GroupMember.objects.filter(user=user, date__year=date).count()
+                dataSource['data'].append(data)
+    else:
+        for user in User.objects.all():
+            month = myconverter_month(date)
+            year = myconverter_year(date)
+            data = {}
+            data['label'] = user.username
+            data['value'] = Post.objects.filter(user=user, created_at__month=month,
+                                                created_at__year=year).count() + \
+                            Post.objects.filter(likes=user, date_of_like__month=month,
+                                                date_of_like__year=year).count() + \
+                            Comment.objects.filter(user=user, timestamp__month=month,
+                                                   timestamp__year=year).count() + \
+                            GroupMember.objects.filter(user=user, date__month=month,
+                                                       date__year=year).count()
+            dataSource['data'].append(data)
+    return dataSource
+
+
+
+def list_of_weight_loss(date, user):
+
+    if isinstance(date, str):
+        list = user.userprofileinfo.weight_history.filter(timestamp__year=date)
+    else:
+        month = myconverter_month(date)
+        year = myconverter_year(date)
+        list = user.userprofileinfo.weight_history.filter(timestamp__year=year, timestamp__month=month)
+    return list;
+
+
+def chart_user(request, username):
+    """
+    render all the graphs of the user, in the user profile page
+    :param request:
+    :param username:
+    :return:
+    """
     if request.user.username == username or request.user.is_superuser:
+        date = filter(request)
         user = User.objects.get(username=username)
-        if request.method == 'POST':
-            form = FilterDate(request.POST, instance=request.user.userprofileinfo)
-            if form.is_valid():
-                date = form.cleaned_data.get('timestamp')
-                month = myconverter_month(date)
-                year = myconverter_year(date)
-                list = user.userprofileinfo.weight_history.filter(timestamp__year=year, timestamp__month=month)
-                plans = Plan.objects.filter(user=user, date__month=month, date__year=year)
-
-
-        elif request.GET.get('year'):
-            year = (request.GET.get('year'))
-            list = user.userprofileinfo.weight_history.filter(timestamp__year=year)
-            plans = Plan.objects.filter(user=user, date__year=year)
-            month = None
-
-
+        if isinstance(date, str):
+            plans = Plan.objects.filter(user=user, date__year=date)
         else:
-            date = datetime.now()
             month = myconverter_month(date)
             year = myconverter_year(date)
             plans = Plan.objects.filter(user=user, date__month=month, date__year=year)
-            list = user.userprofileinfo.weight_history.filter(timestamp__year=year, timestamp__month=month)
 
+        list = list_of_weight_loss(date, user)
         content1 = chart(request, list)
         content2 = chart_bodyfat(request, list)
         content3 = chart_calories(request, plans)
-        content4 = WeightLossPercentage(request, username)
-        content5=weight_lossDistrbotion(request, username)
+        content5=weight_lossDistrbotion(request)
         content6=activity_log_chart(request, username)
-        content7 = activity_log_all(request, month, year)
+
         return render(request, 'accounts/Graph.html',
                       {"user": user, 'output': content1, 'output2': content2, 'output3': content3,
-                       'output4': content4, 'output5': content5, 'output6': content6, 'output6': content6,'output7': content7})
+                        'output5': content5, 'output6': content6, 'output6': content6})
 
     else:
         return HttpResponseRedirect(reverse("accounts:profile", kwargs={"username": request.user.username}))
 
 def calc_bmi(user_P):
+    """calculate bmi
+    cal
+    :param user_P:
+    :return: int
+    """
     if (user_P.height is None or user_P.current_weight is None):
         bmi = "Empty"
     else:
         bmi = round((user_P.current_weight) / (user_P.height) ** 2, 2)
     return bmi
 
+#perosonal profile
 @login_required
 def personal_profile(request, username):
     if request.user.username == username or request.user.is_superuser:
@@ -176,7 +238,7 @@ def personal_profile(request, username):
     else:
         return HttpResponse("No access to this page")
 
-
+#profile
 @login_required
 def profile(request, username):
         user = User.objects.get(username=username)
@@ -189,6 +251,7 @@ def profile(request, username):
 
 
 @login_required
+#edit
 def edit_personal_profile(request, username):
     if request.user.is_superuser:
         if request.method == 'POST':
@@ -217,17 +280,16 @@ def edit_personal_profile(request, username):
     else:
         return HttpResponse("No access to this page")
 
-
+#delete
 def delete_weight(request, pk, username):
     user = User.objects.get(username=username)
     user_P = UserProfileInfo.objects.get(user=user)
-#    d = WeightList.objects.filter(weight_list__user_id=user.id, weight=weight, timestamp=date)
     d= WeightList.objects.get(id=pk)
     d.delete()
     return HttpResponseRedirect(reverse("accounts:personal_profile", kwargs={"username": user.username }))
 
 
-
+#Adding a new weighing
 def add_weight(request, username):
     if request.user.is_superuser or request.user.username == username:
         if request.method == 'POST':
@@ -254,7 +316,13 @@ def add_weight(request, username):
     else:
             return HttpResponse("No access to this page")
 
+#
 def get_groups(request, username):
+    """
+    :param request:
+    :param username:
+    :return: HttpResponse - get all the groups the user is following
+    """
     user = User.objects.get(username=request.user.username)
     my_groups = GroupMember.objects.filter(user=user)
     args = {'my_groups' : my_groups}
@@ -275,7 +343,13 @@ def myconverter_year(o):
     return "{}".format(o.year)
 
 # The `chart` function is defined to generate Column 2D chart from database.
+#chart of wieght loss
 def chart(request, list):
+    """
+    :param request:
+    :param list:
+    :return: Chart of wieght loss for an individual user
+    """
     # Chart data is passed to the `dataSource` parameter, as dict, in the form of key-value pairs.
     dataSource = {
     }
@@ -300,7 +374,7 @@ def chart(request, list):
     return (column2D.render())
 
 
-
+#Chart of body fat loss for an individual user
 def chart_bodyfat(request, list):
     # Chart data is passed to the `dataSource` parameter, as dict, in the form of key-value pairs.
     dataSource = {}
@@ -327,7 +401,7 @@ def chart_bodyfat(request, list):
     return (column2D.render())
 
 
-
+#Chart of calories intake for an individual user
 def chart_calories(request, plans):
     # Chart data is passed to the `dataSource` parameter, as dict, in the form of key-value pairs.
     dataSource = {}
@@ -351,8 +425,8 @@ def chart_calories(request, plans):
     column2D = FusionCharts("column2d", "ex3", "600", "350", "chart-3", "json", dataSource)
     return (column2D.render())
 
-
-def WeightLossPercentage(request, username):
+#Calculate the percentage of weight loss for each user and return the graph with results
+def WeightLossPercentage(request):
     # Chart data is passed to the `dataSource` parameter, as dict, in the form of key-value pairs.
     dataSource = {}
     dataSource['chart'] = {
@@ -362,7 +436,7 @@ def WeightLossPercentage(request, username):
         "numberPrefix": "%",
         "setadaptiveymin": "1",
         "theme": "fint",
-        "palettecolors": "#FF2DC6,#632289,#FFAE00",
+        "palettecolors": "#FF2DC6,#632289,#FFAE00,#D208F7,#6D08F7",
     }
     dataSource['data'] = []
     for user in User.objects.all():
@@ -373,8 +447,8 @@ def WeightLossPercentage(request, username):
     column2D = FusionCharts("column2d", "ex4", "600", "350", "chart-4", "json", dataSource)
     return (column2D.render())
 
-# Distrbotion
-def weight_lossDistrbotion(request, username):
+#Distribution of percent weight loss for all users
+def weight_lossDistrbotion(request):
     # Chart data is passed to the `dataSource` parameter, as dict, in the form of key-value pairs.
     dataSource = { }
     dataSource['chart'] = {
@@ -385,39 +459,40 @@ def weight_lossDistrbotion(request, username):
         "valueFontSize": "15",
         "palettecolors": "#0075c2",
     }
+    #ranges of the distrbution
     labels = ["0","1-9", "10-19", "20-29", "30-39", "40-49", "50"]
     negatives =  ["0","-1--9","-10-19","-20--29","-30-39","-40--49","-50"]
     dataSource['data'] = []
     # Iterate through the data in `Revenue` model and insert in to the `dataSource['data']` list.
-    if request.user.username == username or request.user.is_superuser:
-                arr = []
-                for user in User.objects.all():
-                    index = calc_total_loss_per(user, user.userprofileinfo.current_weight)/10
-                    if len(str(abs(index)))<2:
-                        arr.append(index)
-                    else:
-                        index = (math.ceil(calc_total_loss_per(user, user.userprofileinfo.current_weight)/10))
-                        arr.append(index)
+
+    arr = []
+    for user in User.objects.all():
+        index = calc_total_loss_per(user, user.userprofileinfo.current_weight)/10
+        if len(str(abs(index)))<2:
+            arr.append(index)
+        else:
+            index = (math.ceil(calc_total_loss_per(user, user.userprofileinfo.current_weight)/10))
+            arr.append(index)
 
 
-                for i in range (negatives.__len__()-1, -1,-1):
-                    if i==0:
-                        continue
-                    data = {}
-                    data['label'] = negatives[i]
-                    data['value'] = arr.count(-i)
-                    dataSource['data'].append(data)
+    for i in range (negatives.__len__()-1, -1,-1):
+        if i==0:
+            continue
+        data = {}
+        data['label'] = negatives[i]
+        data['value'] = arr.count(-i)
+        dataSource['data'].append(data)
 
-                for i in range(0, labels.__len__()):
-                    data = {}
-                    data['label'] = labels[i]
-                    data['value'] = arr.count(i)
-                    dataSource['data'].append(data)
-                    # Create an object for the Column 2D chart using the FusionCharts class constructor
-                column2D = FusionCharts("column2d", "ex5", "600", "350", "chart-5", "json", dataSource)
-                return (column2D.render())
+    for i in range(0, labels.__len__()):
+        data = {}
+        data['label'] = labels[i]
+        data['value'] = arr.count(i)
+        dataSource['data'].append(data)
+        # Create an object for the Column 2D chart using the FusionCharts class constructor
+    column2D = FusionCharts("column2d", "ex5", "600", "350", "chart-5", "json", dataSource)
+    return (column2D.render())
 
-# chart activity of Individual user
+# chart activity-log of Individual user
 def activity_log_chart(request, username):
     # Chart data is passed to the `dataSource` parameter, as dict, in the form of key-value pairs.
     dataSource = {}
@@ -428,7 +503,7 @@ def activity_log_chart(request, username):
         "bgColor": "#FFFFFF",
         "theme": "fint",
         "valueFontSize": "15",
-        "palettecolors": "#0075c2,#06AF8F,#08F73A",
+        "palettecolors": "#0075c2,#FC4242, #0075c2,#06AF8F ",
     }
 
     dataSource['data'] =[]
@@ -444,37 +519,57 @@ def activity_log_chart(request, username):
     column2D = FusionCharts("column2d", "ex6", "600", "350", "chart-6", "json", dataSource)
     return (column2D.render())
 
-#chart avtivity of all the users
-def activity_log_all(request, month, year):
+#chart avtivity-log of all the users
+def activity_log_all(request, dataSource):
     # Chart data is passed to the `dataSource` parameter, as dict, in the form of key-value pairs.
-    dataSource = {}
+
     dataSource['chart'] = {
-        "caption": "Activity Log: Posts, comments and likes distribution",
+        "caption": "Activity Log",
+        "subCaption": "Posts, comments, group follows and likes distribution",
         "xAxisName": "Month",
-        "bgColor": "#FFFFFF",
         "theme": "fint",
         "valueFontSize": "15",
         "showlegend": "1",
         "legendposition": "bottom",
     }
-    dataSource['data'] =[]
-    for user in User.objects.all():
-            data = {}
-            data['label'] = user.username
-            data['value'] = Post.objects.filter(user=user, created_at__month=month, created_at__year=year).count() + \
-                            Post.objects.filter(likes=user,  date_of_like__month=month, date_of_like__year=year).count() + \
-                            Comment.objects.filter(user=user, timestamp__month=month, timestamp__year=year).count() + \
-                            GroupMember.objects.filter(user=user, date__month=month, date__year=year).count()
-
-            dataSource['data'].append(data)
-    column2D = FusionCharts("pie2d", "ex7", "600", "350", "chart-7", "json", dataSource)
+    column2D = FusionCharts("pie2d", "ex7", "600", "450", "chart-7", "json", dataSource)
     return (column2D.render())
 
+
+def activity_log_by_type(request):
+    '''return chart of numbes of activies by type'''
+    dataSource = {}
+    dataSource['chart'] = {
+         "caption": "Activity Distribution by type",
+         "subcaption": "For all users in 2018",
+
+        "defaultcenterlabel": "Social app Distribution",
+        "aligncaptionwithcanvas": "0",
+        "captionpadding": "0",
+        "decimals": "1",
+        "theme": "fint",
+        "valueFontSize": "15",
+
+    }
+
+    dataSource['data'] = []
+    lables = ["post", "Comments", "Groups", "likes"]
+    values = [Post.objects.all().count(), Comment.objects.all().count(), Group.objects.all().count(),Post.calculate_likes2()]
+    for i in range(lables.__len__()):
+        data = {}
+        data['label'] = lables[i]
+        print(data['label'])
+        data['value'] = values[i]
+        dataSource['data'].append(data)
+
+    column2D = FusionCharts("doughnut2d", "ex8", "600", "450", "chart-8", "json", dataSource)
+    return (column2D.render())
 
 
 from accounts.printing import MyPrint
 from io import BytesIO
 
+#export report of users names
 def print_users(request):
     # Create the HttpResponse object with the appropriate PDF headers.
     response = HttpResponse(content_type='application/pdf')
@@ -487,7 +582,7 @@ def print_users(request):
 
     response.write(pdf)
     return response
-
+#Total weight loss in KG
 def calc_total_loss(user, current):
     total = 0
     for key in user.userprofileinfo.weight_history.all():
@@ -496,7 +591,7 @@ def calc_total_loss(user, current):
         else:
            break
     return total
-
+#Calculation of weight loss percentages
 def calc_total_loss_per(user, current):
     total = 0
     for k in user.userprofileinfo.weight_history.all():
@@ -512,7 +607,7 @@ from django.http import HttpResponse
 from django.views.generic import View
 from accounts.printing import render_to_pdf #created in step 4
 
-
+#Reports page
 def generate_reports(request):
     GeneratePdf_of_all_user(request)
     return render(request, 'accounts/reports.html')
@@ -521,6 +616,7 @@ import numpy as np
 from statistics import mean, stdev, median
 from decimal import Decimal as d
 
+#progress report of all users: total  weight loss in kg and percentages
 def GeneratePdf_of_all_user(request):
     if request.user.is_superuser:
         dataSource = {}
@@ -538,7 +634,6 @@ def GeneratePdf_of_all_user(request):
         std = round(stdev(numbers), 2)
         med = round(median(numbers), 2)
         numbers.clear()
-      #  numbers = {'avg': avg, 'std': std, 'med': med}
 
         for data in dataSource['data']:
             numbers.append((data.get('weight_loss')))
@@ -557,33 +652,13 @@ def GeneratePdf_of_all_user(request):
     else:
         return render(request, 'accounts/reports.html')
 
+#progress report of one user + filter by month & year
 def  GeneratePdf(request, username):
         user = User.objects.get(username=username)
         dataSource = {}
         dataSource['data'] = []
-
-        if request.method == "POST":
-            form = FilterDate(request.POST, instance=request.user.userprofileinfo)
-            if form.is_valid():
-
-                time = form.cleaned_data.get('timestamp')
-                month = myconverter_month(time)
-                year = myconverter_year(time)
-                list = user.userprofileinfo.weight_history.filter(timestamp__year=year, timestamp__month=month)
-                type  = time
-                if not list:
-
-                    return render(request, 'accounts/reports.html')
-
-        elif request.GET.get('year'):
-                year = (request.GET.get('year'))
-                list = user.userprofileinfo.weight_history.filter(timestamp__year=year)
-                type = year
-                if not list :
-                    return render(request, 'accounts/reports.html')
-        else:
-                return render(request, 'accounts/reports.html')
-
+        date = filter(request)
+        list = list_of_weight_loss(date, user)
         for k in list:
                 data = {}
                 data['body_fat']= k.body_fat
@@ -602,5 +677,32 @@ def  GeneratePdf(request, username):
 
         return HttpResponse(pdf, content_type='application/pdf')
 
+#Activity log report of all the users
+def ActivityLogReport(request):
+    if request.user.is_superuser:
+        dataSource = {}
+        numbers= []
+        dataSource['data'] = []
+        if request.method == "POST":
+            form = FilterDate(request.POST, instance=request.user.userprofileinfo)
+            if form.is_valid():
+                time = form.cleaned_data.get('timestamp')
+                month = myconverter_month(time)
+                year = myconverter_year(time)
+                type = time.strftime('%B') + " " + year
+                for user in User.objects.all():
+                    data = {}
+                    data['label'] = user
+                    data['post'] = Post.objects.filter(user=user, created_at__month=month, created_at__year=year).count()
+                    data ['like'] = Post.objects.filter(likes=user, date_of_like__month=month, date_of_like__year=year).count()
+                    data['follow'] = GroupMember.objects.filter(user=user, date__month=month, date__year=year).count()
+                    data['comment'] =  Comment.objects.filter(user=user, timestamp__month=month, timestamp__year=year).count()
+                    data['value'] = data['post'] + data['like'] + data['comment'] + data['follow']
+                    dataSource['data'].append(data)
+                    numbers.append(data['value'])
 
+            avg = round(mean(numbers), 2)
+            pdf = render_to_pdf('accounts/Activity_log_report.html', {'data': dataSource, 'avg' : avg, 'type': type})
+
+            return HttpResponse(pdf, content_type='application/pdf')
 

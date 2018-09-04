@@ -56,8 +56,9 @@
  </form>
 </li>
            <br>
+
   <li class="list-group-item">
-<form role="form" method="post" action="#">
+<form role="form" method="post" action="{% url 'accounts:activity_log_report' %}">
  {% csrf_token %}
     <p class="report">Activity </p>
            <label for="startDate">Filter by month: </label>

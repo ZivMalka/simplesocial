@@ -12,6 +12,9 @@ def no_future(value):
 
 
 class Appointment(models.Model):
+    """
+    Class Appointment
+    """
     user = models.ForeignKey(User, related_name="appointment", on_delete=models.CASCADE)
     sender = models.ForeignKey(User, related_name="sender", on_delete=models.CASCADE, null=True)
     task = models.CharField(max_length=255)
@@ -20,8 +23,8 @@ class Appointment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
     def __str__(self):
-
         return self.task
 
+    #return all the appointments of the user
     def get_absolute_url(self):
         return reverse('appointments:appoint', kwargs={"username": self.user.username})

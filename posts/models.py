@@ -26,6 +26,7 @@ from activities.models import Comment
 
 
 class Post(models.Model):
+    '''post model'''
     user = models.ForeignKey(User, related_name="posts", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now=True)
     message = models.TextField()
@@ -41,12 +42,15 @@ class Post(models.Model):
         return self.message
 
     def save(self, *args, **kwargs):
+        """
+        save post
+        :param args:
+        :param kwargs:
+        :return:
+        """
         self.slug = slugify(self.message)
         self.message_html = misaka.html(self.message)
         super().save(*args, **kwargs)
-
-  #  def get_absolute_url(self):
-   #     return reverse("posts:single", kwargs={"slug": self.slug})
 
 
     def get_absolute_url(self):
@@ -73,13 +77,16 @@ class Post(models.Model):
         return reverse("posts:like-api-toggle", kwargs={"pk": self.pk})
 
     def calculate_likes(self):
-        likes = Post.objects.filter(post=self.pk).count()
-        self.likes = likes
-        self.save()
-        return self.likes
+        '''calc likes'''
+        likes = Post.objects.filter(pk=self.pk).count()
+        return likes
 
+    def calculate_likes2():
+        count= 0
+        for like in Post.objects.all():
+            count = count + like.calculate_likes()
 
-
+        return count
 
 
 

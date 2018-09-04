@@ -6,19 +6,27 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib import messages
 from notify.signals import notify
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
-
-
-def add_workout(request):
+def add_workout(request, username):
+    """
+    New workout plan
+    :param request:
+    return
+    """
     if request.user.is_superuser:
         form = WorkoutForm(request.POST or None)
         if form.is_valid():
-            workout = form.save(commit=False)
-            workout.save()
+            user = User.objects.get(username=username)
+            day = form.cleaned_data.get('day')
+            title = form.cleaned_data.get('title')
+            date = form.cleaned_data.get('creation_date')
+            workout = Workout.objects.create(user=user, day=day, title=title, creation_date=date)
             notify.send(request.user, recipient=workout.user, actor=request.user, verb='Added a new workout.',
                         nf_type='plan_by_one_user', target=workout)
             messages.success(request, 'Workout Day Added!')
-            return render(request, 'workout/view.html', {'workout': workout})
+            return HttpResponseRedirect(reverse("workout:overview", kwargs={"username": workout.user.username}))
         context = {
             "form": form,
         }
@@ -27,9 +35,15 @@ def add_workout(request):
     else:
         return HttpResponse("Only authorized user can add workout plans")
 
-
+    return redirect('/')
 
 def add_set(request, workout_id):
+    """
+    add new set to workout
+    :param request:
+    :param workout_id:
+    :return HttpResponse redirect to set list
+    """
     if request.user.is_superuser:
         form = SetForm(request.POST or None)
         workout = get_object_or_404(Workout, pk=workout_id)
@@ -47,7 +61,8 @@ def add_set(request, workout_id):
             set.workout = workout
             messages.success(request, 'Exercise Added!')
             set.save()
-            return render(request, 'workout/view.html', {'workout': workout})
+            return HttpResponseRedirect(reverse("workout:view", kwargs={'workout_id': workout.id}))
+
         context = {
             'workout': workout,
             'form': form,
@@ -56,6 +71,7 @@ def add_set(request, workout_id):
 
 
 def delete_workout(request, workout_id, username):
+    '''delete workout plan'''
     if request.user.is_superuser:
         workout = Workout.objects.get(pk=workout_id)
         workout.delete()
@@ -63,6 +79,7 @@ def delete_workout(request, workout_id, username):
 
 
 def delete_set(request, workout_id, set_id):
+    '''delete'''
     if request.user.is_superuser:
         workout = get_object_or_404(Workout, pk=workout_id)
         set = Set.objects.get(pk=set_id)
@@ -78,10 +95,11 @@ def view(request, workout_id):
 
 
 def overview(request, username):
+    '''return all workouts of the user'''
     if request.user.username == username or request.user.is_superuser:
         user = User.objects.get(username=username)
         workouts = Workout.objects.filter(user=user)
-        return render(request, 'workout/overview.html', {'workouts': workouts})
+        return render(request, 'workout/overview.html', {'workouts': workouts, 'user': user})
 
 
 def edit_set(request,workout_id , set_id, username):
@@ -107,6 +125,13 @@ def edit_set(request,workout_id , set_id, username):
 
 
 def edit_workout(request, workout_id, username):
+    """
+
+    :param request:
+    :param workout_id:
+    :param username:
+    :return:
+    """
     workout = get_object_or_404(Workout, pk=workout_id)
     form = WorkoutForm(request.POST or None, instance=workout)
     if form.is_valid():
@@ -116,6 +141,7 @@ def edit_workout(request, workout_id, username):
     return render(request, 'workout/edit_workout.html', {'form': form})
 
 def work_list_manage(request, username):
+        '''return the list of workout of user in the manage control'''
         user = User.objects.get(username=username)
         workouts = Workout.objects.filter(user=user)
         return render(request, 'workout/work_list_manage.html', {'workouts': workouts})

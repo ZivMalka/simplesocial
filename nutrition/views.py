@@ -6,8 +6,10 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.contrib import messages
 from notify.signals import notify
-
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 def create_plan(request):
+    '''create new plan'''
     if request.user.is_superuser:
         form = PlanForm(request.POST or None)
         if form.is_valid():
@@ -17,7 +19,7 @@ def create_plan(request):
             notify.send(request.user, recipient=plan.user, actor=request.user, verb='Added a new plan.',
                         nf_type='plan_by_one_user', target=plan)
 
-            return render(request, 'nutrition/detail.html', {'plan': plan})
+            return HttpResponseRedirect(reverse("nutrition:detail", kwargs={"plan_id": plan.id}))
         context = {
             "form": form,
         }
@@ -27,6 +29,7 @@ def create_plan(request):
         return HttpResponse("Only authorized user can add nutrition meals")
 
 def create_nutrition(request, plan_id):
+    '''create new nutrition'''
     if request.user.is_superuser:
         form = NutritionForm(request.POST or None)
         plan = get_object_or_404(Plan, pk=plan_id)
@@ -39,13 +42,12 @@ def create_nutrition(request, plan_id):
                         'form': form,
                         'error_message': 'You already added that description',
                     }
-                    return render(request, 'nutrition/create_nutrition.html', context)
             nutrition = form.save(commit=False)
             nutrition.plan = plan
             nutrition.save()
             messages.success(request, 'Meal Added!')
+            return HttpResponseRedirect(reverse("nutrition:detail", kwargs={"plan_id": plan.id}))
 
-            return render(request, 'nutrition/detail.html', {'plan': plan})
         context = {
             'plan': plan,
             'form': form,
@@ -54,6 +56,12 @@ def create_nutrition(request, plan_id):
 
 
 def delete_plan(request, plan_id, username):
+    """
+    :param request:
+    :param plan_id:
+    :param username:
+    delete
+    """
     if request.user.is_superuser:
         plan = Plan.objects.get(pk=plan_id)
         plan.delete()
@@ -61,6 +69,13 @@ def delete_plan(request, plan_id, username):
 
 
 def delete_nutrition(request, plan_id, nutrition_id):
+    """
+    delete nutrition of a given user
+    :param request:
+    :param plan_id:
+    :param nutrition_id:
+    :return:
+    """
     if request.user.is_superuser:
         plan = get_object_or_404(Plan, pk=plan_id)
         nutrition = Nutrition.objects.get(pk=nutrition_id)
@@ -75,6 +90,7 @@ def detail(request, plan_id):
 
 
 def plan_list(request, username):
+    '''plan list'''
     if request.user.username == username or request.user.is_superuser:
         user = User.objects.get(username=username)
         plans = Plan.objects.filter(user=user)
@@ -83,6 +99,13 @@ def plan_list(request, username):
 
 
 def edit_meal(request,plan_id , nutrition_id, username):
+    """
+    :param request:
+    :param plan_id:
+    :param nutrition_id:
+    :param username:
+    :return:
+    """
     plan = get_object_or_404(Plan, pk=plan_id)
     nutrition = get_object_or_404(Nutrition, pk=nutrition_id)
     if request.method == "POST":
@@ -106,6 +129,13 @@ def edit_meal(request,plan_id , nutrition_id, username):
 
 
 def edit_plan(request, plan_id, username):
+    """
+    edit plan
+    :param request:
+    :param plan_id:
+    :param username:
+    :return:
+    """
     plan = get_object_or_404(Plan, pk=plan_id)
     form = PlanForm(request.POST or None, instance=plan)
     if form.is_valid():
@@ -117,6 +147,12 @@ def edit_plan(request, plan_id, username):
 
 
 def plan_list_manage(request, username):
+    """
+    return plan list in manage control
+    :param request:
+    :param username:
+    :return:
+    """
     user = User.objects.get(username=username)
     plans = Plan.objects.filter(user=user)
     return render(request, 'nutrition/plan_list_manage.html', {'plans': plans})

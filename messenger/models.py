@@ -6,6 +6,7 @@ from django.db.models import Q
 
 class ThreadManager(models.Manager):
     def by_user(self, user):
+        """return user conversation"""
         qlookup = Q(first=user) | Q(second=user)
         qlookup2 = Q(first=user) & Q(second=user)
         qs = self.get_queryset().filter(qlookup).exclude(qlookup2).distinct()
@@ -55,6 +56,7 @@ class ThreadManager(models.Manager):
 
 
 class Thread(models.Model):
+    """thears obj"""
     first = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='chat_thread_first')
     second = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='chat_thread_second')
     updated = models.DateTimeField(auto_now=True)
@@ -73,6 +75,7 @@ class Thread(models.Model):
 
 
 class ChatMessage(models.Model):
+    """chat obj"""
     thread = models.ForeignKey(Thread, null=True, blank=True, on_delete=models.SET_NULL)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='sender', on_delete=models.CASCADE)
     message = models.TextField()

@@ -17,8 +17,8 @@
                 <p class="list-group-item-text"><b>Created on:</b>&nbsp;{{ workout.creation_date }}</p>
             </a>
         {% empty %}
-            {% if user.is_superuser %}
-            <a href="{% url 'workout:add_workout' %}" class="list-group-item">
+            {% if request.user.is_superuser %}
+            <a href="{% url 'workout:add_workout' username=user.username %}" class="list-group-item">
             {% trans "No workouts found." %}<br>
             {% trans "Add one now." %}
             </a>
@@ -29,10 +29,10 @@
     </div>
 
 
-     {% if user.is_superuser %}
+     {% if request.user.is_superuser%}
          <div class="col-sm-12">
             <br>
-            <a href="{% url 'workout:add_workout' %}">
+            <a href="{% url 'workout:add_workout' username=user.username %}">
                 <button type="button" class="btn btn-success">
                     <span class="glyphicon glyphicon-plus"></span>&nbsp; Add Plan
                 </button>
