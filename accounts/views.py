@@ -144,6 +144,10 @@ def visual_manage_control(request):
 
 
 
+
+
+
+
 def list_of_activity_log(date):
     """
     Get the activity log of all the users
@@ -152,37 +156,23 @@ def list_of_activity_log(date):
     """
     dataSource = {}
     dataSource['data'] = []
-
-    if isinstance(date, str):
-        for user in User.objects.all():
-                data = {}
-                data['label'] = user.username
-                data['value'] = Post.objects.filter(user=user, created_at__year=date).count() + \
-                                Post.objects.filter(likes=user, date_of_like__year=date).count() + \
-                                Comment.objects.filter(user=user, timestamp__year=date).count() + \
-                                GroupMember.objects.filter(user=user, date__year=date).count()
-                dataSource['data'].append(data)
+    if (isinstance(date, datetime.date)):
+        year = myconverter_year(date)
     else:
-        for user in User.objects.all():
-            month = myconverter_month(date)
-            year = myconverter_year(date)
+        year=date
+    for i in range(1, 13):
             data = {}
-            data['label'] = user.username
-            data['value'] = Post.objects.filter(user=user, created_at__month=month,
-                                                created_at__year=year).count() + \
-                            Post.objects.filter(likes=user, date_of_like__month=month,
-                                                date_of_like__year=year).count() + \
-                            Comment.objects.filter(user=user, timestamp__month=month,
-                                                   timestamp__year=year).count() + \
-                            GroupMember.objects.filter(user=user, date__month=month,
-                                                       date__year=year).count()
+            data['label'] = i
+            data['value'] = Post.objects.filter(created_at__month=i, created_at__year=year).count() + \
+                            Post.objects.filter(date_of_like__month=i, date_of_like__year=year).count() + \
+                            Comment.objects.filter(timestamp__month=i, timestamp__year=year).count() + \
+                            GroupMember.objects.filter(date__month=i, date__year=year).count()
             dataSource['data'].append(data)
     return dataSource
 
 
 
 def list_of_weight_loss(date, user):
-
     if isinstance(date, str):
         list = user.userprofileinfo.weight_history.filter(timestamp__year=date)
     else:
@@ -460,7 +450,7 @@ def WeightLossPercentage(request, dataSource):
         "theme": "fint",
         "palettecolors": "#FF2DC6,#632289,#FFAE00,#D208F7,#6D08F7",
     }
-    column2D = FusionCharts("column2d", "ex4", "600", "350", "chart-4", "json", dataSource)
+    column2D = FusionCharts("spline", "ex4", "600", "350", "chart-4", "json", dataSource)
     return (column2D.render())
 
 #Distribution of percent weight loss for all users
@@ -547,8 +537,9 @@ def activity_log_all(request, dataSource):
         "valueFontSize": "15",
         "showlegend": "1",
         "legendposition": "bottom",
+        "palettecolors": "#0075c2,#FC4242, #0075c2,#06AF8F ",
     }
-    column2D = FusionCharts("pie2d", "ex7", "600", "450", "chart-7", "json", dataSource)
+    column2D = FusionCharts("column2d", "ex7", "600", "450", "chart-7", "json", dataSource)
     return (column2D.render())
 
 
