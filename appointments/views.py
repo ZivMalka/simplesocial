@@ -40,6 +40,14 @@ def appoint(request, username):
         return render(request, 'appointment.html', {"previous_events" : list_previous, "upcoming_events": list_upcoming})
     return redirect('/')
 
+def appointment_manage(request):
+    if request.user.is_superuser:
+        now = datetime.now()
+        upcoming_events = Appointment.objects.filter(date__gt=now).order_by('date', 'time')
+        previous_events = Appointment.objects.filter(date__lte=now).order_by('date', 'time')
+
+        return render(request, 'appointment_manage.html', {"previous_events" : previous_events, "upcoming_events": upcoming_events})
+    return redirect('/')
 
 def create_event(request):
     """

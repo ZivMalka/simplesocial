@@ -1,0 +1,102 @@
+{% extends  "appoint_base.html" %}
+{% load i18n  %}
+{% load staticfiles %}
+
+{% block content %}
+
+
+
+<div class="container">
+  <h3>All Appointment</h3>
+
+    <br>
+{% if upcoming_events  %}
+    <h3>Upcoming events</h3>
+    <table class="table table-striped" style="" table-layout: fixed;>
+        <thead style="background-color: #101010; color: #ffffff;">
+        <tr>
+            <th scope="col">Username</th>
+            <th scope="col">Full Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Task</th>
+            <th scope="col">Date</th>
+            <th scope="col">Hour</th>
+            <th scope="col">Created By</th>
+            <th></th>
+            <th></th>
+
+        </tr>
+        </thead>
+        <tbody>
+            {% for event in upcoming_events %}
+        <tr>
+            <td>{{ event.user }}</td>
+            <td>{{ event.user.get_full_name }}</td>
+            <td>{{ event.user.email }}</td>
+            <td>{{ event.task }}</td>
+            <td>{{ event.date }}</td>
+            <td>{{ event.time }}</td>
+            <td><b>{{ event.sender.get_full_name }}</b></td>
+            <td><a href="{% url 'appointments:delete_event' event.id event.user.username %}"><button class="btn btn-danger" onclick="return confirm('Are you sure you wish to delete this appointments?')">Delete</button></a></td>
+            <td><a href="{% url 'appointments:edit_event' event.id event.user.username %}"><button class="btn btn-warning">Edit</button></a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+     </table>
+
+         {% else %}
+                   <div class="list-group">
+    {% trans 'No upcoming events' %}
+    </div>
+{% endif %}
+
+{% if previous_events  %}
+    <h3>Previous events</h3>
+    <table class="table table-striped" style="" table-layout: fixed;>
+      <thead style="background-color: #101010; color: #ffffff;">
+        <tr>
+            <th scope="col">Username</th>
+            <th scope="col">Full Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Task</th>
+            <th scope="col">Date</th>
+            <th scope="col">Hour</th>
+            <th scope="col">Created By</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            {%for later in previous_events %}
+        <tr>
+            <td>{{ later.user }}</td>
+            <td>{{ later.user.get_full_name }}</td>
+            <td>{{ later.user.email }}</td>
+            <td>{{ later.task }}</td>
+            <td>{{ later.date }}</td>
+            <td>{{ later.time }}</td>
+            <td><b>{{ later.sender.get_full_name }}</b></td>
+            <td><a href="{% url 'appointments:delete_event' later.id later.user.username %}"><button class="btn btn-danger" onclick="return confirm('Are you sure you wish to delete this appointments?')">Delete</button></a></td>
+            <td><a href="{% url 'appointments:edit_event' later.id later.user.username %}"><button class="btn btn-warning">Edit</button></a></td>
+            </tr>
+            {% endfor %}
+        <tr>
+            <td>
+                 <a href="{% url 'appointments:create_event' %}">
+                <button type="button" class="btn btn-success">
+                    <span class="glyphicon glyphicon-plus"></span>&nbsp; Schedule new appointment
+                </button>
+            </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+ {% else %}
+    <div class="list-group">
+    {% trans 'No previous events' %}
+    </div>
+    {% endif %}
+
+{% endblock %}

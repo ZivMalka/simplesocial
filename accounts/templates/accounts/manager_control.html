@@ -5,6 +5,33 @@
 
 {% block content %}
 
+<table>
+        <tr scope="row">
+        <td class="">
+            <a href="{% url 'accounts:signup' %}">
+                <button type="button" class="btn btn-success">
+                    <span class="glyphicon glyphicon-plus"></span>&nbsp; Add User
+                </button>
+            </a>
+         </td>
+         <td class="">
+            <a href="{%  url 'appointments:appointment_manage'  %}" class="btn btn-md btn-fill btn-warning">
+                <span class="glyphicon glyphicon-pencil"></span>&nbsp; All Appointments
+            </a>
+         </td>
+             <td class="">
+            <a href="{% url 'accounts:dashboard'  %}" class="btn btn-primary btn-post">
+                Dashboard
+            </a> </td>
+               <td class="">
+            <a href="{% url 'accounts:admin_report'  %}" class="btn btn-default" >
+                Export Reports
+            </a>
+         </td>
+    </tr>
+
+</table>
+    <br>
     <table class="table table-striped" style="top: 10%;  left: 0; right: 0;" table-layout: fixed;>
         <thead style="background-color: #101010; color: #ffffff;">
         <tr>
@@ -18,7 +45,12 @@
             <th scope="col">Meal Plans</th>
             <th scope="col">Action</th>
         </tr>
+
         </thead>
+
+
+
+
         <tbody>
         {% for user in users %}
         <tr>
@@ -34,29 +66,7 @@
             </tr>
         {% endfor %}
         </tbody>
-         <tr>
-        <td class="">
-            <a href="{% url 'accounts:signup' %}">
-                <button type="button" class="btn btn-success">
-                    <span class="glyphicon glyphicon-plus"></span>&nbsp; Add User
-                </button>
-            </a>
-         </td>
-         <td class="">
-            <a href="{% url 'appointments:appoint'  username=user.username %}" class="btn btn-md btn-fill btn-warning">
-                <span class="glyphicon glyphicon-pencil"></span>&nbsp; All Appointments
-            </a>
-         </td>
-             <td class="">
-            <a href="{% url 'accounts:dashboard'  %}" class="btn btn-primary btn-post">
-                Dashboard
-            </a> </td>
-               <td class="">
-            <a href="{% url 'accounts:admin_report'  %}" class="btn btn-default" style="margin-left: -72%;">
-                Export Reports
-            </a>
-         </td>
-    </tr>
+
     </table>
 
 

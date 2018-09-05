@@ -117,3 +117,8 @@
 .mark-notification{
  display: none;
 }
+
+.label label-primary label-indicator animation-floating notification-counter{
+  background-color: #FC4274;
+      border-radius: 1.25em;
+}

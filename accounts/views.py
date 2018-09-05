@@ -107,7 +107,7 @@ def filter(request):
         date = (request.GET.get('year'))
 
     else:
-        date = datetime.now()
+        date = datetime.datetime.now()
 
     return date
 
@@ -118,6 +118,7 @@ def manager_control(request):
     :return: render
     """
     if request.user.is_superuser:
+
         users = User.objects.all()
         return render(request, 'accounts/manager_control.html', {'users': users})
 
@@ -128,11 +129,18 @@ def visual_manage_control(request):
         date = filter (request)
         dataSource = list_of_activity_log(date)
         content7 = activity_log_all(request, dataSource)
-        content4 = WeightLossPercentage(request)
+        data = return_list_of_WeightLossPercentage()
+
+        #Return statistics values
+        num = []
+        for user in User.objects.all():
+            num.append(calc_total_loss_per(user, user.userprofileinfo.current_weight))
+        num = numbers(num)
+        content4 = WeightLossPercentage(request, data)
         content5 = weight_lossDistrbotion(request)
         content8 = activity_log_by_type(request)
         return render(request, 'accounts/manage_graph.html',
-                      {'output4': content4, 'output5': content5, 'output7': content7, 'output8': content8})
+                      {'output4': content4, 'output5': content5, 'output7': content7, 'output8': content8, 'numbers':num})
 
 
 
@@ -426,10 +434,23 @@ def chart_calories(request, plans):
     column2D = FusionCharts("column2d", "ex3", "600", "350", "chart-3", "json", dataSource)
     return (column2D.render())
 
-#Calculate the percentage of weight loss for each user and return the graph with results
-def WeightLossPercentage(request):
-    # Chart data is passed to the `dataSource` parameter, as dict, in the form of key-value pairs.
+
+def return_list_of_WeightLossPercentage():
     dataSource = {}
+    dataSource['data'] = []
+    for user in User.objects.all():
+        data = {}
+        data['label'] = user.username
+        data['value'] = calc_total_loss_per(user, user.userprofileinfo.current_weight)
+        dataSource['data'].append(data)
+    return dataSource
+
+
+
+
+#Calculate the percentage of weight loss for each user and return the graph with results
+def WeightLossPercentage(request, dataSource):
+    # Chart data is passed to the `dataSource` parameter, as dict, in the form of key-value pairs.
     dataSource['chart'] = {
         "caption": "Weight loss Percentage",
         "subCaption": "Weight loss Percentage",
@@ -439,12 +460,6 @@ def WeightLossPercentage(request):
         "theme": "fint",
         "palettecolors": "#FF2DC6,#632289,#FFAE00,#D208F7,#6D08F7",
     }
-    dataSource['data'] = []
-    for user in User.objects.all():
-        data = {}
-        data['label'] = user.username
-        data['value'] = calc_total_loss_per(user, user.userprofileinfo.current_weight)
-        dataSource['data'].append(data)
     column2D = FusionCharts("column2d", "ex4", "600", "350", "chart-4", "json", dataSource)
     return (column2D.render())
 
@@ -453,7 +468,7 @@ def weight_lossDistrbotion(request):
     # Chart data is passed to the `dataSource` parameter, as dict, in the form of key-value pairs.
     dataSource = { }
     dataSource['chart'] = {
-        "caption": "Weight loss distribution ",
+        "caption": "Weight loss distribution for now  ",
         "subCaption": "Weight loss of all the users in %",
         "bgColor": "#FFFFFF",
         "theme": "fint",
@@ -559,7 +574,6 @@ def activity_log_by_type(request):
     for i in range(lables.__len__()):
         data = {}
         data['label'] = lables[i]
-        print(data['label'])
         data['value'] = values[i]
         dataSource['data'].append(data)
 
@@ -599,7 +613,6 @@ def calc_total_loss_per(user, current):
     for k in user.userprofileinfo.weight_history.all():
         if total == 0:
            total = round((((k.weight- current)/k.weight)*100),2)
-           print(k.weight)
         else:
            break
         break
@@ -626,36 +639,36 @@ import numpy as np
 from statistics import mean, stdev, median
 from decimal import Decimal as d
 
+
+#Calc Wieght Loss statistics
+def numbers(numbers1):
+    avg = round((mean(numbers1)), 2)
+    std = round(stdev(numbers1), 2)
+    med = round(median(numbers1), 2)
+    numbers1 = {'avg': avg, 'std': std, 'med': med, 'max':max(numbers1), 'min':  min(numbers1) }
+    return numbers1
+
 #progress report of all users: total  weight loss in kg and percentages
 def GeneratePdf_of_all_user(request):
     if request.user.is_superuser:
         dataSource = {}
         dataSource['data'] = []
-        numbers = []
+        numbers1 = []
+        numbers2 = []
         for user in User.objects.all():
                 data = {}
                 data['weight_loss_per'] = calc_total_loss_per(user, user.userprofileinfo.current_weight)
                 data['weight_loss']  = calc_total_loss(user, user.userprofileinfo.current_weight)
                 data ['user'] = user
-                numbers.append(data['weight_loss_per'])
+                numbers1.append(data['weight_loss_per'])
+                numbers2.append(data['weight_loss'])
                 dataSource['data'].append(data)
 
-        avg = round((mean(numbers)), 2)
-        std = round(stdev(numbers), 2)
-        med = round(median(numbers), 2)
-        numbers.clear()
-
-        for data in dataSource['data']:
-            numbers.append((data.get('weight_loss')))
-
-        avg2 = round((mean(numbers)), 2)
-        std2 = round(stdev(numbers), 2)
-        med2 = round(median(numbers), 2)
-
-        numbers = {'avg': avg, 'std': std, 'med': med, 'avg2' : avg2, 'std2' : std2, 'med2': med2}
+        numbers1 = numbers(numbers1)
+        numbers2 = numbers(numbers2)
 
         pdf = render_to_pdf('accounts/all_users_report.html',
-                            {'data': dataSource, 'numbers': numbers})
+                            {'data': dataSource, 'numbers1': numbers1, 'numbers2': numbers2})
 
         return HttpResponse(pdf, content_type='application/pdf')
 

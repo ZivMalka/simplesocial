@@ -17,7 +17,13 @@
 
 
  {% block content %}
-
+     <h2>Weight loss distribution</h2>
+<p> Average percentage of weight loss:{{ numbers.avg }}</p>
+<p> Median:{{ numbers.med }}</p>
+<p> Standard deviation:{{ numbers.std }}</p>
+ <p> The lowest percentage of weight loss:{{ numbers.min }}</p>
+      <p> The highest percentage of weight loss:{{ numbers.max }}</p>
+     <br>
          <div id="chart-4" style="width: 100px; height: 100px;;display: inline-block;margin-right:43%; float:right;">
         {{ output4|safe }}
         </div>

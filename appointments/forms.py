@@ -9,6 +9,7 @@ class AppointmentForm(forms.ModelForm):
     """
     create Appointment form
     """
+
     date = DateField(widget = AdminDateWidget())
     time = forms.TimeField(widget= AdminTimeWidget)
 
