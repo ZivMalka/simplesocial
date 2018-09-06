@@ -19,7 +19,7 @@ class Plan(models.Model):
         ordering = ['date']
 
     user = models.ForeignKey(User, related_name="nutrition", on_delete=models.CASCADE)
-    subtitle = models.CharField(max_length=40)
+    subtitle = models.CharField(max_length=40, unique=True)
     date = models.DateField(help_text="Enter date", validators=[no_future])
 
     def __str__(self):

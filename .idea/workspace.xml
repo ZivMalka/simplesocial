@@ -119,7 +119,30 @@
     <favorites_list name="simplesocial" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/workout/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="41" column="55" lean-forward="false" selection-start-line="41" selection-start-column="44" selection-end-line="41" selection-end-column="55" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/nutrition/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="272">
+              <caret line="21" column="58" lean-forward="false" selection-start-line="21" selection-start-column="58" selection-end-line="21" selection-end-column="58" />
+              <folding>
+                <marker date="1536242675800" expanded="true" signature="1102:1130" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -196,7 +219,6 @@
         <option value="$PROJECT_DIR$/appointments/models.py" />
         <option value="$PROJECT_DIR$/messenger/models.py" />
         <option value="$PROJECT_DIR$/messenger/consumer.py" />
-        <option value="$PROJECT_DIR$/workout/models.py" />
         <option value="$PROJECT_DIR$/accounts/models.py" />
         <option value="$PROJECT_DIR$/accounts/forms.py" />
         <option value="$PROJECT_DIR$/activities/models.py" />
@@ -230,13 +252,14 @@
         <option value="$PROJECT_DIR$/accounts/views.py" />
         <option value="$PROJECT_DIR$/accounts/templates/accounts/profile.html" />
         <option value="$PROJECT_DIR$/accounts/templates/accounts/personal_profile.html" />
-        <option value="$PROJECT_DIR$/nutrition/models.py" />
         <option value="$PROJECT_DIR$/workout/templates/workout/overview.html" />
         <option value="$PROJECT_DIR$/workout/views.py" />
         <option value="$PROJECT_DIR$/nutrition/forms.py" />
         <option value="$PROJECT_DIR$/nutrition/templates/nutrition/plan_list.html" />
         <option value="$PROJECT_DIR$/nutrition/urls.py" />
         <option value="$PROJECT_DIR$/nutrition/views.py" />
+        <option value="$PROJECT_DIR$/workout/models.py" />
+        <option value="$PROJECT_DIR$/nutrition/models.py" />
       </list>
     </option>
   </component>
@@ -298,7 +321,7 @@
             <path>
               <item name="simplesocial" type="b2602c69:ProjectViewProjectNode" />
               <item name="simplesocial" type="462c0819:PsiDirectoryNode" />
-              <item name="workout" type="462c0819:PsiDirectoryNode" />
+              <item name="nutrition" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -502,6 +525,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32767403" sideWeight="0.4935275" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18845502" sideWeight="0.2859304" order="7" side_tool="true" content_ui="tabs" />
@@ -846,16 +870,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/nutrition/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="42" column="30" lean-forward="false" selection-start-line="42" selection-start-column="30" selection-end-line="42" selection-end-column="30" />
-          <folding>
-            <marker date="1536236287499" expanded="true" signature="1089:1117" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/appointments/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="629">
@@ -913,16 +927,8 @@
         <state relative-caret-position="476">
           <caret line="148" column="31" lean-forward="true" selection-start-line="148" selection-start-column="31" selection-end-line="148" selection-end-column="31" />
           <folding>
-            <element signature="e#0#35#0" expanded="true" />
+            <element signature="e#0#35#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/workout/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="39" column="84" lean-forward="true" selection-start-line="39" selection-start-column="84" selection-end-line="39" selection-end-column="84" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -957,7 +963,7 @@
         <state relative-caret-position="187">
           <caret line="11" column="31" lean-forward="false" selection-start-line="11" selection-start-column="31" selection-end-line="11" selection-end-column="35" />
           <folding>
-            <element signature="e#0#24#0" expanded="true" />
+            <element signature="e#0#24#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -975,6 +981,24 @@
         <state relative-caret-position="153">
           <caret line="11" column="125" lean-forward="true" selection-start-line="11" selection-start-column="125" selection-end-line="11" selection-end-column="125" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/workout/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="41" column="55" lean-forward="false" selection-start-line="41" selection-start-column="44" selection-end-line="41" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nutrition/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="21" column="58" lean-forward="false" selection-start-line="21" selection-start-column="58" selection-end-line="21" selection-end-column="58" />
+          <folding>
+            <marker date="1536242675800" expanded="true" signature="1102:1130" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>

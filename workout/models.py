@@ -39,7 +39,7 @@ class Workout(models.Model):
     user = models.ForeignKey(User, related_name="workout", on_delete=models.CASCADE)
     creation_date = models.DateField(help_text="Enter date", validators=[no_future])
     day = models.IntegerField(choices=DAYS_OF_WEEK)
-    title = models.CharField(max_length=15)
+    title = models.CharField(max_length=15, unique=True)
 
 
     def __str__(self):
