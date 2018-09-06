@@ -4,6 +4,24 @@
 
 {% block content %}
     {% if user.is_authenticated %}
+        {% if messages %}
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+                {% for message in messages %}
+                <p {% if message.tags == "success" %} class="alert alert-success" {% endif %}> {{ message }}</p>
+                {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+          <h1 class="underline">Most recent</h1>
+        <a href="{{ weekly.get_absolute_url }}" class="list-group-item">
+                <span class="glyphicon glyphicon-chevron-right pull-right"></span>
+                <h4 class="list-group-item-heading">{{ weekly.subtitle }}</h4>
+                <p class="list-group-item-text"><b>Calories:</b>&nbsp; {{ weekly.get_energy_value}}</p>
+                <p class="list-group-item-text"><b>Created on:</b>&nbsp;{{ weekly.date}}</p>
+            </a>
+
     <h1 class="underline">Your nutritions</h1>
 
 <div class="list-group">
@@ -29,7 +47,7 @@
         {% if request.user.is_superuser %}
      <div class="col-sm-12">
         <br>
-        <a href="{% url 'nutrition:create_plan' %}">
+        <a href="{% url 'nutrition:create_plan' username=user.username %}">
             <button type="button" class="btn btn-success">
                 <span class="glyphicon glyphicon-plus"></span>&nbsp; Add Plan
             </button>

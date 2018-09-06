@@ -8,18 +8,20 @@ from django.contrib import messages
 from notify.signals import notify
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-def create_plan(request):
+def create_plan(request, username):
     '''create new plan'''
     if request.user.is_superuser:
-        form = PlanForm(request.POST or None)
+        user = User.objects.get(username=username)
+        form = PlanForm(request.POST , instance=user)
         if form.is_valid():
-            plan = form.save(commit=False)
-            plan.save()
+            subtitle = form.cleaned_data.get('subtitle')
+            date = form.cleaned_data.get('date')
+            new_plan = Plan.objects.create(user=user, subtitle=subtitle, date=date)
             messages.success(request, 'Plan Added!')
-            notify.send(request.user, recipient=plan.user, actor=request.user, verb='Added a new plan.',
-                        nf_type='plan_by_one_user', target=plan)
+            notify.send(request.user, recipient=user, actor=request.user, verb='Added a new plan.',
+                        nf_type='plan_by_one_user', target=new_plan)
 
-            return HttpResponseRedirect(reverse("nutrition:detail", kwargs={"plan_id": plan.id}))
+            return HttpResponseRedirect(reverse("nutrition:list", kwargs={"username": username}))
         context = {
             "form": form,
         }
@@ -89,12 +91,16 @@ def detail(request, plan_id):
         return render(request, 'nutrition/detail.html', {'plan': plan, 'user': user })
 
 
+from django.db.models import Q
+
 def plan_list(request, username):
     '''plan list'''
     if request.user.username == username or request.user.is_superuser:
         user = User.objects.get(username=username)
-        plans = Plan.objects.filter(user=user)
-        return render(request, 'nutrition/plan_list.html', {'plans': plans})
+
+        weekly = (Plan.objects.latest('date'))
+        plans = Plan.objects.filter(Q(user=user) & ~Q(id=weekly.id))
+        return render(request, 'nutrition/plan_list.html', {'plans': plans, 'weekly':weekly})
 
 
 

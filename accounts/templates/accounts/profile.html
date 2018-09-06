@@ -11,6 +11,7 @@
 
    {% block profile_content %}
 
+
  {% if user.userprofileinfo.profile_pic %}
             <img  src ="{{ user.userprofileinfo.profile_pic.url }}" class="user_pic">
      {% else %}
@@ -24,6 +25,9 @@
  <span>Following</span>&nbsp;&nbsp; <b><a style="color:black" onclick="document.getElementById('modal-wrapper').style.display='block'">{{ my_groups.count }}</b></a>
 </p>
 </ul>
+          {% if error_message %}
+                        <p><strong>{{ error_message }}</strong></p>
+                    {% endif %}
 
         <div id="modal-wrapper" class="modal">
         <div class="modal-content animate" style="width: 335px; margin-top: 40px; min-height:500px; margin-left:36%">

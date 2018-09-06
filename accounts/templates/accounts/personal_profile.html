@@ -16,7 +16,9 @@
   <div class="row">
 
  {% block profile_content %}
-
+   {% if error_message %}
+                        <p><strong>{{ error_message }}</strong></p>
+                    {% endif %}
        <h2>Personal Record</h2>
 
 <ul>

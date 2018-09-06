@@ -29,7 +29,7 @@
 
 <div class="col-md-3">
 <div class="list-group" style="width:70%; margin-left: 309%;margin-top: -100%;">
-  <a href="/user/settings/profile/edit/" class="list-group-item">Profile</a>
+  <a href="{% url 'accounts:edit_profile' username=user.username %}" class="list-group-item">Profile</a>
   <a href="{% url 'accounts:edit_personal_profile' username=user.username %}"  class="list-group-item">Personal</a>
 </div></div>
 

@@ -9,7 +9,7 @@ class PlanForm(forms.ModelForm):
     date = DateField(widget = AdminDateWidget())
     class Meta:
         model = Plan
-        fields = ['user','subtitle' ,'date']
+        fields = ['subtitle' ,'date']
 
 
 class NutritionForm(forms.ModelForm):

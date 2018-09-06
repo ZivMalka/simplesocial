@@ -6,7 +6,7 @@ from django.forms.fields import DateField
 
 class WorkoutForm(forms.ModelForm):
     title = forms.CharField(widget=EmojiPickerTextInput)
-    creation_date = DateField(widget = AdminDateWidget())
+    creation_date = DateField(widget = AdminDateWidget(), )
     class Meta:
         model = Workout
         fields = ['day', 'title' , 'creation_date']

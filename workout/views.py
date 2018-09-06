@@ -8,6 +8,7 @@ from django.contrib import messages
 from notify.signals import notify
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+import datetime
 
 def add_workout(request, username):
     """
@@ -93,13 +94,17 @@ def view(request, workout_id):
         return render(request, 'workout/view.html', {'workout': workout, 'user': user})
 
 
+from django.db.models import Q
 
 def overview(request, username):
     '''return all workouts of the user'''
     if request.user.username == username or request.user.is_superuser:
         user = User.objects.get(username=username)
-        workouts = Workout.objects.filter(user=user)
-        return render(request, 'workout/overview.html', {'workouts': workouts, 'user': user})
+
+        weekly = (Workout.objects.latest('creation_date'))
+
+        workouts = Workout.objects.filter(Q(user=user) & ~Q(id=weekly.id))
+        return render(request, 'workout/overview.html', {'workouts': workouts, 'user': user, 'weekly':weekly})
 
 
 def edit_set(request,workout_id , set_id, username):

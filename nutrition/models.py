@@ -40,6 +40,7 @@ class Nutrition(models.Model):
     '''Nutrition class'''
     class Meta:
         ordering = ['time']
+        get_latest_by = ['time']
     plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
     time = models.TimeField(null=True, blank=True)
     description = models.TextField()

@@ -5,9 +5,27 @@
 
 {% block content %}
     {% if user.is_authenticated %}
+  <h1 class="underline">Most recent</h1>
+        <a href="{{ weekly.get_absolute_url }}" class="list-group-item">
+                <span class="glyphicon glyphicon-chevron-right pull-right"></span>
+                <h4 class="list-group-item-heading">{{ weekly.title }}</h4>
+                <p class="list-group-item-text"><b>Workout day:</b>&nbsp; {{ weekly.get_day_display }}</p>
+                <p class="list-group-item-text"><b>Created on:</b>&nbsp;{{ weekly.creation_date }}</p>
+            </a>
 
     <h1 class="underline">Your workouts</h1>
     <div class="list-group">
+    {% if request.user.is_superuser  %}
+                    {% if messages %}
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+                    {% for message in messages %}
+                    <p {% if message.tags == "success" %} class="alert alert-success" {% endif %}> {{ message }}</p>
+                    {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+        {% endif %}
         {% for workout in workouts %}
             <a href="{{ workout.get_absolute_url }}" class="list-group-item">
                 <span class="glyphicon glyphicon-chevron-right pull-right"></span>

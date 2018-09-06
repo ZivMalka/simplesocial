@@ -28,17 +28,14 @@
   {% if request.user == user  or request.user.is_superuser %}
      <li>  <a href="{% url 'accounts:personal_profile' username=user.username %}">Personal Profile</a></li>
        <li><a href="{% url 'nutrition:list' username=user.username%}">Nutrition</a>
-          <li><a href="{% url 'workout:overview' username=request.user.username %}"> Workout</a> </li>
+          <li><a href="{% url 'workout:overview' username=user.username %}"> Workout</a> </li>
          <li>  <a href="{% url 'accounts:chart' username=user.username %}">Visual Progress</a></li>
-
-
-
 
 
 
       </ul>
           <ul class="nav navbar-nav navbar-right">
-      <li><a href="{% url 'accounts:edit_profile' %}">Settings</a></li>
+      <li><a href="{% url 'accounts:edit_profile' username=user.username %}">Settings</a></li>
     {% endif %}
              </ul>
 

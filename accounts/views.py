@@ -63,11 +63,13 @@ def get_users(request):
 
 #edit user profile
 @login_required
-def edit_profile(request):
-    if request.user.is_authenticated:
+def edit_profile(request, username):
+    if request.user.username == username or  request.user.is_superuser:
+        current_user = User.objects.get(username=username)
+        user_p =  get_object_or_404(UserProfileInfo, user=current_user)
         if request.method == 'POST':
-            user_form_edit = EditProfileForm(request.POST, instance=request.user)
-            profile_form = UserProfileInfoForm(request.POST, instance=request.user.userprofileinfo)
+            user_form_edit = EditProfileForm(request.POST, instance=current_user)
+            profile_form = UserProfileInfoForm(request.POST, instance=user_p)
             if user_form_edit.is_valid() and profile_form.is_valid():
                 user = user_form_edit.save()
                 user.save()
@@ -77,17 +79,17 @@ def edit_profile(request):
                     profile.profile_pic = request.FILES['profile_pic']
                 profile_form.save()
                 messages.success(request, 'Your profile was successfully updated!')
-                return HttpResponseRedirect(reverse("accounts:profile", kwargs={"username": request.user.username}))
+                return HttpResponseRedirect(reverse("accounts:profile", kwargs={"username": current_user.username}))
             else:
-                user_form_edit = EditProfileForm(instance=request.user)
-                profile_form = UserProfileInfoForm(instance=request.user.userprofileinfo)
+                user_form_edit = EditProfileForm(instance=current_user)
+                profile_form = UserProfileInfoForm(instance=user_p)
                 return render(request, 'accounts/edit_profile.html',
-                              {'user_form_edit': user_form_edit, 'profile_form': profile_form})
+                              {'user_form_edit': user_form_edit, 'profile_form': profile_form, 'user':current_user})
         else:
-            user_form_edit = EditProfileForm(instance=request.user)
-            profile_form = UserProfileInfoForm(instance=request.user.userprofileinfo)
+            user_form_edit = EditProfileForm(instance=current_user)
+            profile_form = UserProfileInfoForm(instance=UserProfileInfo(user=current_user))
             return render(request, 'accounts/edit_profile.html',
-                          {'user_form_edit': user_form_edit, 'profile_form': profile_form})
+                          {'user_form_edit': user_form_edit, 'profile_form': profile_form, 'user':current_user})
     else:
         return HttpResponse("No access to this page")
 
@@ -252,30 +254,22 @@ def profile(request, username):
 @login_required
 #edit
 def edit_personal_profile(request, username):
-    if request.user.is_superuser:
+    if request.user.is_superuser or username==request.user.username:
+        current_user = User.objects.get(username=username)
+        user_p = get_object_or_404(UserProfileInfo, user=current_user)
         if request.method == 'POST':
-            profile_form = UserPersonalProfileInfoForm(request.POST, instance=request.user.userprofileinfo)
-
+            profile_form = UserPersonalProfileInfoForm(request.POST, instance=user_p)
             if profile_form.is_valid():
                 weight = profile_form.cleaned_data.get('current_weight')
                 body_fat = profile_form.cleaned_data.get('body_fat')
                 profile = profile_form.save()
-                #profile = profile_form.save(commit=False)
                 profile.save()
-
-                if weight is not None:
-                    p1 = WeightList(weight=weight, timestamp=datetime.now(), body_fat=body_fat)
-                    p1.save()
-                    user = User.objects.get(username=username)
-                    user_P = UserProfileInfo.objects.get(user=user)
-                    user_P.weight_history.add(p1)
-
                 messages.success(request, 'Your personal profile was successfully updated!')
-                return HttpResponseRedirect(reverse("accounts:perosnal_profile", kwargs={"username": request.user.username}))
+                return HttpResponseRedirect(reverse("accounts:personal_profile", kwargs={"username": username}))
         else:
-            profile_form = UserPersonalProfileInfoForm(request.POST, instance=request.user.userprofileinfo)
+            profile_form = UserPersonalProfileInfoForm(request.POST, instance=user_p)
             return render(request, 'accounts/personal_profile_edit.html',
-                          {'profile_form': profile_form})
+                          {'profile_form': profile_form, 'user':current_user})
     else:
         return HttpResponse("No access to this page")
 
