@@ -33,8 +33,7 @@ class Post(models.Model):
     message_html = models.TextField(editable=False)
     group = models.ForeignKey(Group, related_name="posts",null=True, blank=True, on_delete=models.CASCADE)
     slug = models.SlugField(unique=False)
-    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='post_likes')
-    date_of_like = models.DateTimeField(null=True, blank=True)
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, through="Like")
     comment = GenericRelation(Comment)
     post_pic = models.ImageField(upload_to='post_pic', blank=True)
 
@@ -62,7 +61,6 @@ class Post(models.Model):
         )
 
 
-
     def get_posts_url(self):
         return reverse( "posts:single_2" , kwargs={"slug": self.group.slug})
 
@@ -76,19 +74,16 @@ class Post(models.Model):
     def get_api_like_url(self):
         return reverse("posts:like-api-toggle", kwargs={"pk": self.pk})
 
-    def calculate_likes(self):
-        '''calc likes'''
-        likes = Post.objects.filter(pk=self.pk).count()
-        return likes
+class Like(models.Model):
+    post = models.ForeignKey(Post, related_name="likes_posts", on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='user_likes', on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now=True)
 
-    def calculate_likes2():
-        count= 0
-        for like in Post.objects.all():
-            count = count + like.calculate_likes()
+    def __str__(self):
+        return self.user.username
 
-        return count
-
-
+    class Meta:
+        unique_together = ("post", "user")
 
 
 

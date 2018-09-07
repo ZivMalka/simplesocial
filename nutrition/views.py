@@ -97,10 +97,12 @@ def plan_list(request, username):
     '''plan list'''
     if request.user.username == username or request.user.is_superuser:
         user = User.objects.get(username=username)
-
-        weekly = (Plan.objects.latest('date'))
-        plans = Plan.objects.filter(Q(user=user) & ~Q(id=weekly.id))
-        return render(request, 'nutrition/plan_list.html', {'plans': plans, 'weekly':weekly})
+        if Plan.objects.filter(user=user):
+            weekly = (Plan.objects.latest('date'))
+            plans = Plan.objects.filter(Q(user=user) & ~Q(id=weekly.id))
+        else:
+            return render(request, 'nutrition/plan_list.html', {'user': user})
+        return render(request, 'nutrition/plan_list.html', {'plans': plans, 'weekly':weekly, 'user': user})
 
 
 

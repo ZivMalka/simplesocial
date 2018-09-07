@@ -4,8 +4,8 @@ from nutrition import views
 app_name = 'nutrition'
 
 urlpatterns = [
-    url(r"menu/(?P<username>[-\w]+)/$", views.plan_list, name="list"),
-    url(r'^create_plan/(?P<username>[-\w]+)/$', views.create_plan, name='create_plan'),
+    url(r"menu/(?P<username>[a-zA-Z0-9]+)/$", views.plan_list, name="list"),
+    url(r'^create_plan/(?P<username>[a-zA-Z0-9]+)/$', views.create_plan, name='create_plan'),
     url(r'^(?P<plan_id>[0-9]+)/create_nutrition/$', views.create_nutrition, name='create_nutrition'),
     url(r'^(?P<plan_id>[0-9]+)/detail/$', views.detail, name='detail'),
     url(r'^(?P<plan_id>[0-9]+)/delete_plan/(?P<username>[-\w]+)/$', views.delete_plan, name='delete_plan'),

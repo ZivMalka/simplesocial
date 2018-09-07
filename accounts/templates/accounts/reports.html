@@ -23,6 +23,16 @@
 </style>
 
  {% block profile_content %}
+       {% if messages %}
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+                {% for message in messages %}
+                <p {% if message.tags == "error" %} class="alert alert-danger" {% endif %}> {{ message }}</p>
+                {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
     <h2>Export Report</h2>
        <ul class="list-group">
       <li class="list-group-item">
@@ -54,7 +64,6 @@
 
 
 
-{
        </ul>
 
 {% endblock  %}

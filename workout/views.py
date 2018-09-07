@@ -100,10 +100,11 @@ def overview(request, username):
     '''return all workouts of the user'''
     if request.user.username == username or request.user.is_superuser:
         user = User.objects.get(username=username)
-
-        weekly = (Workout.objects.latest('creation_date'))
-
-        workouts = Workout.objects.filter(Q(user=user) & ~Q(id=weekly.id))
+        if Workout.objects.filter(user=user):
+            weekly = (Workout.objects.latest('creation_date'))
+            workouts = Workout.objects.filter(Q(user=user) & ~Q(id=weekly.id))
+        else:
+            return render(request, 'workout/overview.html')
         return render(request, 'workout/overview.html', {'workouts': workouts, 'user': user, 'weekly':weekly})
 
 

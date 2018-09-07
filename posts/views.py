@@ -12,7 +12,7 @@ from groups.models import Group
 from braces.views import SelectRelatedMixin
 from . import forms
 from . import models
-from posts.models import Post
+from posts.models import Post, Like
 from .forms import PostForm
 from activities.models import Comment
 from activities.forms import CommentForm
@@ -27,6 +27,7 @@ from django.contrib.auth.mixins import(
     LoginRequiredMixin,
     PermissionRequiredMixin
 )
+
 from django.shortcuts import get_object_or_404
 from django.views import generic
 from django.db.models import Q
@@ -130,12 +131,15 @@ class PostLikeAPIToggle(APIView):
         user = self.request.user
         updated = False
         liked = False
-        if user in obj.likes.all():
+        user_like  = Like.objects.filter(post=obj, user=user)
+        if user_like:
                 liked = False
-                obj.likes.remove(user)
+                user_like.delete()
+                #obj.likes.remove(user)
         else:
                 liked = True
-                obj.likes.add(user)
+                #obj.likes.add(user)
+                Like.objects.create(user=user, post=obj)
                 notify.send(request.user, recipient=obj.user, actor=request.user, verb='Like your post.',
                     nf_type='liked_by_one_user', target=obj)
         updated = True

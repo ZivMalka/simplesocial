@@ -7,3 +7,4 @@ class GroupMemberInLinn(admin.TabularInline):
     model = models.GroupMember
 
 admin.site.register(models.Group)
+admin.site.register(models.GroupMember)

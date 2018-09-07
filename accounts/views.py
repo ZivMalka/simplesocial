@@ -17,7 +17,7 @@ from nutrition.models import Nutrition, Plan
 import json
 from datetime import datetime, time
 import math
-from posts.models import Post
+from posts.models import Post, Like
 from activities.models import Comment
 from groups.models import Group,GroupMember
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -94,7 +94,7 @@ def edit_profile(request, username):
         return HttpResponse("No access to this page")
 
 
-def filter(request):
+def filter(request, default):
     """
     get input from the user and return the output
     :param request: data
@@ -109,7 +109,11 @@ def filter(request):
         date = (request.GET.get('year'))
 
     else:
-        date = datetime.datetime.now()
+        if default:
+            date = datetime.datetime.now().year
+            print(date)
+        else:
+            date = datetime.datetime.now()
 
     return date
 
@@ -128,25 +132,27 @@ def manager_control(request):
 #Dashboard Admin
 def visual_manage_control(request):
     if request.user.is_superuser:
-        date = filter (request)
+        default = False
+        date = filter (request, default)
+
+        #data for content4
         dataSource = list_of_activity_log(date)
-        content7 = activity_log_all(request, dataSource)
-        data = return_list_of_WeightLossPercentage()
+        data = return_list_of_WeightLossPercentage(date)
 
         #Return statistics values
         num = []
         for user in User.objects.all():
             num.append(calc_total_loss_per(user, user.userprofileinfo.current_weight))
-        num = numbers(num)
+
+        if num.__len__() >= 2:
+            num = numbers(num)
+        #charts
+        content7 = activity_log_all(request, dataSource)
         content4 = WeightLossPercentage(request, data)
         content5 = weight_lossDistrbotion(request)
         content8 = activity_log_by_type(request)
         return render(request, 'accounts/manage_graph.html',
                       {'output4': content4, 'output5': content5, 'output7': content7, 'output8': content8, 'numbers':num})
-
-
-
-
 
 
 
@@ -166,7 +172,7 @@ def list_of_activity_log(date):
             data = {}
             data['label'] = i
             data['value'] = Post.objects.filter(created_at__month=i, created_at__year=year).count() + \
-                            Post.objects.filter(date_of_like__month=i, date_of_like__year=year).count() + \
+                            Like.objects.filter(date__month=i, date__year=year).count() + \
                             Comment.objects.filter(timestamp__month=i, timestamp__year=year).count() + \
                             GroupMember.objects.filter(date__month=i, date__year=year).count()
             dataSource['data'].append(data)
@@ -192,7 +198,8 @@ def chart_user(request, username):
     :return:
     """
     if request.user.username == username or request.user.is_superuser:
-        date = filter(request)
+        default = False
+        date = filter(request, default)
         user = User.objects.get(username=username)
         if isinstance(date, str):
             plans = Plan.objects.filter(user=user, date__year=date)
@@ -419,16 +426,30 @@ def chart_calories(request, plans):
     return (column2D.render())
 
 
-def return_list_of_WeightLossPercentage():
+def return_list_of_WeightLossPercentage(date):
     dataSource = {}
     dataSource['data'] = []
-    for user in User.objects.all():
+    avg =[]
+    a = 0
+    current_weight = 0
+    for i in range (1,13):
+        for user in User.objects.all():
+            for k in user.userprofileinfo.weight_history.filter(timestamp__month=i).order_by('-timestamp'):
+                    current_weight = k.weight
+                    a =  (calc_total_loss_per(user ,current_weight))
+                    avg.append(a)
+                    break
         data = {}
-        data['label'] = user.username
-        data['value'] = calc_total_loss_per(user, user.userprofileinfo.current_weight)
+        if avg.__len__() == 0:
+            data ['value'] = a
+            data ['label'] = i
+        else:
+            data['value'] = round(mean(avg),2)
+            data['label'] = i
         dataSource['data'].append(data)
+        avg.clear()
+        a= 0
     return dataSource
-
 
 
 
@@ -436,8 +457,8 @@ def return_list_of_WeightLossPercentage():
 def WeightLossPercentage(request, dataSource):
     # Chart data is passed to the `dataSource` parameter, as dict, in the form of key-value pairs.
     dataSource['chart'] = {
-        "caption": "Weight loss Percentage",
-        "subCaption": "Weight loss Percentage",
+        "caption": "Average percentage of weight loss for all users",
+        "subCaption": "Weight loss Percentage per month",
         "yAxisName": "Weight loss Percentage",
         "numberPrefix": "%",
         "setadaptiveymin": "1",
@@ -512,7 +533,7 @@ def activity_log_chart(request, username):
             data = {}
             data['label'] = i
             data['value'] = Post.objects.filter(user=user, created_at__month=i).count() + \
-                            Post.objects.filter(likes=user,  date_of_like__month=i).count() + \
+                            Like.objects.filter(user=user,  date__month=i).count() + \
                             Comment.objects.filter(user=user, timestamp__month=i).count() + \
                             GroupMember.objects.filter(user=user, date__month=i).count()
             dataSource['data'].append(data)
@@ -538,11 +559,14 @@ def activity_log_all(request, dataSource):
 
 
 def activity_log_by_type(request):
+
+    default= True
+    date = filter(request, default)
     '''return chart of numbes of activies by type'''
     dataSource = {}
     dataSource['chart'] = {
          "caption": "Activity Distribution by type",
-         "subcaption": "For all users in 2018",
+         "subcaption": "For all users",
 
         "defaultcenterlabel": "Social app Distribution",
         "aligncaptionwithcanvas": "0",
@@ -553,14 +577,37 @@ def activity_log_by_type(request):
 
     }
 
-    dataSource['data'] = []
-    lables = ["post", "Comments", "Groups", "likes"]
-    values = [Post.objects.all().count(), Comment.objects.all().count(), Group.objects.all().count(),Post.calculate_likes2()]
-    for i in range(lables.__len__()):
-        data = {}
-        data['label'] = lables[i]
-        data['value'] = values[i]
-        dataSource['data'].append(data)
+    if (isinstance(date, datetime.date)):
+        #filter by month and year
+        year = myconverter_year(date)
+        month = myconverter_month(date)
+        dataSource['data'] = []
+        lables = ["post", "Comments", "Groups", "likes"]
+        values = [Post.objects.filter(created_at__month=month, created_at__year=year).count(), + \
+                    Like.objects.filter(date__month=i, date__year=year).count(), + \
+                      Comment.objects.filter(timestamp__month=month, timestamp__year=year).count(), + \
+                      GroupMember.objects.filter(date__month=month, date__year=year).count(), ]
+        for i in range(lables.__len__()):
+            data = {}
+            data['label'] = lables[i]
+            data['value'] = values[i]
+            dataSource['data'].append(data)
+    else:
+        #filter by year
+        year = date
+        dataSource['data'] = []
+        lables = ["post", "Comments", "Groups", "likes"]
+        values = [Post.objects.filter(created_at__year=year).count(), + \
+                  Comment.objects.filter(timestamp__year=year).count(), + \
+                  GroupMember.objects.filter(date__year=year).count(),+ \
+                 Like.objects.filter(date__year=year).count(),
+                        ]
+        for i in range(lables.__len__()):
+            data = {}
+            data['label'] = lables[i]
+            data['value'] = values[i]
+            dataSource['data'].append(data)
+
 
     column2D = FusionCharts("doughnut2d", "ex8", "600", "450", "chart-8", "json", dataSource)
     return (column2D.render())
@@ -648,9 +695,10 @@ def GeneratePdf_of_all_user(request):
                 numbers1.append(data['weight_loss_per'])
                 numbers2.append(data['weight_loss'])
                 dataSource['data'].append(data)
-
-        numbers1 = numbers(numbers1)
-        numbers2 = numbers(numbers2)
+        if numbers1.__len__() >=  2:
+            numbers1 = numbers(numbers1)
+        if numbers2.__len__() >=2:
+            numbers2 = numbers(numbers2)
 
         pdf = render_to_pdf('accounts/all_users_report.html',
                             {'data': dataSource, 'numbers1': numbers1, 'numbers2': numbers2})
@@ -665,9 +713,13 @@ def  GeneratePdf(request, username):
         user = User.objects.get(username=username)
         dataSource = {}
         dataSource['data'] = []
-        date = filter(request)
-
+        date = filter(request, False)
+        current = user.userprofileinfo.current_weight
         list = list_of_weight_loss(date, user)
+
+        if not list:
+            messages.error(request, 'No data on this date.')
+            return HttpResponseRedirect(reverse("accounts:reports_page", kwargs={"username": username}))
         for k in list:
                 data = {}
                 data['body_fat']= k.body_fat
@@ -706,7 +758,7 @@ def ActivityLogReport(request):
                     data = {}
                     data['label'] = user
                     data['post'] = Post.objects.filter(user=user, created_at__month=month, created_at__year=year).count()
-                    data ['like'] = Post.objects.filter(likes=user, date_of_like__month=month, date_of_like__year=year).count()
+                    data ['like'] = Like.objects.filter(user=user, date__month=month, date__year=year).count()
                     data['follow'] = GroupMember.objects.filter(user=user, date__month=month, date__year=year).count()
                     data['comment'] =  Comment.objects.filter(user=user, timestamp__month=month, timestamp__year=year).count()
                     data['value'] = data['post'] + data['like'] + data['comment'] + data['follow']

@@ -113,8 +113,12 @@ class JoinGroup(LoginRequiredMixin, generic.RedirectView):
             followers = []
             for user in GroupMember.objects.filter(group=group):
                 followers.append(user.user)
-            notify.send(request.user, recipient_list=followers, actor=request.user,
+            if followers:
+                notify.send(request.user, recipient_list=followers, actor=request.user,
                         verb = 'start followed ', nf_type = 'followed_by_one_user', target=group)
+            else:
+                notify.send(request.user, recipient=request.user, actor=request.user,
+                        verb='you just start follow ', nf_type='followed_by_one_user', target=group)
             GroupMember.objects.create(user=self.request.user,group=group)
 
         except IntegrityError:
