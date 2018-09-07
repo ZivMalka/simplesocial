@@ -66,8 +66,7 @@ def create_event(request):
             notify.send(request.user, recipient=app.user, actor=request.user, verb='Added a new Meeting.',
                         nf_type='app_by_one_user', target=app)
             messages.success(request, 'Appointment Added!')
-            return HttpResponseRedirect(reverse("appointments:overview", kwargs={"username": request.user.username}))
-
+            return HttpResponseRedirect(reverse("appointments:appoint", kwargs={"username": request.user.username}))
 
         context = {'form': form}
         return render(request, 'create_event.html', context)

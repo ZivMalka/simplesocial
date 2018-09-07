@@ -44,7 +44,7 @@
               <entry file="file://$PROJECT_DIR$/nutrition/templates/nutrition/plan_list.html">
                 <provider selected="true" editor-type-id="text-editor">
                   <state relative-caret-position="102">
-                    <caret line="6" column="1" lean-forward="true" selection-start-line="6" selection-start-column="1" selection-end-line="16" selection-end-column="15" />
+                    <caret line="6" column="1" lean-forward="false" selection-start-line="6" selection-start-column="1" selection-end-line="16" selection-end-column="15" />
                     <folding />
                   </state>
                 </provider>
@@ -150,7 +150,6 @@
         <option value="$PROJECT_DIR$/accounts/templates/accounts/all_users_report.html" />
         <option value="$PROJECT_DIR$/appointments/urls.py" />
         <option value="$PROJECT_DIR$/accounts/templates/accounts/manager_control.html" />
-        <option value="$PROJECT_DIR$/appointments/views.py" />
         <option value="$PROJECT_DIR$/appointments/templates/appointment_manage.html" />
         <option value="$PROJECT_DIR$/accounts/templates/accounts/manage_graph.html" />
         <option value="$PROJECT_DIR$/workout/forms.py" />
@@ -177,6 +176,7 @@
         <option value="$PROJECT_DIR$/groups/views.py" />
         <option value="$PROJECT_DIR$/posts/views.py" />
         <option value="$PROJECT_DIR$/accounts/templates/accounts/reports.html" />
+        <option value="$PROJECT_DIR$/appointments/views.py" />
       </list>
     </option>
   </component>
@@ -234,53 +234,6 @@
             <path>
               <item name="simplesocial" type="b2602c69:ProjectViewProjectNode" />
               <item name="simplesocial" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="simplesocial" type="b2602c69:ProjectViewProjectNode" />
-              <item name="simplesocial" type="462c0819:PsiDirectoryNode" />
-              <item name="accounts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="simplesocial" type="b2602c69:ProjectViewProjectNode" />
-              <item name="simplesocial" type="462c0819:PsiDirectoryNode" />
-              <item name="accounts" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="simplesocial" type="b2602c69:ProjectViewProjectNode" />
-              <item name="simplesocial" type="462c0819:PsiDirectoryNode" />
-              <item name="accounts" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="accounts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="simplesocial" type="b2602c69:ProjectViewProjectNode" />
-              <item name="simplesocial" type="462c0819:PsiDirectoryNode" />
-              <item name="nutrition" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="simplesocial" type="b2602c69:ProjectViewProjectNode" />
-              <item name="simplesocial" type="462c0819:PsiDirectoryNode" />
-              <item name="nutrition" type="462c0819:PsiDirectoryNode" />
-              <item name="migrations" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="simplesocial" type="b2602c69:ProjectViewProjectNode" />
-              <item name="simplesocial" type="462c0819:PsiDirectoryNode" />
-              <item name="nutrition" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="simplesocial" type="b2602c69:ProjectViewProjectNode" />
-              <item name="simplesocial" type="462c0819:PsiDirectoryNode" />
-              <item name="nutrition" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="nutrition" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="simplesocial" type="b2602c69:ProjectViewProjectNode" />
-              <item name="simplesocial" type="462c0819:PsiDirectoryNode" />
-              <item name="posts" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -490,8 +443,8 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32597622" sideWeight="0.4871407" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32767403" sideWeight="0.881877" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24108659" sideWeight="0.85355985" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20543294" sideWeight="0.7140696" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24659607" sideWeight="0.65025467" order="2" side_tool="true" content_ui="combo" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.025466893" sideWeight="0.7140696" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24659607" sideWeight="0.65025467" order="2" side_tool="true" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3721634" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -572,13 +525,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
           <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/appointments/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="16" lean-forward="false" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
         </state>
       </provider>
     </entry>
@@ -774,16 +720,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/appointments/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="629">
-          <caret line="45" column="61" lean-forward="false" selection-start-line="45" selection-start-column="59" selection-end-line="45" selection-end-column="61" />
-          <folding>
-            <element signature="e#0#44#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/messenger/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="476">
@@ -851,7 +787,7 @@
         <state relative-caret-position="171">
           <caret line="26" column="10" lean-forward="true" selection-start-line="26" selection-start-column="4" selection-end-line="26" selection-end-column="11" />
           <folding>
-            <element signature="e#0#32#0" expanded="true" />
+            <element signature="e#0#32#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -861,7 +797,7 @@
         <state relative-caret-position="101">
           <caret line="35" column="9" lean-forward="false" selection-start-line="35" selection-start-column="9" selection-end-line="35" selection-end-column="9" />
           <folding>
-            <element signature="e#0#39#0" expanded="true" />
+            <element signature="e#0#39#0" expanded="false" />
             <marker date="1536336563382" expanded="true" signature="742:2592" ph="..." />
           </folding>
         </state>
@@ -922,7 +858,7 @@
         <state relative-caret-position="169">
           <caret line="715" column="36" lean-forward="false" selection-start-line="715" selection-start-column="36" selection-end-line="715" selection-end-column="36" />
           <folding>
-            <element signature="e#0#146#0" expanded="true" />
+            <element signature="e#0#146#0" expanded="false" />
             <marker date="1536340650424" expanded="true" signature="21650:22872" ph="..." />
           </folding>
         </state>
@@ -955,7 +891,7 @@
     <entry file="file://$PROJECT_DIR$/nutrition/templates/nutrition/plan_list.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
-          <caret line="6" column="1" lean-forward="true" selection-start-line="6" selection-start-column="1" selection-end-line="16" selection-end-column="15" />
+          <caret line="6" column="1" lean-forward="false" selection-start-line="6" selection-start-column="1" selection-end-line="16" selection-end-column="15" />
           <folding />
         </state>
       </provider>
@@ -973,8 +909,24 @@
         <state relative-caret-position="104">
           <caret line="175" column="92" lean-forward="true" selection-start-line="175" selection-start-column="92" selection-end-line="175" selection-end-column="101" />
           <folding>
-            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#0#11#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/appointments/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="5" column="61" lean-forward="true" selection-start-line="5" selection-start-column="61" selection-end-line="5" selection-end-column="68" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/appointments/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="265">
+          <caret line="68" column="69" lean-forward="false" selection-start-line="68" selection-start-column="69" selection-end-line="68" selection-end-column="69" />
+          <folding />
         </state>
       </provider>
     </entry>
