@@ -8,26 +8,30 @@ from django.contrib import messages
 from notify.signals import notify
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+
+
 def create_plan(request, username):
     '''create new plan'''
     if request.user.is_superuser:
-        user = User.objects.get(username=username)
         form = PlanForm(request.POST or None)
         if form.is_valid():
+            user = User.objects.get(username=username)
             subtitle = form.cleaned_data.get('subtitle')
             date = form.cleaned_data.get('date')
-            new_plan = Plan.objects.create(user=user, subtitle=subtitle, date=date)
+            plan = Plan.objects.create(user=user, subtitle=subtitle, date=date)
             messages.success(request, 'Plan Added!')
             notify.send(request.user, recipient=user, actor=request.user, verb='Added a new plan.',
-                        nf_type='plan_by_one_user', target=new_plan)
+                        nf_type='plan_by_one_user', target=plan)
 
-            return HttpResponseRedirect(reverse("nutrition:list", kwargs={"username": username}))
+            return render(request, "nutrition/detail.html", {'plan':plan})
         context = {
             "form": form,
         }
+
         return render(request, 'nutrition/create_plan.html', context)
     else:
         return HttpResponse("Only authorized user can add nutrition meals")
+
 
 def create_nutrition(request, plan_id):
     '''create new nutrition'''
