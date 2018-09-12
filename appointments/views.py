@@ -58,7 +58,7 @@ def create_event(request):
     if request.user.is_superuser:
         form = AppointmentForm(request.POST)
         if form.is_valid():
-            user = form.cleaned_data.get('user')
+            user = User.objects.get(username=username)
             task = form.cleaned_data.get('task')
             date = form.cleaned_data.get('date')
             time = form.cleaned_data.get('time')
@@ -66,11 +66,11 @@ def create_event(request):
             notify.send(request.user, recipient=app.user, actor=request.user, verb='Added a new Meeting.',
                         nf_type='app_by_one_user', target=app)
             messages.success(request, 'Appointment Added!')
-            return HttpResponseRedirect(reverse("appointments:appoint", kwargs={"username": request.user.username}))
+            return redirect("appointments:appointment_manage")
 
         context = {'form': form}
         return render(request, 'create_event.html', context)
-    return redirect(home)
+    return redirect('home')
 
 def delete_event(request, appoint_id, username):
     '''delete'''
