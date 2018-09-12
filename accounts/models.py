@@ -7,6 +7,12 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
+from django.core.exceptions import ValidationError
+from datetime import date
+def birth_date_validation(value):
+    today = date.today()
+    if value.year + 18 > today.year:
+        raise ValidationError('Date not valid.')
 
 class WeightList(models.Model):
     """
@@ -26,11 +32,14 @@ class UserProfileInfo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_pic = models.ImageField(upload_to='profile_pics', blank=True)
     description = models.CharField(null=True, blank=True, max_length=250)
-    birth_date = models.DateField(null=True, blank=True)
+    birth_date = models.DateField(null=True, blank=True, validators=[birth_date_validation])
     height = models.FloatField(null=True, blank=True)
     body_fat = models.FloatField(null=True, blank=True)
     current_weight = models.FloatField(null=True, blank=True)
     weight_history = models.ManyToManyField(WeightList, blank=True, related_name='weight_list')
+    goal = models.FloatField(null=True, blank=True)
+
+
 
 
     def create_user_profile(sender, instance, created, **kwargs):

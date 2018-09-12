@@ -4,6 +4,8 @@
 
 
 {% block content %}
+          <link rel='stylesheet' type='text/css' href="{% static 'css/css.css' %}" />
+
     {% if user.is_authenticated %}
   <h1 class="underline">Most recent</h1>
         <a href="{{ weekly.get_absolute_url }}" class="list-group-item">

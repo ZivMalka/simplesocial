@@ -137,13 +137,12 @@ def visual_manage_control(request):
 
         #data for content4
         dataSource = list_of_activity_log(date)
-        data = return_list_of_WeightLossPercentage(date)
+        data = return_list_of_WeightLossPercentage(request)
 
         #Return statistics values
         num = []
         for user in User.objects.all():
             num.append(calc_total_loss_per(user, user.userprofileinfo.current_weight))
-
         if num.__len__() >= 2:
             num = numbers(num)
         #charts
@@ -179,8 +178,8 @@ def list_of_activity_log(date):
     return dataSource
 
 
-
 def list_of_weight_loss(date, user):
+    """list of weight_loss of an Individual user"""
     if isinstance(date, str):
         list = user.userprofileinfo.weight_history.filter(timestamp__year=date)
     else:
@@ -218,7 +217,7 @@ def chart_user(request, username):
 
         return render(request, 'accounts/Graph.html',
                       {"user": user, 'output': content1, 'output2': content2, 'output3': content3,
-                        'output5': content5, 'output6': content6, 'output6': content6, 'value':value})
+                        'output5': content5, 'output6': content6, 'output6': content6,'value':value})
 
     else:
         return HttpResponseRedirect(reverse("accounts:profile", kwargs={"username": request.user.username}))
@@ -230,7 +229,7 @@ def calc_bmi(user_P):
     :return: int
     """
     if (user_P.height is None or user_P.current_weight is None):
-        bmi = "Empty"
+        bmi = ""
     else:
         bmi = round((user_P.current_weight) / (user_P.height) ** 2, 2)
     return bmi
@@ -241,8 +240,12 @@ def personal_profile(request, username):
     if request.user.username == username or request.user.is_superuser:
         user = User.objects.get(username=username)
         user_P = UserProfileInfo.objects.get(user=user)
+        if user_P.current_weight is None or user_P.goal is None:
+            content9 = ""
+        else:
+            content9 = rating_meter(request, user_P.current_weight, user_P.goal)
         bmi = calc_bmi(user_P)
-        return render(request, 'accounts/personal_profile.html', {"user":user, 'bmi': bmi })
+        return render(request, 'accounts/personal_profile.html', {"user":user, 'bmi': bmi, 'output9':content9 })
     else:
         return HttpResponse("No access to this page")
 
@@ -267,14 +270,15 @@ def edit_personal_profile(request, username):
         if request.method == 'POST':
             profile_form = UserPersonalProfileInfoForm(request.POST, instance=user_p)
             if profile_form.is_valid():
-                weight = profile_form.cleaned_data.get('current_weight')
-                body_fat = profile_form.cleaned_data.get('body_fat')
-                profile = profile_form.save()
-                profile.save()
-                messages.success(request, 'Your personal profile was successfully updated!')
-                return HttpResponseRedirect(reverse("accounts:personal_profile", kwargs={"username": username}))
+                    profile = profile_form.save()
+                    messages.success(request, 'Your personal profile was successfully updated!')
+                    return HttpResponseRedirect(reverse("accounts:personal_profile", kwargs={"username": username}))
+            else:
+                profile_form = UserPersonalProfileInfoForm(request.POST, instance=user_p)
+                return render(request, 'accounts/personal_profile_edit.html',
+                              {'profile_form': profile_form, 'user': current_user})
         else:
-            profile_form = UserPersonalProfileInfoForm(request.POST, instance=user_p)
+            profile_form = UserPersonalProfileInfoForm(instance=user_p)
             return render(request, 'accounts/personal_profile_edit.html',
                           {'profile_form': profile_form, 'user':current_user})
     else:
@@ -426,15 +430,21 @@ def chart_calories(request, plans):
     return (column2D.render())
 
 
-def return_list_of_WeightLossPercentage(date):
+def return_list_of_WeightLossPercentage(request):
     dataSource = {}
     dataSource['data'] = []
     avg =[]
     a = 0
+    date = filter(request, True)
+    if (isinstance(date, datetime.date)):
+        year = myconverter_year(date)
+    else:
+        year = date
+    print(year)
     current_weight = 0
     for i in range (1,13):
         for user in User.objects.all():
-            for k in user.userprofileinfo.weight_history.filter(timestamp__month=i).order_by('-timestamp'):
+            for k in user.userprofileinfo.weight_history.filter(timestamp__month=i, timestamp__year=year).order_by('-timestamp'):
                     current_weight = k.weight
                     a =  (calc_total_loss_per(user ,current_weight))
                     avg.append(a)
@@ -584,7 +594,7 @@ def activity_log_by_type(request):
         dataSource['data'] = []
         lables = ["post", "Comments", "Groups", "likes"]
         values = [Post.objects.filter(created_at__month=month, created_at__year=year).count(), + \
-                    Like.objects.filter(date__month=i, date__year=year).count(), + \
+                    Like.objects.filter(date__month=month, date__year=year).count(), + \
                       Comment.objects.filter(timestamp__month=month, timestamp__year=year).count(), + \
                       GroupMember.objects.filter(date__month=month, date__year=year).count(), ]
         for i in range(lables.__len__()):
@@ -611,6 +621,48 @@ def activity_log_by_type(request):
 
     column2D = FusionCharts("doughnut2d", "ex8", "600", "450", "chart-8", "json", dataSource)
     return (column2D.render())
+
+
+
+def rating_meter(request, weight, goal):
+
+    dataSource = {}
+    dataSource['chart'] = {
+        "caption": "Target Weight:"  +  str(goal),
+        "lowerlimit": "0",
+        "upperlimit": "100",
+        "showvalue": "1",
+        "numbersuffix": "%",
+        "theme": "fint",
+        "showtooltip": "0",
+
+    }
+    dataSource['colorrange'] = {
+        "color": [
+            {
+                "minvalue": "0",
+                "maxvalue":(goal/ weight  ) *100,
+                "code": "#726FF5"
+            },
+            {
+                "minvalue": (goal / weight) * 100,
+                "maxvalue": "100",
+                "code": "#ECECEC"
+            },
+
+        ]
+    }
+    dataSource['dials'] = {
+        "dial": [
+            {
+                "value": (goal/ weight  ) *100
+            }
+        ]
+    }
+
+    column2D = FusionCharts("angulargauge", "ex9", "450", "250", "chart-9", "json", dataSource)
+    return (column2D.render())
+
 
 
 from accounts.printing import MyPrint

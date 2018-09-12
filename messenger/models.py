@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.db import models
 from django.db.models import Q
-
+from django.urls import reverse
 
 class ThreadManager(models.Manager):
     def by_user(self, user):
@@ -80,3 +80,9 @@ class ChatMessage(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='sender', on_delete=models.CASCADE)
     message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.message
+
+    def get_absolute_url(self):
+        return reverse("messenger:conversation_detail", kwargs={"username": self.user})

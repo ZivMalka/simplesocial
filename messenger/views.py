@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.views.generic.edit import FormMixin
 from django.contrib.auth import get_user_model
 from django.views.generic import DetailView, ListView
-
+from django.urls import reverse
 from .forms import ComposeForm
 from .models import Thread, ChatMessage
 

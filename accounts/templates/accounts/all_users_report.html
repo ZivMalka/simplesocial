@@ -65,12 +65,13 @@
 <body>
 {% load custom_tags %}
 {% current_time "%Y-%m-%d %I:%M %p" as the_time %}
-
+{% load custom_tags %}
+{% current_time "%Y/%m/%d" as time %}
 <h1 class="s">HealthyHipe Report</h1>
    <div class='wrapper'>
    <div class='header'>
  <p class="date">Produced in {{ the_time }}.</p>
-   <p class='title'>User Progress Reports </p>
+   <p class='title'>Users Progress Reports as of {{  time }} </p>
      </div>
 
 

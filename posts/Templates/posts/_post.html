@@ -50,12 +50,14 @@
         {% if user in post.likes.all %}
 
          	<a href="#" style="text-decoration: none;" class="like unlike" data-href='{{ post.get_api_like_url }}' data-likes='{{ post.likes.count }}' href='{{ post.get_like_url }}'>
-               <span class="glyphicon glyphicon-thumbs-up"></span> <span class="like-count" id="u"><a class="like-count1" data-toggle="modal" data-target="#myModal{{ post.pk }}"> {{ post.likes.count }} <span> {% trans 'Unlike' %}
+               <span class="glyphicon glyphicon-thumbs-up"></span></a>
 
+            <a class="like-count1" data-toggle="modal" data-target="#myModal{{ post.pk }}"> {{ post.likes.count }} <span> {% trans 'Like' %}
           </a>
         {% else %}
         	<a href="#" style="text-decoration: none;" class="like" data-href='{{ post.get_api_like_url }}' data-likes='{{ post.likes.count }}' href='{{ post.get_like_url }}'>
-        <span class="glyphicon glyphicon-thumbs-up"></span> <span class="like-count" id="u"><a class="like-count1" data-toggle="modal" data-target="#myModal{{ post.pk }}"> {{ post.likes.count }} <span> {% trans 'Like' %}
+        <span class="glyphicon glyphicon-thumbs-up"></span>
+<a class="like-count1" data-toggle="modal" data-target="#myModal{{ post.pk }}" > {{ post.likes.count }} {% trans 'Like' %}
           </a>
         {% endif %}
 

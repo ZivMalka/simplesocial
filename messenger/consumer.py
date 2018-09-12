@@ -1,10 +1,13 @@
 import asyncio
 import json
-
+from notify.signals import notify
 from channels.consumer import SyncConsumer, AsyncConsumer
 from django.contrib.auth import get_user_model
+User = get_user_model()
 from channels.db import database_sync_to_async
 from .models import Thread, ChatMessage
+from django.conf import settings
+from django.contrib.auth.models import User
 
 class ChatConsumer(AsyncConsumer):
 
@@ -34,6 +37,7 @@ class ChatConsumer(AsyncConsumer):
             if  user.is_authenticated:
                 username = user.username
                 await self.insert_obj_to_databae(user, msg)
+
             my_Response = {
                 'message' : msg,
                 'username':username
@@ -65,3 +69,8 @@ class ChatConsumer(AsyncConsumer):
             user=me,
             message=msg
         )
+
+        other_user = self.scope['url_route']['kwargs']['username']
+        recipient = User.objects.get(username=other_user)
+        notify.send(new_message.user, recipient=recipient, actor=me, verb='Send you a new message.',
+                    nf_type='message_by_one_user', target=new_message)

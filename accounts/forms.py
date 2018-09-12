@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.forms.fields import DateField
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
-
+from django.contrib.admin.widgets import AdminDateWidget, AdminTimeWidget
 
 #Create new user form
 class UserCreateForm(UserCreationForm):
@@ -32,11 +32,11 @@ class EditProfileForm(forms.ModelForm):
 
 
 class UserPersonalProfileInfoForm(forms.ModelForm):
-    birth_date = forms.DateField(widget=forms.TextInput(attrs={"id": "datepicker"}), required=False)
-
+    birth_date = forms.DateTimeField(required= True,widget=forms.TextInput(attrs={"id": "datepicker", },  ))
+    height = forms.FloatField(min_value = 1.40, max_value=2, required= True)
     class Meta:
         model = UserProfileInfo
-        fields = ('height','birth_date')
+        fields = ('height','birth_date', 'goal')
 
 class WeightHistoryForm(forms.ModelForm):
     weight = forms.FloatField(required=True, min_value=30, widget=forms.TextInput(attrs={'required': 'true'}),)
@@ -48,6 +48,7 @@ class WeightHistoryForm(forms.ModelForm):
 
 #FILTER DATE
 class FilterDate(forms.ModelForm):
+    timestamp = DateField(widget=AdminDateWidget(), )
     class Meta:
         model = WeightList
         fields = ('timestamp', )

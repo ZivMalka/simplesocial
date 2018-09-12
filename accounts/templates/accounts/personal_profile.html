@@ -9,7 +9,9 @@
   <link href="{% static 'posts/css/posts.css' %}?v=1" rel="stylesheet">
       <link href="{% static 'accounts/css/css.css' %}?v=1" rel="stylesheet">
   <script src="{% static 'accounts/js/filter.js' %}?v=1"></script>
-
+     <script src="{% static "accounts/js/fusioncharts.js" %}"></script>
+     <script src="{% static "accounts/js/fusioncharts.theme.fint.js" %}"></script>
+   <script src="{% static "accounts/js/fusioncharts.widgets.js" %}"></script>
 {% endblock head %}
 
 <div class="container">
@@ -19,9 +21,14 @@
    {% if error_message %}
                         <p><strong>{{ error_message }}</strong></p>
                     {% endif %}
+
+      <div id="chart-9" style="display:inline-block; float:right;margin-right: 22%;">
+        {{ output9|safe }}
+    </div>
+     <div  style="display:inline-block">
        <h2>Personal Record</h2>
 
-<ul>
+<ul style="list-style: none;">
     <li> First Name: {{ user.first_name }} </li>
     <li> Last Name:  {{ user.last_name }}  </li>
     <li> Birth date:  {{ user.userprofileinfo.birth_date }}  </li>
@@ -29,22 +36,19 @@
     <li> Weight:  {{ user.userprofileinfo.current_weight }} </li>
     <li> Body fat:  {{ user.userprofileinfo.body_fat }}%  </li>
      <li> Bmi:  {{ bmi }}  </li>
+  <li> Target weight:  {{ user.userprofileinfo.goal }}  </li>
 </ul>
+     </div>
 
-           <a href="{% url 'accounts:reports_page' username=user.username %}" class="btn btn-default btn-cancel-compose" style="display: inline-block;margin-top: -5%;margin-left:21%;background:white; color: #1879cd;"><span class="glyphicon glyphicon-ok-circle"></span>Export Report</a>
-
-            <h2>Weight History: </h2>
- <div>
-
-       {% if request.user.is_superuser or request.user == user  %}
-          <a href="{% url 'accounts:add_weight' username=user.username %}" class="btn btn-default btn-cancel-compose" style="display: inline-block;margin-top: -77px;margin-left: 245px;background:white; color: #1879cd;"><span class="glyphicon glyphicon-ok-circle"></span>Add</a>
- {% endif %}
+     <div>
+     <a href="{% url 'accounts:reports_page' username=user.username %}" class="btn btn-default btn-cancel-compose" style="display: inline-block;margin-top: -18%;margin-left:21%;background:white; color: #1879cd;"><span class="glyphicon glyphicon-ok-circle"></span>Export Report</a>
+</div>
+ <h2>Weight History: </h2>
+ <a href="{% url 'accounts:add_weight' username=user.username %}" class="btn btn-default btn-cancel-compose" style="margin-top: -3%;margin-left:21%;background:white; color: #1879cd;"><span class="glyphicon glyphicon-ok-circle"></span>Add a new weighing</a>
 
 <div class="a">
-<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="filter.." title="Type in a name">
  </div>
-
-
 
 <center>
    <table class="table" id="myTable" style="max-width: 50%;">
@@ -73,7 +77,18 @@
 
 </div>
 
+  <style>
+   .raphael-group-30-pointers{
+       display: none;
+  }
+  .raphael-group-25-pointers{
+  display: none;
+     }
+.raphael-group-3-creditgroup{
+ display: none;
+}
 
+  </style>
 
 
 {% endblock %}

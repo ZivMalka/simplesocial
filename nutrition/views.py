@@ -12,7 +12,7 @@ def create_plan(request, username):
     '''create new plan'''
     if request.user.is_superuser:
         user = User.objects.get(username=username)
-        form = PlanForm(request.POST , instance=user)
+        form = PlanForm(request.POST or None)
         if form.is_valid():
             subtitle = form.cleaned_data.get('subtitle')
             date = form.cleaned_data.get('date')
@@ -25,7 +25,6 @@ def create_plan(request, username):
         context = {
             "form": form,
         }
-
         return render(request, 'nutrition/create_plan.html', context)
     else:
         return HttpResponse("Only authorized user can add nutrition meals")

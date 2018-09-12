@@ -1,7 +1,7 @@
 {%  extends "accounts/profile_base.html" %}
 {% load staticfiles %}
 {% load i18n %}
-
+{% load bootstrap3 %}
 
  {% block profile_content %}
 
@@ -10,24 +10,25 @@
    <script src="{% static 'accounts/js/accounts.js' %}"></script>
 
 
-
+                {% if error_message %}
+                        <p><strong>{{ error_message }}</strong></p>
+                    {% endif %}
 
 <div class="container" style="margin-right: -50px;">
   <div class="row" >
     <h1>Edit</h1>
    <form enctype="multipart/form-data" method="POST">
        {% csrf_token %}
-         {% for field in profile_form.visible_fields %}
+         {% for field in profile_form %}
   <div class="form-group">
  <label for="{{ field.label }}" class="col-sm-2 control-label">{{ field.label }}</label>
-    <input class="form-control" style="width: 35%;"  placeholder={{ field }}
-  </div>{% endfor %}
+    <input class="form-control" style="width: 35%;" vaule={{ field }}  </div>
+
+         {% endfor %}
+
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
    </div> </div>
-
-
-
 
 
 <div class="col-md-3">

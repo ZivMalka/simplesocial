@@ -3,7 +3,7 @@
 {% load staticfiles %}
 
 {% block content %}
-
+ <link rel='stylesheet' type='text/css' href="{% static 'css/css.css' %}" />
 <h1> {{ workout.title }} – {{ workout.get_day_display }} </h1>
 
     {% if messages %}
