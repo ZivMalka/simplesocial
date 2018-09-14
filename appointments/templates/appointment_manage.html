@@ -80,15 +80,6 @@
             <td><a href="{% url 'appointments:edit_event' later.id later.user.username %}"><button class="btn btn-warning">Edit</button></a></td>
             </tr>
             {% endfor %}
-        <tr>
-            <td>
-                 <a href="{% url 'appointments:create_event' %}">
-                <button type="button" class="btn btn-success">
-                    <span class="glyphicon glyphicon-plus"></span>&nbsp; Schedule new appointment
-                </button>
-            </a>
-            </td>
-        </tr>
         </tbody>
     </table>
 </div>
