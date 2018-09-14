@@ -150,6 +150,6 @@ def work_list_manage(request, username):
         '''return the list of workout of user in the manage control'''
         user = User.objects.get(username=username)
         workouts = Workout.objects.filter(user=user)
-        return render(request, 'workout/work_list_manage.html', {'workouts': workouts})
+        return render(request, 'workout/work_list_manage.html', {'workouts': workouts, 'user': user})
 
 
