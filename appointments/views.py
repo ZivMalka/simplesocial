@@ -11,7 +11,19 @@ from django.db.models import Q
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from notify.signals import notify
+from django.core.exceptions import ValidationError
+from dal import autocomplete
 
+
+
+class CountryAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        qs = User.objects.all()
+        if self.q:
+            qs = qs.filter(username__istartswith=self.q)
+
+        return qs
 
 
 def appoint(request, username):
@@ -53,12 +65,19 @@ def create_event(request):
     """
     create an event from admin to user
     :param request:
-
     """
     if request.user.is_superuser:
         form = AppointmentForm(request.POST)
         if form.is_valid():
-            user = User.objects.get(username=username)
+            user = form.cleaned_data.get('user')
+
+            if (user == request.user):
+                context = {
+                    'form': form,
+                    'error_message': 'You are the meeting creator, Please add guest'
+                }
+                return render(request, 'create_event.html', context)
+
             task = form.cleaned_data.get('task')
             date = form.cleaned_data.get('date')
             time = form.cleaned_data.get('time')
@@ -66,7 +85,7 @@ def create_event(request):
             notify.send(request.user, recipient=app.user, actor=request.user, verb='Added a new Meeting.',
                         nf_type='app_by_one_user', target=app)
             messages.success(request, 'Appointment Added!')
-            return redirect("appointments:appointment_manage")
+            return HttpResponseRedirect(reverse("appointments:appoint", kwargs={"username": request.user.username}))
 
         context = {'form': form}
         return render(request, 'create_event.html', context)

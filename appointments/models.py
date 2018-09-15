@@ -11,6 +11,7 @@ def no_future(value):
         raise ValidationError('Date has passed.')
 
 
+
 class Appointment(models.Model):
     """
     Class Appointment

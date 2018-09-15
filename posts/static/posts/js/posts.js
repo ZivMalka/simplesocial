@@ -125,8 +125,8 @@ $("body").keydown(function (evt) {
   });
 
 
-   function updateText(btn, newCount){
-          btn.text(newCount)
+   function updateText(btn, newCount, verb){
+          btn.text(newCount + " " + verb)
           btn.attr("data-likes", newCount)
       }
       $(".like").click(function(e){
@@ -145,9 +145,9 @@ $("body").keydown(function (evt) {
               console.log(data)
               var newLikes;
               if (data.liked){
-                  updateText(".like-count1", addLike)
+                   updateText(this_, addLike, "Unlike")
               } else {
-                  updateText(".like-count1", removeLike)
+                   updateText(this_, removeLike, "Like")
                   // remove one like
               }
             }, error: function(error){

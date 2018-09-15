@@ -1,10 +1,13 @@
 {% extends 'appoint_base.html' %}
+{% load static %}
 {% block content %}
 
+<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
 
 <div class="container-fluid">
 
     <div class="row">
+
 
         <div class="col-sm-12 col-md-7">
             <div class="panel panel-default">
@@ -29,4 +32,6 @@
     </div>
 
 </div>
+
+
 {% endblock %}
