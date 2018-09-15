@@ -77,7 +77,7 @@ def delete_event(request, appoint_id, username):
     if request.user.is_superuser:
         appointment = Appointment.objects.get(pk=appoint_id)
         appointment.delete()
-        return appoint(request, username)
+        return appointment_manage(request)
 
 
 def edit_event(request, appointment_id, username):
