@@ -8,7 +8,7 @@ from django.views.generic import DetailView, ListView
 from django.urls import reverse
 from .forms import ComposeForm
 from .models import Thread, ChatMessage
-
+from notify.signals import notify
 
 class InboxView(LoginRequiredMixin, ListView):
     """return messeges list of the user"""
@@ -67,7 +67,10 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
         thread = self.get_object()
         user = self.request.user
         message = form.cleaned_data.get("message")
-        ChatMessage.objects.create(user=user, thread=thread, message=message)
+        new_message = ChatMessage.objects.create(user=user, thread=thread, message=message)
+        notify.send(user, recipient=thread.second, actor=user, verb='Send you a new message.',
+                    nf_type='message_by_one_user', target=new_message)
+
         return super().form_valid(form)
 
 

@@ -9,7 +9,7 @@ class WorkoutForm(forms.ModelForm):
     creation_date = DateField(widget = AdminDateWidget(), )
     class Meta:
         model = Workout
-        fields = ['day', 'title' , 'creation_date']
+        fields = ['title' , 'creation_date']
 
 
 
@@ -18,4 +18,4 @@ class SetForm(forms.ModelForm):
 
     class Meta:
         model = Set
-        fields = ['exercise', 'sets', 'reps', 'unit']
+        fields = ['day','exercise', 'sets', 'reps', 'unit']

@@ -25,7 +25,7 @@ class CountryAutocomplete(autocomplete.Select2QuerySetView):
 
         return qs
 
-
+from django.db.models import Q
 def appoint(request, username):
     '''
     get upcoming apptmein and the past appoitment of the user
@@ -36,8 +36,8 @@ def appoint(request, username):
     if request.user.username == username or request.user.is_superuser:
         now = datetime.now()
 
-        upcoming_events =  Appointment.objects.filter(date__gte = now).order_by('date', 'time')
-        previous_events = Appointment.objects.filter(date__lt=now).order_by('date', 'time')
+        upcoming_events = Appointment.objects.filter(Q(date=now.date(),time__gte=now.time())|Q(date__gt=now.date())).order_by('date', 'time')
+        previous_events = Appointment.objects.filter(Q(time__lte=now.time())|Q(date__lt=now.date())).order_by('date', 'time')
 
         list_upcoming = []
         for app in upcoming_events:
@@ -55,9 +55,8 @@ def appoint(request, username):
 def appointment_manage(request):
     if request.user.is_superuser:
         now = datetime.now()
-        upcoming_events = Appointment.objects.filter(date__gte=now).order_by('date', 'time')
-        previous_events = Appointment.objects.filter(date__lt=now).order_by('date', 'time')
-
+        upcoming_events = Appointment.objects.filter(Q(date=now.date(), time__gte=now.time()) | Q(date__gt=now.date())).order_by('date', 'time')
+        previous_events = Appointment.objects.filter(Q(time__lte=now.time()) | Q(date__lt=now.date())).order_by('date', 'time')
         return render(request, 'appointment_manage.html', {"previous_events" : previous_events, "upcoming_events": upcoming_events})
     return redirect('/')
 

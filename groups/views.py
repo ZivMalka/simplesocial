@@ -115,7 +115,7 @@ class JoinGroup(LoginRequiredMixin, generic.RedirectView):
                 followers.append(user.user)
             if followers:
                 notify.send(request.user, recipient_list=followers, actor=request.user,
-                        verb = 'start followed ', nf_type = 'followed_by_one_user', target=group)
+                        verb = 'startrd following ', nf_type = 'followed_by_one_user', target=group)
             else:
                 notify.send(request.user, recipient=request.user, actor=request.user,
                         verb='you just start follow ', nf_type='followed_by_one_user', target=group)

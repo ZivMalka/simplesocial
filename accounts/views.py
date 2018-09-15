@@ -180,12 +180,13 @@ def list_of_activity_log(date):
 
 def list_of_weight_loss(date, user):
     """list of weight_loss of an Individual user"""
-    if isinstance(date, str):
-        list = user.userprofileinfo.weight_history.filter(timestamp__year=date)
-    else:
+
+    if (isinstance(date, datetime.date)):
         month = myconverter_month(date)
         year = myconverter_year(date)
         list = user.userprofileinfo.weight_history.filter(timestamp__year=year, timestamp__month=month)
+    else:
+        list = user.userprofileinfo.weight_history.filter(timestamp__year=date)
     return list;
 
 
@@ -198,14 +199,14 @@ def chart_user(request, username):
     """
     if request.user.username == username or request.user.is_superuser:
         default = False
-        date = filter(request, default)
+        date = filter(request, True)
         user = User.objects.get(username=username)
-        if isinstance(date, str):
-            plans = Plan.objects.filter(user=user, date__year=date)
-        else:
+        if isinstance(date, datetime.date):
             month = myconverter_month(date)
             year = myconverter_year(date)
             plans = Plan.objects.filter(user=user, date__month=month, date__year=year)
+        else:
+            plans = Plan.objects.filter(user=user, date__year=date)
 
         list = list_of_weight_loss(date, user)
         content1 = chart(request, list)
@@ -491,21 +492,22 @@ def weight_lossDistrbotion(request):
         "palettecolors": "#0075c2",
     }
     #ranges of the distrbution
-    labels = ["0","1-9", "10-19", "20-29", "30-39", "40-49", "50"]
+    labels = ["0","1-10", "11-20", "21-30", "31-40", "41-50", "51"]
     negatives =  ["0","-1--9","-10-19","-20--29","-30-39","-40--49","-50"]
     dataSource['data'] = []
     # Iterate through the data in `Revenue` model and insert in to the `dataSource['data']` list.
 
     arr = []
     for user in User.objects.all():
-        index = calc_total_loss_per(user, user.userprofileinfo.current_weight)/10
+        index = (calc_total_loss_per(user, user.userprofileinfo.current_weight))/10
+
         if len(str(abs(index)))<2:
             arr.append(index)
         else:
-            index = (math.ceil(calc_total_loss_per(user, user.userprofileinfo.current_weight)/10))
+            index = (math.ceil((calc_total_loss_per(user, user.userprofileinfo.current_weight))/10))
             arr.append(index)
 
-
+    print(arr)
     for i in range (negatives.__len__()-1, -1,-1):
         if i==0:
             continue

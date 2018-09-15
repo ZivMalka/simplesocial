@@ -35,7 +35,7 @@
                     <td>{{event.date}}</td>
                     <td>{{event.time}}</td>
                      <td>{{event.user}}</td>
-                    <td>{{ event.sender.get_full_name }}</td>
+                    <td>{{ event.sender }}</td>
                     <td>
                     {% if user.is_superuser %}
                     <div>
@@ -83,7 +83,7 @@
                     <td>{{later.date}}</td>
                     <td>{{later.time}}</td>
                      <td>{{later.user}}</td>
-                    <td>{{ later.sender.get_full_name }}</td>
+                    <td>{{ later.sender}}</td>
                     <td>
                     {% if user.is_superuser %}
                     <div>

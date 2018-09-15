@@ -17,13 +17,13 @@ def add_workout(request, username):
     return
     """
     if request.user.is_superuser:
+        user = User.objects.get(username=username)
         form = WorkoutForm(request.POST or None)
         if form.is_valid():
-            user = User.objects.get(username=username)
-            day = form.cleaned_data.get('day')
+
             title = form.cleaned_data.get('title')
             date = form.cleaned_data.get('creation_date')
-            workout = Workout.objects.create(user=user, day=day, title=title, creation_date=date)
+            workout = Workout.objects.create(user=user, title=title, creation_date=date)
             notify.send(request.user, recipient=workout.user, actor=request.user, verb='Added a new workout.',
                         nf_type='plan_by_one_user', target=workout)
             messages.success(request, 'Workout Day Added!')
@@ -85,13 +85,32 @@ def delete_set(request, workout_id, set_id):
         workout = get_object_or_404(Workout, pk=workout_id)
         set = Set.objects.get(pk=set_id)
         set.delete()
-        return render(request, 'workout/view.html', {'workout': workout})
+        return HttpResponseRedirect(reverse("workout:view_by_day", kwargs={'workout_id': workout.id, 'day':set.day}))
+
 
 
 def view(request, workout_id):
         workout = get_object_or_404(Workout, pk=workout_id)
         user = workout.user
-        return render(request, 'workout/view.html', {'workout': workout, 'user': user})
+        set = Set.objects.filter(workout=workout).order_by('day')
+        seen_days =[]
+        newresults = []
+        for s in set:
+            if s.day not in seen_days:
+                seen_days.append(s.day)
+                newresults.append(s)
+        return render(request, 'workout/view.html', {'workout': workout,'set': newresults ,'user': user})
+
+
+def view_by_day(request, workout_id, day):
+    workout = get_object_or_404(Workout, pk=workout_id)
+    user = workout.user
+    set = Set.objects.filter(workout=workout, day=day)
+    name = ""
+    for s in set:
+        name=s.get_day_display()
+        break;
+    return render(request, 'workout/viewbyday.html', {'workout': workout, 'set': set, 'user': user, 'name':name})
 
 
 from django.db.models import Q
@@ -104,7 +123,7 @@ def overview(request, username):
             weekly = (Workout.objects.latest('creation_date'))
             workouts = Workout.objects.filter(Q(user=user) & ~Q(id=weekly.id))
         else:
-            return render(request, 'workout/overview.html')
+            return render(request, 'workout/overview.html', {'user': user})
         return render(request, 'workout/overview.html', {'workouts': workouts, 'user': user, 'weekly':weekly})
 
 
@@ -117,7 +136,7 @@ def edit_set(request,workout_id , set_id, username):
                 if form.is_valid():
                     form.save()
                     messages.success(request, 'Your Set Has Been Updated')
-                    return render(request, 'workout/view.html', {'workout': workout}, username)
+                    return HttpResponseRedirect(reverse("workout:view_by_day", kwargs={'workout_id': workout.id, 'day': set.day}))
             except Exception as e:
                 messages.warning(request, 'Your set was not saved due to an error: {}'.format(e))
         else:

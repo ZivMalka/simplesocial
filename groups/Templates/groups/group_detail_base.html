@@ -11,7 +11,13 @@
    <link href="{% static 'posts/css/posts.css' %}?v=1" rel="stylesheet">
 
   <div class="brand"><div class="brand__cover" style="background-image: url(/media/bannr/couchto5k_banner_1170x250.jpg);"></div><div class="brand__cover-overlay"></div><div class="brand-row brand__inner"><div class="brand__logo"><div class="brand__logo-content">
-      <img src="/media/bannr/couchto5k_banner_1170x250.jpg" class="brand__logo-img" style="margin-top: -20px;margin-left: -87px;height: 281px;" >
+     {% if group.profile_pic %}
+            <img  src ="{{ group.profile_pic.url }}" class="brand__logo-img" style="margin-top: -20px;margin-left: -87px;height: 281px;" >
+     {% else %}
+           <img src="/media/banner/couchto5k_banner_1170x250.jpg" class="brand__logo-img" style="margin-top: -20px;margin-left: -87px;height: 281px;" >
+        {% endif %}
+
+
   </div></div><div class="brand__name"><h1 class="group_name" style="">{{group.name}}</h1></div><div class="brand__actions">
   </div></div><div class="brand__name"></div><div class="brand__actions">
       	{% if user in group.members.all %}

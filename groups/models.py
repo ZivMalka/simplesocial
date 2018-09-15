@@ -25,6 +25,7 @@ class Group(models.Model):
     description = models.TextField(blank=True, default='')
     description_html = models.TextField(editable=False, default='', blank=True)
     members = models.ManyToManyField(User,through="GroupMember")
+    profile_pic = models.ImageField(upload_to='banner', blank=True)
 
     def __str__(self):
         return self.name

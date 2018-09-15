@@ -1,6 +1,6 @@
 import asyncio
 import json
-from notify.signals import notify
+
 from channels.consumer import SyncConsumer, AsyncConsumer
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -72,5 +72,4 @@ class ChatConsumer(AsyncConsumer):
 
         other_user = self.scope['url_route']['kwargs']['username']
         recipient = User.objects.get(username=other_user)
-        notify.send(new_message.user, recipient=recipient, actor=me, verb='Send you a new message.',
-                    nf_type='message_by_one_user', target=new_message)
+

@@ -40,7 +40,7 @@
         </a>
 
     {% empty %}
-        {% if user.is_superuser %}
+        {% if request.user.is_superuser %}
         <a href="{% url 'nutrition:create_plan' username=user.username %}" class="list-group-item">
         {% trans "No previous nutrition menus." %}<br>
         {% trans "Add new menu." %}

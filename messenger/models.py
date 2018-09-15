@@ -50,6 +50,7 @@ class ThreadManager(models.Manager):
                     first=user,
                     second=user2
                 )
+
                 obj.save()
                 return obj, True
             return None, False

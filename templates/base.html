@@ -54,7 +54,7 @@
         </li>
       <ul class="nav navbar-nav navbar-left">
           {% if user.is_authenticated %}
-              {% if user.is_superuser %}
+              {% if request.user.is_superuser %}
                  <li><a href="\admin"><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span>&nbsp;Admin Dashboard</a></li>
                <li><a href="{% url 'accounts:manager' %}"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>&nbsp;Manage</a></li>
                {% endif %}
@@ -65,6 +65,7 @@
                  style="  background-color: #FC4274; border-radius: 1.25em;">{{  user.notifications.unread.count }}</span></a>
           <ul class="dropdown-menu notify-drop">
             <div class="notify-drop-title">
+                Notifications
             </div>
             <div class="drop-content">
   <div class="notification-box-list">
@@ -117,7 +118,7 @@
                     <a href="{% url 'accounts:login' %}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp; Login</a>
                 </li>
                 <li>
-                    <a href="">Sign Up</a>
+                    <a href="{% url 'accounts:signup' %}">Sign Up</a>
                 </li>
 {% endif %}
 

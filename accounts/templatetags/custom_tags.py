@@ -13,9 +13,14 @@ def current_time(format_string):
 def bmi(format_string):
     bmi = []
     for user in User.objects.all():
-        bmi.append(calc_bmi(user.userprofileinfo))
-    if bmi.__len__()>1:
+        b = calc_bmi(user.userprofileinfo)
+        if (isinstance(b, str)):
+            continue
+        else:
+            bmi.append(b)
+
+    if bmi.__len__()>2:
         avg_bmi = mean(bmi)
     else:
-        avg_bmi = bmi
+        avg_bmi = ""
     return avg_bmi
