@@ -87,7 +87,7 @@ def edit_event(request, appointment_id, username):
     if form.is_valid():
         form.save()
         messages.success(request, 'Event Updated Successfully')
-        return HttpResponseRedirect(reverse("appointments:appoint", kwargs={"username": request.user.username}))
+        return redirect("appointments:appointment_manage")
     return render(request, 'edit_event.html', {'form': form})
 
 
