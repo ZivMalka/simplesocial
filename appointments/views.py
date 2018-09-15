@@ -24,8 +24,8 @@ def appoint(request, username):
     if request.user.username == username or request.user.is_superuser:
         now = datetime.now()
 
-        upcoming_events =  Appointment.objects.filter(date__gt = now).order_by('date', 'time')
-        previous_events = Appointment.objects.filter(date__lte=now).order_by('date', 'time')
+        upcoming_events =  Appointment.objects.filter(date__gte = now).order_by('date', 'time')
+        previous_events = Appointment.objects.filter(date__lt=now).order_by('date', 'time')
 
         list_upcoming = []
         for app in upcoming_events:
@@ -43,8 +43,8 @@ def appoint(request, username):
 def appointment_manage(request):
     if request.user.is_superuser:
         now = datetime.now()
-        upcoming_events = Appointment.objects.filter(date__gt=now).order_by('date', 'time')
-        previous_events = Appointment.objects.filter(date__lte=now).order_by('date', 'time')
+        upcoming_events = Appointment.objects.filter(date__gte=now).order_by('date', 'time')
+        previous_events = Appointment.objects.filter(date__lt=now).order_by('date', 'time')
 
         return render(request, 'appointment_manage.html', {"previous_events" : previous_events, "upcoming_events": upcoming_events})
     return redirect('/')
