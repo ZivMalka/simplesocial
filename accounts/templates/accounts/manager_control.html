@@ -28,6 +28,11 @@
                 Export Reports
             </a>
          </td>
+           <td class="">
+            <a href="{% url 'accounts:signup'  %}" class="btn btn-success" >
+                Add New User
+            </a>
+         </td>
     </tr>
 
 </table>
@@ -63,6 +68,7 @@
             <td><a href="{% url 'workout:work_list_manage' username=user.username %}"><button class="btn btn-info">View</button></a></td>
             <td><a href="{% url 'nutrition:plan_list_manage' username=user.username %}"><button class="btn btn-info">View</button></a></td>
             <td><a href="#"><button class="btn btn-danger" onclick="confirm('This user will be deleted, are you sure?')">Delete User</button></a></td>
+            <td><a href="{% url 'appointments:create_event' username=user.username %}"> <button type="button" class="btn btn-success">Add Appointment</button></a></td>
             </tr>
         {% endfor %}
         </tbody>
