@@ -1,6 +1,7 @@
 # HealthyHipe
 
 Healthyhipe is a social media for health.
+[Short clip](https://drive.google.com/file/d/1pvN7JPLx6ok_mz96d6MOd53x35kvFQUA/view?usp=drive_web).
 
 The project includes the following features:
 
