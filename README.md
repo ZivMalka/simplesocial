@@ -5,7 +5,7 @@ Healthyhipe is a social media for health.
 
 The project includes the following features:
 
- * Groups - each group has her own social feed and group memebrs
+ * Groups - each group includes social feed, group members and following list
  * Real time chat
  * Nutrition menus and workout programs
  * Personal profile - support and monitor patients to better manage their own health
