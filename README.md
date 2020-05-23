@@ -22,6 +22,8 @@ The project includes the following features:
  * Redis
  * Bootstrap
  
-
- 
+ ![alt text](static/images/2020-05-23_14-48-27.jpg)
+ ![alt text](static/images/2020-05-23_16-36-22.jpg) 
+ ![alt text](static/images/2020-05-23_17-07-25.jpg)
+ ![alt text](static/images/2020-05-23_14-52-09.jpg)
  
