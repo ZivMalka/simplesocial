@@ -8,6 +8,6 @@ channels==2.1.2
 channels-redis==2.3.0
 django-redis==4.9.0
 redis==2.10.6
-reportlab==3.5.4
+reportlab==3.5.55
 Twisted==18.7.0
 
