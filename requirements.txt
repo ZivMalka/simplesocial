@@ -7,7 +7,7 @@ channel==0.1.0
 channels==2.1.2
 channels-redis==2.3.0
 django-redis==4.9.0
-redis==2.10.6
+redis==4.5.3
 reportlab==3.5.4
 Twisted==18.7.0
 
